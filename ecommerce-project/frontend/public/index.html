@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-    <meta name="theme-color" content="#232f3e">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShopHub - India's Best Shopping Destination</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Only keep page-specific styles that aren't in styles.css */
+        /* Enhanced Modern Styles */
         :root {
             --amazon-orange: #ff9900;
             --amazon-dark: #232f3e;
@@ -20,8 +19,505 @@
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
-        /* Remove navbar styles - they're in styles.css now */
-        /* Keep only animation keyframes that aren't in styles.css */
+        /* Enhanced Navbar */
+        .navbar {
+            background: var(--amazon-dark);
+            padding: 0.5rem 0;
+        }
+
+        .navbar-container {
+            display: grid;
+            grid-template-columns: auto 1fr auto auto;
+            gap: 1rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        @media (max-width: 992px) {
+            .navbar-container {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+                padding: 0.5rem 1rem;
+            }
+
+            .nav-search {
+                width: 100%;
+                max-width: none;
+            }
+
+            .nav-links {
+                justify-content: space-between;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .auth-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .nav-links li a {
+                padding: 0.5rem 0.75rem;
+            }
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #ff9900, #ffc34d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-search {
+            max-width: 600px;
+            margin: 0;
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            width: 100%;
+        }
+
+        .nav-search input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: none;
+            font-size: 0.95rem;
+        }
+
+        .nav-search button {
+            background: var(--amazon-orange);
+            border: none;
+            padding: 0 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-search button:hover {
+            background: #ffaa33;
+        }
+
+        .nav-search button i {
+            color: var(--amazon-dark);
+            font-size: 1.2rem;
+        }
+
+        /* Hero Carousel */
+        .hero-carousel {
+            position: relative;
+            margin-bottom: 2rem;
+            width: 100%;
+            max-width: 100%;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .hero-carousel {
+                margin-bottom: 1.2rem;
+            }
+        }
+
+        .carousel-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 0 5rem;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-content {
+            max-width: 500px;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .carousel-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            animation: slideInLeft 0.5s ease;
+        }
+
+        .carousel-content p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            animation: slideInRight 0.5s ease;
+        }
+
+        .carousel-btn {
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            background: var(--amazon-orange);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .carousel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,153,0,0.3);
+        }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Category Cards */
+        .category-section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header h2 {
+            font-size: 1.8rem;
+            color: var(--amazon-dark);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--amazon-orange);
+            border-radius: 3px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .category-card {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .category-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+        }
+
+        .category-card:hover .category-image {
+            transform: scale(1.1);
+        }
+
+        .category-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 1.5rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+
+        .category-overlay h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .category-overlay p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Product Cards Enhanced */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--flipkart-yellow);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .product-image-container {
+            position: relative;
+            padding-top: 100%;
+            overflow: hidden;
+            background: #f8f8f8;
+        }
+
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-actions {
+            position: absolute;
+            bottom: -50px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.95);
+            transition: bottom 0.3s ease;
+        }
+
+        .product-card:hover .product-actions {
+            bottom: 0;
+        }
+
+        .product-actions button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: var(--amazon-dark);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .product-actions button:hover {
+            background: var(--amazon-orange);
+            transform: scale(1.1);
+        }
+
+        .product-info {
+            padding: 1rem;
+        }
+
+        .product-category {
+            font-size: 0.8rem;
+            color: var(--amazon-orange);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+            font-weight: 600;
+            color: var(--amazon-dark);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            margin: 0.5rem 0;
+        }
+
+        .stars {
+            color: #ffc107;
+        }
+
+        .rating-count {
+            color: var(--secondary-color);
+            font-size: 0.85rem;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .current-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--flipkart-blue);
+        }
+
+        .original-price {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            text-decoration: line-through;
+        }
+
+        .discount {
+            color: var(--success-color);
+            font-weight: bold;
+        }
+
+        /* Banner Strip */
+        .banner-strip {
+            background: var(--gradient-2);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .banner-strip h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .banner-strip p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .countdown-timer {
+            display: flex;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .timer-block {
+            background: rgba(255,255,255,0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .timer-block span {
+            font-size: 0.8rem;
+            display: block;
+            opacity: 0.8;
+        }
+
+        /* Features Section */
+        .features-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .feature-item {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--flipkart-blue), var(--amazon-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .feature-item h4 {
+            margin-bottom: 0.5rem;
+            color: var(--amazon-dark);
+        }
+
+        .feature-item p {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
         @keyframes slideInLeft {
             from {
                 opacity: 0;
@@ -55,14 +551,34 @@
             }
         }
 
-        /* Keep banner-strip gradient since it uses custom variable */
-        .banner-strip {
-            background: var(--gradient-2);
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar-container {
+                grid-template-columns: auto 1fr;
+            }
+            
+            .nav-links {
+                grid-column: 1 / -1;
+                justify-content: center;
+            }
+            
+            .carousel-slide {
+                padding: 0 2rem;
+            }
+            
+            .carousel-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .banner-strip {
+                flex-direction: column;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Rest of your HTML remains exactly the same -->
+    <!-- Enhanced Navigation Header -->
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
@@ -130,7 +646,8 @@
         </div>
     </div>
 
-    <!-- Rest of your content remains exactly the same -->
+    
+    <!-- Main Content -->
     <div class="main-content">
         <div class="container">
             <!-- Banner Strip -->
@@ -240,6 +757,7 @@
         </div>
     </div>
 
+
     <!-- Enhanced Footer -->
     <footer>
         <div class="container">
@@ -304,7 +822,7 @@
 
     <script src="/js/api.js"></script>
     <script>
-        // Your existing JavaScript remains exactly the same
+        // Carousel functionality
         let slideIndex = 1;
         let autoSlideInterval;
 
@@ -332,12 +850,14 @@
             showSlide(slideIndex);
         }
 
+        // Start auto carousel
         function startCarousel() {
             autoSlideInterval = setInterval(nextSlide, 5000);
         }
 
+        // Countdown timer
         function startCountdown() {
-            const countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000);
+            const countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours from now
             
             const x = setInterval(function() {
                 const now = new Date().getTime();
@@ -357,18 +877,22 @@
             }, 1000);
         }
 
+        // Enhanced product loading with categories
         async function loadProducts() {
             try {
+                // Featured (newest) products
                 const featured = await productsAPI.getAll({ limit: 12, sort: 'newest' });
                 if (featured.products) {
                     $('#featured-products').innerHTML = featured.products.map(createProductCard).join('');
                 }
 
+                // Electronics
                 const electronics = await productsAPI.getAll({ category: 'electronics', limit: 4 });
                 if (electronics.products) {
                     $('#electronics-products').innerHTML = electronics.products.map(createProductCard).join('');
                 }
 
+                // Fashion
                 const fashion = await productsAPI.getAll({ category: 'fashion', limit: 4 });
                 if (fashion.products) {
                     $('#fashion-products').innerHTML = fashion.products.map(createProductCard).join('');
@@ -379,7 +903,7 @@
         }
 
         function createProductCard(product) {
-            const discount = Math.floor(Math.random() * 30) + 10;
+            const discount = Math.floor(Math.random() * 30) + 10; // Random discount for demo
             const originalPrice = product.price * (1 + discount/100);
             
             return `
@@ -416,6 +940,7 @@
             `;
         }
 
+        // Load categories with enhanced design
         async function loadCategories() {
             try {
                 const data = await productsAPI.getCategories();
@@ -448,6 +973,7 @@
             }
         }
 
+        // Enhanced search functionality
         function performSearch() {
             const query = $('#search-input').value.trim();
             if (query) {
@@ -455,14 +981,17 @@
             }
         }
 
+        // Quick view modal
         function viewQuick(productId) {
             showAlert('Quick view coming soon!', 'info');
         }
 
+        // Add to wishlist
         function addToWishlist(productId) {
             showAlert('Added to wishlist!', 'success');
         }
 
+        // Initialize page
         document.addEventListener('DOMContentLoaded', () => {
             startCarousel();
             startCountdown();
@@ -470,6 +999,7 @@
             loadCategories();
         });
 
+        // Search input enter key
         $('#search-input')?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 performSearch();
