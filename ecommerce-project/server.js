@@ -33,9 +33,12 @@ app.use(helmet({
 }));
 
 // Rate limiting
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
+const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX, 10) || (process.env.NODE_ENV === 'production' ? 1000 : 5000);
+
 const limiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 200, // limit each IP to 200 requests per windowMs
+    windowMs: RATE_LIMIT_WINDOW_MS,
+    max: RATE_LIMIT_MAX,
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false,  // Disable the `X-RateLimit-*` headers
     handler: (req, res) => {
@@ -45,7 +48,10 @@ const limiter = rateLimit({
     // Also skip on order creation so users don't hit the limiter when placing an order.
     skip: (req, res) => {
         if (req.method === 'POST' && req.path === '/orders') return true;
-        return Boolean(req.session && req.session.user);
+        // Allow all authenticated users (session or JWT) to bypass limit
+        if (req.session && req.session.user) return true;
+        if (req.user) return true;
+        return false;
     }
 });
 app.use('/api', limiter);
