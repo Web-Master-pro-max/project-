@@ -762,7 +762,7 @@
     <script src="/js/api.js"></script>
     <script>
         // Validation helpers
-        const validators = {
+        const registerValidators = {
             name: (name) => name && name.length >= 2,
             email: (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
             password: (pass) => pass && pass.length >= 6
@@ -772,16 +772,16 @@
             const password = document.getElementById('password').value;
             const strengthBar = document.getElementById('strength-bar');
             const strengthText = document.getElementById('strength-text');
-            
+
             let strength = 0;
-            
+
             if (password.length >= 6) strength += 25;
             if (password.length >= 8) strength += 25;
             if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength += 25;
             if (password.match(/[0-9]/) && password.match(/[^a-zA-Z0-9]/)) strength += 25;
-            
+
             strengthBar.style.width = strength + '%';
-            
+
             if (strength <= 25) {
                 strengthBar.style.background = '#ff6161';
                 strengthText.textContent = 'Weak password';
@@ -808,17 +808,17 @@
             const agreeTerms = document.getElementById('agree-terms').checked;
 
             // Validation
-            if (!validators.name(name)) {
+            if (!registerValidators.name(name)) {
                 showAlert('Please enter a valid name (minimum 2 characters)', 'danger');
                 return;
             }
 
-            if (!validators.email(email)) {
+            if (!registerValidators.email(email)) {
                 showAlert('Please enter a valid email address', 'danger');
                 return;
             }
 
-            if (!validators.password(password)) {
+            if (!registerValidators.password(password)) {
                 showAlert('Password must be at least 6 characters', 'danger');
                 return;
             }
@@ -838,7 +838,7 @@
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
 
                 const response = await authAPI.register({ name, email, password });
-                
+
                 if (response.success || response.user) {
                     showAlert('Account created successfully! Redirecting...', 'success');
                     setTimeout(() => {
@@ -864,19 +864,19 @@
             const alertContainer = document.getElementById('alert-container');
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
-            
+
             let icon = 'info-circle';
             if (type === 'success') icon = 'check-circle';
             if (type === 'danger') icon = 'exclamation-circle';
-            
+
             alert.innerHTML = `
                 <i class="fas fa-${icon}"></i>
                 <span>${message}</span>
             `;
-            
+
             alertContainer.innerHTML = '';
             alertContainer.appendChild(alert);
-            
+
             setTimeout(() => {
                 alert.remove();
             }, 5000);
