@@ -2,940 +2,211 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#232f3e">
     <title>ShopHub - India's Best Shopping Destination</title>
+    <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Mobile-First Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: #f1f3f6;
-            color: #212121;
-            line-height: 1.4;
-            overflow-x: hidden;
-            width: 100%;
-        }
-
-        /* Mobile-Optimized Variables */
+        /* Only keep page-specific styles that aren't in styles.css */
         :root {
             --amazon-orange: #ff9900;
             --amazon-dark: #232f3e;
+            --amazon-light: #37475a;
             --flipkart-blue: #2874f0;
             --flipkart-yellow: #ff9f00;
-            --safe-area-top: env(safe-area-inset-top);
-            --safe-area-bottom: env(safe-area-inset-bottom);
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
-        /* Smooth scrolling and better touch */
-        * {
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Typography for mobile */
-        h1 { font-size: 1.8rem; }
-        h2 { font-size: 1.4rem; }
-        h3 { font-size: 1.2rem; }
-        p { font-size: 0.9rem; }
-
-        /* Container with proper padding */
-        .container {
-            width: 100%;
-            padding: 0 12px;
-            margin: 0 auto;
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-
-        /* Enhanced Mobile Navbar */
-        .navbar {
-            background: var(--amazon-dark);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            padding: 8px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-            width: 100%;
-        }
-
-        .navbar-container {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 8px;
-            padding: 0 12px;
-            width: 100%;
-        }
-
-        .navbar-brand {
-            font-size: 1.4rem;
-            background: linear-gradient(135deg, #ff9900, #ffc34d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            white-space: nowrap;
-        }
-
-        .navbar-brand i {
-            -webkit-text-fill-color: initial;
-            color: #ff9900;
-            margin-right: 2px;
-        }
-
-        /* Mobile Search */
-        .nav-search {
-            flex: 1;
-            min-width: 180px;
-            display: flex;
-            height: 40px;
-            border-radius: 6px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            order: 3;
-            width: 100%;
-        }
-
-        @media (min-width: 480px) {
-            .nav-search {
-                order: 0;
-                width: auto;
+        /* Remove navbar styles - they're in styles.css now */
+        /* Keep only animation keyframes that aren't in styles.css */
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
 
-        .nav-search input {
-            flex: 1;
-            padding: 0 12px;
-            border: none;
-            font-size: 14px;
-            min-width: 0;
-            background: white;
-        }
-
-        .nav-search button {
-            background: var(--amazon-orange);
-            border: none;
-            padding: 0 15px;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .nav-search button i {
-            color: var(--amazon-dark);
-            font-size: 1rem;
-        }
-
-        /* Mobile Navigation Links */
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 16px;
-            margin-left: auto;
-            order: 2;
-        }
-
-        .nav-links li a {
-            color: white;
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-        }
-
-        .nav-links li a i {
-            font-size: 1.2rem;
-        }
-
-        .nav-links li a span {
-            font-size: 0.7rem;
-            display: none;
-        }
-
-        @media (min-width: 380px) {
-            .nav-links li a span {
-                display: block;
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
             }
         }
 
-        /* Auth Buttons Mobile */
-        .auth-buttons {
-            display: flex;
-            gap: 8px;
-            order: 1;
-            margin-left: auto;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 8px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.85rem;
-            white-space: nowrap;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--flipkart-blue);
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid white;
-            color: white;
-        }
-
-        .btn-sm {
-            padding: 6px 10px;
-            font-size: 0.8rem;
-        }
-
-        /* Cart Icon with Badge */
-        .cart-icon-wrapper {
-            position: relative;
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--flipkart-yellow);
-            color: var(--amazon-dark);
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            border: 2px solid var(--amazon-dark);
-        }
-
-        /* Hero Carousel Mobile */
-        .hero-carousel {
-            margin: 8px -12px 16px -12px;
-            width: calc(100% + 24px);
-            position: relative;
-            overflow: hidden;
-            border-radius: 0;
-        }
-
-        .carousel-container {
-            position: relative;
-            height: 200px;
-            overflow: hidden;
-        }
-
-        @media (min-width: 480px) {
-            .carousel-container {
-                height: 250px;
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        @media (min-width: 768px) {
-            .carousel-container {
-                height: 350px;
-            }
-        }
-
-        .carousel-slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .carousel-slide.active {
-            opacity: 1;
-        }
-
-        .carousel-content {
-            max-width: 280px;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
-        }
-
-        .carousel-content h2 {
-            font-size: 1.4rem;
-            margin-bottom: 6px;
-            line-height: 1.2;
-        }
-
-        .carousel-content p {
-            font-size: 0.9rem;
-            margin-bottom: 12px;
-            opacity: 0.95;
-        }
-
-        .carousel-btn {
-            padding: 8px 20px;
-            font-size: 0.9rem;
-            background: var(--amazon-orange);
-            border: none;
-            border-radius: 20px;
-            color: white;
-            cursor: pointer;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .carousel-dots {
-            position: absolute;
-            bottom: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 5;
-        }
-
-        .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.6);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .dot.active {
-            background: white;
-            width: 20px;
-            border-radius: 10px;
-        }
-
-        /* Section Headers Mobile */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0 12px 0;
-        }
-
-        .section-header h2 {
-            font-size: 1.2rem;
-            color: var(--amazon-dark);
-            position: relative;
-            padding-left: 10px;
-        }
-
-        .section-header h2::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 16px;
-            background: var(--amazon-orange);
-            border-radius: 3px;
-        }
-
-        .section-header .btn-outline {
-            background: transparent;
-            border: 1px solid var(--flipkart-blue);
-            color: var(--flipkart-blue);
-            padding: 6px 12px;
-            font-size: 0.8rem;
-        }
-
-        /* Product Grid Mobile */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-
-        @media (min-width: 480px) {
-            .products-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 768px) {
-            .products-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        /* Product Card Mobile */
-        .product-card {
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-            cursor: pointer;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .product-card:active {
-            transform: scale(0.98);
-        }
-
-        .product-badge {
-            position: absolute;
-            top: 6px;
-            left: 6px;
-            background: var(--flipkart-yellow);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            z-index: 2;
-        }
-
-        .product-image-container {
-            position: relative;
-            padding-top: 100%;
-            overflow: hidden;
-            background: #f8f8f8;
-        }
-
-        .product-image {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            padding: 8px;
-        }
-
-        /* Mobile touch-friendly product actions */
-        .product-actions {
-            display: flex;
-            justify-content: space-around;
-            padding: 8px;
-            background: white;
-            border-top: 1px solid #eee;
-            margin-top: auto;
-        }
-
-        .product-actions button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: var(--amazon-dark);
-            color: white;
-            cursor: pointer;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
-        }
-
-        .product-actions button:active {
-            background: var(--amazon-orange);
-        }
-
-        .product-info {
-            padding: 10px;
-            flex: 1;
-        }
-
-        .product-category {
-            font-size: 0.7rem;
-            color: var(--amazon-orange);
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .product-title {
-            font-size: 0.85rem;
-            margin: 4px 0;
-            font-weight: 600;
-            color: var(--amazon-dark);
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            line-height: 1.3;
-            height: 2.2rem;
-        }
-
-        .product-rating {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            margin: 4px 0;
-            font-size: 0.75rem;
-        }
-
-        .stars {
-            color: #ffc107;
-            display: flex;
-            gap: 2px;
-        }
-
-        .stars i {
-            font-size: 0.7rem;
-        }
-
-        .rating-count {
-            color: #666;
-        }
-
-        .product-price {
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 4px 0;
-        }
-
-        .current-price {
-            font-size: 1rem;
-            font-weight: bold;
-            color: var(--flipkart-blue);
-        }
-
-        .original-price {
-            font-size: 0.75rem;
-            color: #666;
-            text-decoration: line-through;
-        }
-
-        .discount {
-            color: #388e3c;
-            font-weight: 600;
-            font-size: 0.7rem;
-        }
-
-        /* Category Grid Mobile */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        @media (min-width: 480px) {
-            .category-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        .category-card {
-            position: relative;
-            border-radius: 8px;
-            overflow: hidden;
-            cursor: pointer;
-            aspect-ratio: 1/1;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-
-        .category-card:active {
-            opacity: 0.9;
-        }
-
-        .category-image {
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .category-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 10px;
-            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
-            color: white;
-        }
-
-        .category-overlay h3 {
-            font-size: 1rem;
-            margin-bottom: 2px;
-        }
-
-        .category-overlay p {
-            font-size: 0.7rem;
-            opacity: 0.9;
-        }
-
-        .category-overlay i {
-            font-size: 0.7rem;
-        }
-
-        /* Banner Strip Mobile */
+        /* Keep banner-strip gradient since it uses custom variable */
         .banner-strip {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            padding: 16px;
-            border-radius: 8px;
-            margin: 16px 0;
-            color: white;
-        }
-
-        .banner-strip h3 {
-            font-size: 1.2rem;
-            margin-bottom: 4px;
-        }
-
-        .banner-strip p {
-            font-size: 0.85rem;
-            margin-bottom: 12px;
-            opacity: 0.9;
-        }
-
-        .countdown-timer {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-        }
-
-        .timer-block {
-            background: rgba(255,255,255,0.2);
-            padding: 8px 12px;
-            border-radius: 6px;
-            text-align: center;
-            min-width: 60px;
-            backdrop-filter: blur(4px);
-        }
-
-        .timer-block span:first-child {
-            font-size: 1.2rem;
-            font-weight: bold;
-            display: block;
-        }
-
-        .timer-block span:last-child {
-            font-size: 0.7rem;
-            opacity: 0.8;
-            text-transform: uppercase;
-        }
-
-        /* Features Section Mobile */
-        .features-section {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
-            margin: 24px 0;
-            padding: 16px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-
-        @media (min-width: 480px) {
-            .features-section {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-
-        .feature-item {
-            text-align: center;
-        }
-
-        .feature-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--flipkart-blue), var(--amazon-orange));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 8px;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        .feature-item h4 {
-            font-size: 0.9rem;
-            margin-bottom: 2px;
-            color: var(--amazon-dark);
-        }
-
-        .feature-item p {
-            font-size: 0.75rem;
-            color: #666;
-        }
-
-        /* Footer Mobile */
-        footer {
-            background: var(--amazon-dark);
-            color: white;
-            padding: 24px 0 16px;
-            margin-top: 24px;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        @media (min-width: 480px) {
-            .footer-content {
-                grid-template-columns: repeat(3, 1fr);
-            }
-        }
-
-        @media (min-width: 768px) {
-            .footer-content {
-                grid-template-columns: repeat(5, 1fr);
-            }
-        }
-
-        .footer-section h3 {
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-            color: #ff9900;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 6px;
-        }
-
-        .footer-section ul li a {
-            color: #ddd;
-            text-decoration: none;
-            font-size: 0.8rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .footer-section ul li a i {
-            font-size: 0.9rem;
-            width: 16px;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            font-size: 0.75rem;
-            color: #aaa;
-        }
-
-        .payment-methods {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
-        .payment-methods i {
-            font-size: 1.5rem;
-            color: #ddd;
-        }
-
-        /* Loading States */
-        .loading-spinner {
-            text-align: center;
-            padding: 20px;
-            color: var(--flipkart-blue);
-        }
-
-        /* Touch-friendly improvements */
-        button, a, .category-card, .product-card {
-            touch-action: manipulation;
-        }
-
-        /* Hide elements on very small screens */
-        @media (max-width: 360px) {
-            .product-actions button {
-                width: 32px;
-                height: 32px;
-                font-size: 0.8rem;
-            }
-            
-            .product-title {
-                font-size: 0.8rem;
-            }
-            
-            .current-price {
-                font-size: 0.9rem;
-            }
+            background: var(--gradient-2);
         }
     </style>
 </head>
 <body>
-    <!-- Mobile-Optimized Navigation -->
+    <!-- Rest of your HTML remains exactly the same -->
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
                 <i class="fas fa-store"></i>
-                <span>ShopHub</span>
+                ShopHub
+            </div>
+            
+            <div class="nav-search">
+                <input type="text" id="search-input" placeholder="Search for products, brands and more...">
+                <button onclick="performSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
 
             <ul class="nav-links">
-                <li>
-                    <a href="/">
-                        <i class="fas fa-home"></i>
-                        <span>Home</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="/products">
-                        <i class="fas fa-box"></i>
-                        <span>Products</span>
-                    </a>
-                </li>
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/products"><i class="fas fa-box"></i> Products</a></li>
                 <li>
                     <a href="/cart" class="cart-icon-wrapper">
                         <i class="fas fa-shopping-cart"></i>
-                        <span>Cart</span>
-                        <span id="cart-count" class="cart-count">0</span>
+                        <span id="cart-count" class="cart-count" style="display: none;">0</span>
                     </a>
                 </li>
+                <li><a href="/orders"><i class="fas fa-truck"></i> Orders</a></li>
             </ul>
 
             <div id="auth-buttons" class="auth-buttons">
                 <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
                 <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
             </div>
-
-            <div class="nav-search">
-                <input type="text" id="search-input" placeholder="Search for products...">
-                <button onclick="performSearch()">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
         </div>
     </nav>
 
-    <!-- Hero Carousel - Mobile Optimized -->
-    <div class="hero-carousel">
-        <div class="carousel-container" id="carousel">
-            <div class="carousel-slide active" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://via.placeholder.com/800x400/ff9900/ffffff?text=Summer+Sale');">
-                <div class="carousel-content">
-                    <h2>Summer Sale</h2>
-                    <p>Up to 50% off on electronics, fashion & more</p>
-                    <button class="carousel-btn" onclick="window.location.href='/products?category=sale'">Shop Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
-            <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://via.placeholder.com/800x400/2874f0/ffffff?text=Fashion+Festival');">
-                <div class="carousel-content">
-                    <h2>Fashion Festival</h2>
-                    <p>Min 50% off on top brands</p>
-                    <button class="carousel-btn" onclick="window.location.href='/products?category=fashion'">Explore Now <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
-            <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://via.placeholder.com/800x400/ff9f00/ffffff?text=Electronics+Week');">
-                <div class="carousel-content">
-                    <h2>Electronics Week</h2>
-                    <p>Special offers on smartphones & laptops</p>
-                    <button class="carousel-btn" onclick="window.location.href='/products?category=electronics'">View Deals <i class="fas fa-arrow-right"></i></button>
-                </div>
-            </div>
-        </div>
-        <div class="carousel-dots" id="carousel-dots">
-            <span class="dot active" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-            <span class="dot" onclick="currentSlide(3)"></span>
-        </div>
-    </div>
-
-    <!-- Main Content -->
+    <!-- Hero Carousel -->
     <div class="container">
-        <!-- Flash Sale Banner -->
-        <div class="banner-strip">
-            <div>
-                <h3>⚡ Flash Sale Ends in:</h3>
-                <p>Grab the best deals before they're gone!</p>
+        <div class="hero-carousel">
+            <div class="carousel-container" id="carousel">
+                <div class="carousel-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),  url('images/hero1.jpg');">
+                    <div class="carousel-content">
+                        <h2>Summer Sale</h2>
+                        <p>Up to 50% off on electronics, fashion & more</p>
+                        <button class="carousel-btn" onclick="window.location.href='/products?category=sale'">Shop Now <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero2.jpg');">
+                    <div class="carousel-content">
+                        <h2>Fashion Festival</h2>
+                        <p>Min 50% off on top brands</p>
+                        <button class="carousel-btn" onclick="window.location.href='/products?category=fashion'">Explore Now <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero3.png');">
+                    <div class="carousel-content">
+                        <h2>Electronics Week</h2>
+                        <p>Special offers on smartphones & laptops</p>
+                        <button class="carousel-btn" onclick="window.location.href='/products?category=electronics'">View Deals <i class="fas fa-arrow-right"></i></button>
+                    </div>
+                </div>
             </div>
-            <div class="countdown-timer" id="countdown">
-                <div class="timer-block">
-                    <span id="hours">00</span>
-                    <span>Hours</span>
-                </div>
-                <div class="timer-block">
-                    <span id="minutes">00</span>
-                    <span>Mins</span>
-                </div>
-                <div class="timer-block">
-                    <span id="seconds">00</span>
-                    <span>Secs</span>
-                </div>
+            <div class="carousel-dots" id="carousel-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
             </div>
-        </div>
-
-        <!-- Today's Deals -->
-        <div class="section-header">
-            <h2>Today's Deals</h2>
-            <button class="btn btn-outline" onclick="loadProducts()">
-                <i class="fas fa-sync-alt"></i> Refresh
-            </button>
-        </div>
-        <div id="featured-products" class="products-grid">
-            <!-- Products loaded here -->
-        </div>
-
-        <!-- Shop by Category -->
-        <div class="section-header">
-            <h2>Shop by Category</h2>
-            <a href="/products" class="btn btn-outline">All <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div id="categories" class="category-grid">
-            <!-- Categories loaded here -->
-        </div>
-
-        <!-- Electronics -->
-        <div class="section-header">
-            <h2>📱 Electronics</h2>
-            <a href="/products?category=electronics" class="btn btn-outline">More <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div id="electronics-products" class="products-grid">
-            <!-- Electronics products loaded here -->
-        </div>
-
-        <!-- Fashion -->
-        <div class="section-header">
-            <h2>👕 Fashion Store</h2>
-            <a href="/products?category=fashion" class="btn btn-outline">More <i class="fas fa-arrow-right"></i></a>
-        </div>
-        <div id="fashion-products" class="products-grid">
-            <!-- Fashion products loaded here -->
         </div>
     </div>
 
-    <!-- Features -->
+    <!-- Rest of your content remains exactly the same -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Banner Strip -->
+            <div class="banner-strip">
+                <div>
+                    <h3>Flash Sale Ends in:</h3>
+                    <p>Grab the best deals before they're gone!</p>
+                </div>
+                <div class="countdown-timer" id="countdown">
+                    <div class="timer-block">
+                        <span id="hours">00</span>
+                        <span>Hours</span>
+                    </div>
+                    <div class="timer-block">
+                        <span id="minutes">00</span>
+                        <span>Mins</span>
+                    </div>
+                    <div class="timer-block">
+                        <span id="seconds">00</span>
+                        <span>Secs</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products Section -->
+            <div class="category-section">
+                <div class="section-header">
+                    <h2>Today's Deals</h2>
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <button class="btn btn-outline" onclick="loadProducts()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <a href="/products" class="btn btn-outline">View All <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div id="featured-products" class="products-grid">
+                    <!-- Products loaded here -->
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div class="category-section">
+                <div class="section-header">
+                    <h2>Shop by Category</h2>
+                    <a href="/products" class="btn btn-outline">All Categories <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div id="categories" class="category-grid">
+                    <!-- Categories loaded here -->
+                </div>
+            </div>
+
+            <!-- Electronics Section -->
+            <div class="category-section">
+                <div class="section-header">
+                    <h2>Electronics</h2>
+                    <a href="/products?category=electronics" class="btn btn-outline">See More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div id="electronics-products" class="products-grid">
+                    <!-- Electronics products loaded here -->
+                </div>
+            </div>
+
+            <!-- Fashion Section -->
+            <div class="category-section">
+                <div class="section-header">
+                    <h2>Fashion Store</h2>
+                    <a href="/products?category=fashion" class="btn btn-outline">See More <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div id="fashion-products" class="products-grid">
+                    <!-- Fashion products loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
     <div class="container">
         <div class="features-section">
             <div class="feature-item">
@@ -950,35 +221,36 @@
                     <i class="fas fa-shield-alt"></i>
                 </div>
                 <h4>Secure Payment</h4>
-                <p>100% secure</p>
+                <p>100% secure transactions</p>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">
                     <i class="fas fa-undo-alt"></i>
                 </div>
                 <h4>Easy Returns</h4>
-                <p>7-day policy</p>
+                <p>7-day return policy</p>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">
                     <i class="fas fa-headset"></i>
                 </div>
                 <h4>24/7 Support</h4>
-                <p>Dedicated care</p>
+                <p>Dedicated customer care</p>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Enhanced Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>About</h3>
+                    <h3>About ShopHub</h3>
                     <ul>
                         <li><a href="/about">About Us</a></li>
                         <li><a href="/careers">Careers</a></li>
-                        <li><a href="/press">Press</a></li>
+                        <li><a href="/press">Press Releases</a></li>
+                        <li><a href="/blog">Blog</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -987,38 +259,42 @@
                         <li><a href="/payments">Payments</a></li>
                         <li><a href="/shipping">Shipping</a></li>
                         <li><a href="/returns">Returns</a></li>
+                        <li><a href="/faq">FAQ</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Policy</h3>
                     <ul>
-                        <li><a href="/privacy">Privacy</a></li>
-                        <li><a href="/terms">Terms</a></li>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Use</a></li>
                         <li><a href="/security">Security</a></li>
+                        <li><a href="/sitemap">Sitemap</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Social</h3>
                     <ul>
                         <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
                         <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
                         <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>App</h3>
+                    <h3>Download App</h3>
                     <ul>
-                        <li><a href="#"><i class="fab fa-google-play"></i> Play Store</a></li>
+                        <li><a href="#"><i class="fab fa-google-play"></i> Google Play</a></li>
                         <li><a href="#"><i class="fab fa-app-store"></i> App Store</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 ShopHub. All rights reserved.</p>
+                <p>&copy; 2026 ShopHub. All rights reserved. | Prices are inclusive of GST</p>
                 <div class="payment-methods">
                     <i class="fab fa-cc-visa"></i>
                     <i class="fab fa-cc-mastercard"></i>
-                    <i class="fab fa-cc-rupay"></i>
+                    <i class="fab fa-cc-amex"></i>
+                    <i class="fab fa-cc-paypal"></i>
                     <i class="fab fa-google-pay"></i>
                     <i class="fab fa-apple-pay"></i>
                 </div>
@@ -1026,11 +302,9 @@
         </div>
     </footer>
 
+    <script src="/js/api.js"></script>
     <script>
-        // Helper function
-        const $ = (id) => document.getElementById(id);
-
-        // Carousel functionality
+        // Your existing JavaScript remains exactly the same
         let slideIndex = 1;
         let autoSlideInterval;
 
@@ -1044,8 +318,8 @@
             slides.forEach(slide => slide.classList.remove('active'));
             dots.forEach(dot => dot.classList.remove('active'));
             
-            slides[slideIndex - 1]?.classList.add('active');
-            dots[slideIndex - 1]?.classList.add('active');
+            slides[slideIndex - 1].classList.add('active');
+            dots[slideIndex - 1].classList.add('active');
         }
 
         function nextSlide() {
@@ -1056,15 +330,12 @@
         function currentSlide(n) {
             slideIndex = n;
             showSlide(slideIndex);
-            clearInterval(autoSlideInterval);
-            startCarousel();
         }
 
         function startCarousel() {
             autoSlideInterval = setInterval(nextSlide, 5000);
         }
 
-        // Countdown timer
         function startCountdown() {
             const countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000);
             
@@ -1076,11 +347,9 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 
-                if ($('hours')) {
-                    $('hours').textContent = hours.toString().padStart(2, '0');
-                    $('minutes').textContent = minutes.toString().padStart(2, '0');
-                    $('seconds').textContent = seconds.toString().padStart(2, '0');
-                }
+                $('#hours').textContent = hours.toString().padStart(2, '0');
+                $('#minutes').textContent = minutes.toString().padStart(2, '0');
+                $('#seconds').textContent = seconds.toString().padStart(2, '0');
                 
                 if (distance < 0) {
                     clearInterval(x);
@@ -1088,25 +357,45 @@
             }, 1000);
         }
 
-        // Format price
-        function formatPrice(price) {
-            return '₹' + Math.round(price).toLocaleString('en-IN');
+        async function loadProducts() {
+            try {
+                const featured = await productsAPI.getAll({ limit: 12, sort: 'newest' });
+                if (featured.products) {
+                    $('#featured-products').innerHTML = featured.products.map(createProductCard).join('');
+                }
+
+                const electronics = await productsAPI.getAll({ category: 'electronics', limit: 4 });
+                if (electronics.products) {
+                    $('#electronics-products').innerHTML = electronics.products.map(createProductCard).join('');
+                }
+
+                const fashion = await productsAPI.getAll({ category: 'fashion', limit: 4 });
+                if (fashion.products) {
+                    $('#fashion-products').innerHTML = fashion.products.map(createProductCard).join('');
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
         }
 
-        // Create product card (mobile optimized)
         function createProductCard(product) {
             const discount = Math.floor(Math.random() * 30) + 10;
             const originalPrice = product.price * (1 + discount/100);
             
             return `
-                <div class="product-card" onclick="window.location.href='/products/${product.id || 1}'">
+                <div class="card product-card" onclick="window.location.href='/products/${product.id}'">
                     <span class="product-badge">-${discount}%</span>
                     <div class="product-image-container">
-                        <img src="${product.image_url || 'https://via.placeholder.com/200x200/2874f0/ffffff?text=Product'}" alt="${product.name || 'Product'}" class="product-image">
+                        <img src="${product.image_url || '/images/placeholder.png'}" alt="${product.name}" class="product-image">
+                    </div>
+                    <div class="product-actions">
+                        <button onclick="event.stopPropagation(); addToCart(${product.id})"><i class="fas fa-shopping-cart"></i></button>
+                        <button onclick="event.stopPropagation(); addToWishlist(${product.id})"><i class="fas fa-heart"></i></button>
+                        <button onclick="event.stopPropagation(); viewQuick(${product.id})"><i class="fas fa-eye"></i></button>
                     </div>
                     <div class="product-info">
-                        <span class="product-category">${product.category || 'General'}</span>
-                        <h3 class="product-title">${product.name || 'Product Name'}</h3>
+                        <span class="product-category">${product.category}</span>
+                        <h3 class="product-title">${product.name}</h3>
                         <div class="product-rating">
                             <div class="stars">
                                 <i class="fas fa-star"></i>
@@ -1118,122 +407,73 @@
                             <span class="rating-count">(124)</span>
                         </div>
                         <div class="product-price">
-                            <span class="current-price">${formatPrice(product.price || 999)}</span>
+                            <span class="current-price">${formatPrice(product.price)}</span>
                             <span class="original-price">${formatPrice(originalPrice)}</span>
-                            <span class="discount">${discount}%</span>
+                            <span class="discount">${discount}% off</span>
                         </div>
-                    </div>
-                    <div class="product-actions">
-                        <button onclick="event.stopPropagation(); addToCart(${product.id || 1})"><i class="fas fa-shopping-cart"></i></button>
-                        <button onclick="event.stopPropagation(); addToWishlist(${product.id || 1})"><i class="fas fa-heart"></i></button>
-                        <button onclick="event.stopPropagation(); viewQuick(${product.id || 1})"><i class="fas fa-eye"></i></button>
                     </div>
                 </div>
             `;
         }
 
-        // Load products with sample data
-        function loadProducts() {
-            const sampleProducts = [
-                { id: 1, name: 'Smartphone X', price: 19999, category: 'electronics', image_url: 'https://via.placeholder.com/200x200/2874f0/ffffff?text=Phone' },
-                { id: 2, name: 'Laptop Pro', price: 54999, category: 'electronics', image_url: 'https://via.placeholder.com/200x200/ff9900/ffffff?text=Laptop' },
-                { id: 3, name: 'Wireless Earbuds', price: 2999, category: 'electronics', image_url: 'https://via.placeholder.com/200x200/ff9f00/ffffff?text=Earbuds' },
-                { id: 4, name: 'Smart Watch', price: 3999, category: 'electronics', image_url: 'https://via.placeholder.com/200x200/764ba2/ffffff?text=Watch' },
-                { id: 5, name: 'Men\'s T-Shirt', price: 599, category: 'fashion', image_url: 'https://via.placeholder.com/200x200/f093fb/ffffff?text=T-Shirt' },
-                { id: 6, name: 'Women\'s Dress', price: 1299, category: 'fashion', image_url: 'https://via.placeholder.com/200x200/f5576c/ffffff?text=Dress' },
-                { id: 7, name: 'Running Shoes', price: 1999, category: 'fashion', image_url: 'https://via.placeholder.com/200x200/667eea/ffffff?text=Shoes' },
-                { id: 8, name: 'Sunglasses', price: 899, category: 'fashion', image_url: 'https://via.placeholder.com/200x200/4facfe/ffffff?text=Sunglasses' }
-            ];
-
-            if ($('featured-products')) {
-                $('featured-products').innerHTML = sampleProducts.slice(0, 4).map(createProductCard).join('');
-            }
-
-            if ($('electronics-products')) {
-                $('electronics-products').innerHTML = sampleProducts.filter(p => p.category === 'electronics').slice(0, 4).map(createProductCard).join('');
-            }
-
-            if ($('fashion-products')) {
-                $('fashion-products').innerHTML = sampleProducts.filter(p => p.category === 'fashion').slice(0, 4).map(createProductCard).join('');
+        async function loadCategories() {
+            try {
+                const data = await productsAPI.getCategories();
+                const container = $('#categories');
+                
+                const categoryImages = {
+                    'electronics': '📱',
+                    'fashion': '👕',
+                    'home': '🏠',
+                    'books': '📚',
+                    'sports': '⚽',
+                    'toys': '🧸'
+                };
+                
+                if (data.categories && data.categories.length > 0) {
+                    container.innerHTML = data.categories.map(category => `
+                        <div class="category-card" onclick="window.location.href='/products?category=${encodeURIComponent(category)}'">
+                            <div class="category-image" style="background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem;">
+                                ${categoryImages[category.toLowerCase()] || '📦'}
+                            </div>
+                            <div class="category-overlay">
+                                <h3>${category}</h3>
+                                <p>Shop now <i class="fas fa-arrow-right"></i></p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Error loading categories:', error);
             }
         }
 
-        // Load categories
-        function loadCategories() {
-            const categories = [
-                { name: 'Electronics', icon: '📱' },
-                { name: 'Fashion', icon: '👕' },
-                { name: 'Home', icon: '🏠' },
-                { name: 'Books', icon: '📚' },
-                { name: 'Sports', icon: '⚽' },
-                { name: 'Toys', icon: '🧸' }
-            ];
-
-            if ($('categories')) {
-                $('categories').innerHTML = categories.map(cat => `
-                    <div class="category-card" onclick="window.location.href='/products?category=${cat.name.toLowerCase()}'">
-                        <div class="category-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 2.5rem;">
-                            ${cat.icon}
-                        </div>
-                        <div class="category-overlay">
-                            <h3>${cat.name}</h3>
-                            <p>Shop now <i class="fas fa-arrow-right"></i></p>
-                        </div>
-                    </div>
-                `).join('');
-            }
-        }
-
-        // Search
         function performSearch() {
-            const query = $('search-input')?.value.trim();
+            const query = $('#search-input').value.trim();
             if (query) {
                 window.location.href = `/products?search=${encodeURIComponent(query)}`;
-            } else {
-                alert('Please enter a search term');
             }
         }
 
-        // Action functions
-        function addToCart(id) {
-            alert('Added to cart!');
-            if ($('cart-count')) {
-                $('cart-count').style.display = 'flex';
-                $('cart-count').textContent = '1';
-            }
+        function viewQuick(productId) {
+            showAlert('Quick view coming soon!', 'info');
         }
 
-        function addToWishlist(id) {
-            alert('Added to wishlist!');
+        function addToWishlist(productId) {
+            showAlert('Added to wishlist!', 'success');
         }
 
-        function viewQuick(id) {
-            alert('Quick view coming soon!');
-        }
-
-        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             startCarousel();
             startCountdown();
             loadProducts();
             loadCategories();
-
-            // Hide cart count if zero
-            if ($('cart-count') && $('cart-count').textContent === '0') {
-                $('cart-count').style.display = 'none';
-            }
         });
 
-        // Search on enter
-        $('search-input')?.addEventListener('keypress', (e) => {
+        $('#search-input')?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 performSearch();
             }
-        });
-
-        // Touch optimization
-        document.querySelectorAll('button, a, .category-card, .product-card').forEach(el => {
-            el.addEventListener('touchstart', () => {}, { passive: true });
         });
     </script>
 </body>
