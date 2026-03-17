@@ -54,8 +54,9 @@
             .navbar-container {
                 padding: 0 2rem;
                 display: grid;
-                grid-template-columns: auto 1fr auto auto;
+                grid-template-columns: auto auto 1fr auto auto;
                 gap: 1rem;
+                align-items: center;
             }
         }
 
@@ -133,18 +134,36 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 0.5rem;
-            min-width: 44px;
-            min-height: 44px;
+            justify-content: center;
+            padding: 0.4rem 0.6rem;
+            min-width: 50px;
+            height: 44px;
             text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+            white-space: nowrap;
+        }
+
+        .nav-links li a:hover {
+            background: rgba(255,255,255,0.15);
         }
 
         @media (min-width: 480px) {
             .nav-links li a {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 flex-direction: row;
-                gap: 0.5rem;
-                padding: 0.5rem 0.8rem;
+                gap: 0.6rem;
+                padding: 0.5rem 1rem;
+                min-width: auto;
+                height: auto;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .nav-links li a {
+                font-size: 0.95rem;
+                padding: 0.6rem 1.2rem;
+                gap: 0.8rem;
             }
         }
 
@@ -183,7 +202,16 @@
             display: flex;
             gap: 0.5rem;
             align-items: center;
+            justify-content: flex-end;
             order: 2;
+            flex-wrap: wrap;
+        }
+
+        @media (min-width: 480px) {
+            .auth-buttons {
+                gap: 0.8rem;
+                order: 0;
+            }
         }
 
         .auth-user {
@@ -197,21 +225,31 @@
         }
 
         .btn {
-            padding: 0.5rem 0.8rem;
+            padding: 0.6rem 1rem;
             border: 2px solid transparent;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            justify-content: center;
+            gap: 0.5rem;
             min-height: 40px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
         }
 
         .btn-primary {
             background: var(--flipkart-blue);
             color: white;
+        }
+
+        .btn-primary:hover {
+            background: #1a5cc8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 116, 240, 0.3);
         }
 
         .btn-outline {
@@ -220,15 +258,24 @@
             border: 2px solid white;
         }
 
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
         .btn-danger {
             background: var(--danger-color);
             color: white;
             border: none;
         }
 
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
         .btn-sm {
-            padding: 0.35rem 0.7rem;
-            font-size: 0.75rem;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.8rem;
+            min-height: 36px;
         }
 
         .btn-block {
@@ -739,6 +786,8 @@
                     </a>
                 </li>
                 <li><a href="/orders"><i class="fas fa-truck"></i> Orders</a></li>
+                <li id="dashboard-link" style="display:none;"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li id="admin-nav-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;"><i class="fas fa-crown"></i> Admin</a></li>
             </ul>
 
             <div id="auth-buttons" class="auth-buttons">
@@ -916,8 +965,15 @@
                     `;
                 }
 
+                // Show Dashboard link
+                const dashboardLink = document.getElementById('dashboard-link');
+                if (dashboardLink) dashboardLink.style.display = 'block';
+
+                // Show Admin link if user is admin
                 if (authResponse.authenticated && authResponse.user.role === 'admin') {
                     $('admin-link').style.display = 'block';
+                    const adminNavLink = document.getElementById('admin-nav-link');
+                    if (adminNavLink) adminNavLink.style.display = 'block';
                 }
 
                 try {

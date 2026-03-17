@@ -800,6 +800,8 @@
                     </a>
                 </li>
                 <li><a href="/orders"><i class="fas fa-truck"></i><span class="nav-text">Orders</span></a></li>
+                <li id="dashboard-link" style="display:none;"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i><span class="nav-text">Dashboard</span></a></li>
+                <li id="admin-nav-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;"><i class="fas fa-crown"></i><span class="nav-text">Admin</span></a></li>
             </ul>
 
             <div id="auth-buttons" class="auth-buttons">
@@ -1211,11 +1213,21 @@ document.addEventListener('DOMContentLoaded', function() {
                         <span class="auth-user">Hi, ${status.user.name}</span>
                         <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
                     `;
+                    
+                    // Show Dashboard link
+                    const dashboardLink = document.getElementById('dashboard-link');
+                    if (dashboardLink) dashboardLink.style.display = 'block';
                 } else {
                     authButtons.innerHTML = `
                         <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
                         <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
                     `;
+                }
+
+                // Show Admin link if user is admin
+                if (status.authenticated && status.user && status.user.role === 'admin') {
+                    const adminLink = document.getElementById('admin-nav-link');
+                    if (adminLink) adminLink.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error updating auth UI:', error);
