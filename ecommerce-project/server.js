@@ -56,7 +56,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Middleware
+// Update CORS configuration - This is the key part to fix
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
@@ -72,11 +72,19 @@ app.use(cors({
             return callback(null, true);
         }
 
-        // Allow your specific domain if you have one
-        // if (origin === 'https://yourdomain.com') {
-        //     return callback(null, true);
-        // }
+        // Allow your specific Vercel project URL
+        if (origin === 'https://project-seven-zeta-69.vercel.app') {
+            return callback(null, true);
+        }
 
+        // Allow your EC2 IP (for direct access)
+        if (origin === 'http://51.20.87.184:3000') {
+            return callback(null, true);
+        }
+
+        // Log rejected origins for debugging
+        console.log('CORS rejected origin:', origin);
+        
         // Reject other origins
         return callback(new Error('Not allowed by CORS'));
     },
@@ -84,18 +92,17 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+// Serve static files - Note: Your frontend files are in 'public' folder
 app.use(express.static(path.join(__dirname, 'frontend', 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'frontend', 'uploads')));
 
 // Session configuration with memory storage
-// Memory storage is sufficient because:
-// 1. Sessions are checked/refreshed every 5 minutes from frontend
-// 2. Session data is stored in localStorage on client side as backup
-// 3. User data survives server restart via localStorage + re-login
 const sessionStore = new session.MemoryStore();
 
 // Track active sessions for user limit
@@ -126,12 +133,12 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: true,
     saveUninitialized: false,
-    proxy: process.env.NODE_ENV === 'production',
+    proxy: true, // Changed to true for Vercel proxy
     cookie: {
-        secure: process.env.NODE_ENV === 'production',
+        secure: process.env.NODE_ENV === 'production', // Will be true on Vercel (HTTPS)
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        sameSite: 'lax'
+        sameSite: 'lax' // Changed from 'lax' to 'none' for cross-site requests
     }
 }));
 
@@ -142,7 +149,8 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 
-// Frontend Routes - Serve HTML files
+// Frontend Routes - These are for when you access EC2 directly
+// Note: When using Vercel, these routes won't be used because Vercel serves the frontend
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'public', 'index.html'));
 });
@@ -214,6 +222,8 @@ const initializeServer = async () => {
         
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server running on port ${PORT}`);
+            console.log(`CORS enabled for: .vercel.app domains`);
+            console.log(`Server ready to accept requests from Vercel`);
         });
     } catch (error) {
         console.error('Failed to start server:', error);
