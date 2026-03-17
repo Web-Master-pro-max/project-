@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Admin Dashboard - ShopHub</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -15,18 +15,261 @@
             --admin-dark: #263238;
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        /* Navbar - Responsive */
+        .navbar {
+            background: var(--amazon-dark);
+            padding: 0.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-container {
+                padding: 0 2rem;
+                display: grid;
+                grid-template-columns: auto 1fr auto auto;
+                gap: 1rem;
+            }
+        }
+
+        .navbar-brand {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #ff9900, #ffc34d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-brand {
+                font-size: 1.8rem;
+            }
+        }
+
+        .nav-search {
+            width: 100%;
+            order: 3;
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        @media (min-width: 768px) {
+            .nav-search {
+                width: auto;
+                order: 0;
+                max-width: 400px;
+            }
+        }
+
+        .nav-search input {
+            flex: 1;
+            padding: 0.7rem;
+            border: none;
+            font-size: 0.9rem;
+        }
+
+        .nav-search button {
+            background: var(--amazon-orange);
+            border: none;
+            padding: 0 1rem;
+            cursor: pointer;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: auto;
+            order: 1;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                order: 0;
+                margin-left: 0;
+                gap: 1rem;
+            }
+        }
+
+        .nav-links li a {
+            color: white;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        @media (min-width: 480px) {
+            .nav-links li a {
+                font-size: 0.9rem;
+                flex-direction: row;
+                gap: 0.5rem;
+                padding: 0.5rem 0.8rem;
+            }
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff0000;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            order: 2;
+        }
+
+        .btn {
+            padding: 0.5rem 0.8rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            min-height: 40px;
+        }
+
+        .btn-primary {
+            background: var(--flipkart-blue);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-sm {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.75rem;
+        }
+
+        /* Admin Wrapper - Responsive */
         .admin-wrapper {
             display: flex;
+            flex-direction: column;
             min-height: 100vh;
         }
 
-        .admin-sidebar {
-            width: 260px;
+        @media (min-width: 1024px) {
+            .admin-wrapper {
+                flex-direction: row;
+            }
+        }
+
+        /* Mobile Menu Toggle */
+        .mobile-menu-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 1rem;
             background: var(--admin-dark);
             color: white;
-            position: fixed;
-            height: 100vh;
-            overflow-y: auto;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        @media (min-width: 1024px) {
+            .mobile-menu-toggle {
+                display: none;
+            }
+        }
+
+        /* Admin Sidebar - Responsive */
+        .admin-sidebar {
+            width: 100%;
+            background: var(--admin-dark);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 1023px) {
+            .admin-sidebar {
+                display: none;
+            }
+            
+            .admin-sidebar.mobile-open {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 85%;
+                max-width: 300px;
+                height: 100vh;
+                overflow-y: auto;
+                z-index: 2000;
+                animation: slideIn 0.3s ease;
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(-100%);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .admin-sidebar {
+                width: 260px;
+                position: sticky;
+                top: 0;
+                height: 100vh;
+            }
         }
 
         .admin-sidebar-header {
@@ -36,12 +279,11 @@
         }
 
         .admin-sidebar-header h2 {
-            margin: 0;
             font-size: 1.3rem;
+            margin-bottom: 0.3rem;
         }
 
         .admin-sidebar-header p {
-            margin: 0.3rem 0 0;
             font-size: 0.85rem;
             opacity: 0.7;
         }
@@ -51,18 +293,15 @@
             padding: 1rem 0;
         }
 
-        .admin-menu li {
-            padding: 0;
-        }
-
         .admin-menu a {
             display: flex;
             align-items: center;
             gap: 1rem;
             padding: 0.8rem 1.5rem;
             color: rgba(255,255,255,0.8);
-            transition: all 0.3s ease;
             text-decoration: none;
+            transition: all 0.3s ease;
+            min-height: 44px;
         }
 
         .admin-menu a:hover,
@@ -75,43 +314,75 @@
             width: 20px;
         }
 
+        /* Sidebar Overlay */
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+
+        /* Admin Main - Responsive */
         .admin-main {
             flex: 1;
-            margin-left: 260px;
             background: #f5f5f5;
             min-height: 100vh;
         }
 
         .admin-header {
             background: white;
-            padding: 1rem 2rem;
+            padding: 1rem;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 1rem;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
+        @media (min-width: 768px) {
+            .admin-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1rem 2rem;
+            }
+        }
+
         .admin-header-left h1 {
-            margin: 0;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             color: var(--admin-dark);
+        }
+
+        @media (min-width: 768px) {
+            .admin-header-left h1 {
+                font-size: 1.5rem;
+            }
         }
 
         .admin-header-right {
             display: flex;
             align-items: center;
             gap: 1.5rem;
+            justify-content: flex-end;
         }
 
         .admin-notifications {
             position: relative;
             cursor: pointer;
+            padding: 0.5rem;
         }
 
         .notification-badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
+            top: 0;
+            right: 0;
             background: var(--admin-danger);
             color: white;
             border-radius: 50%;
@@ -126,52 +397,94 @@
         .admin-profile {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
+            gap: 0.5rem;
             cursor: pointer;
+            padding: 0.3rem;
+        }
+
+        @media (min-width: 768px) {
+            .admin-profile {
+                gap: 0.8rem;
+            }
         }
 
         .admin-profile img {
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             object-fit: cover;
         }
 
-        .admin-content {
-            padding: 2rem;
+        @media (min-width: 768px) {
+            .admin-profile img {
+                width: 40px;
+                height: 40px;
+            }
         }
 
+        .admin-content {
+            padding: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .admin-content {
+                padding: 2rem;
+            }
+        }
+
+        /* Stats Grid - Responsive */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 640px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
         }
 
         .stat-card {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1rem;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            gap: 1rem;
+            text-align: center;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
         }
 
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        @media (min-width: 768px) {
+            .stat-card {
+                padding: 1.5rem;
+                flex-direction: row;
+                text-align: left;
+                gap: 1rem;
+            }
         }
 
         .stat-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .stat-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+                margin-bottom: 0;
+            }
         }
 
         .stat-icon.products { background: #e3f2fd; color: var(--admin-primary); }
@@ -180,74 +493,152 @@
         .stat-icon.revenue { background: #fce4ec; color: #c2185b; }
 
         .stat-details h3 {
-            margin: 0;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: #666;
+            margin-bottom: 0.2rem;
+        }
+
+        @media (min-width: 768px) {
+            .stat-details h3 {
+                font-size: 0.9rem;
+            }
         }
 
         .stat-details .stat-value {
-            font-size: 1.8rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: var(--admin-dark);
-            margin: 0.2rem 0 0;
         }
 
+        @media (min-width: 768px) {
+            .stat-details .stat-value {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* Charts Grid - Responsive */
         .charts-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 1fr;
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 1024px) {
+            .charts-grid {
+                grid-template-columns: 2fr 1fr;
+            }
         }
 
         .chart-card {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        @media (min-width: 768px) {
+            .chart-card {
+                padding: 1.5rem;
+            }
         }
 
         .chart-header {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            gap: 0.8rem;
             margin-bottom: 1rem;
         }
 
-        .chart-header h3 {
-            margin: 0;
-            font-size: 1.1rem;
+        @media (min-width: 640px) {
+            .chart-header {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
         }
 
+        .chart-header h3 {
+            font-size: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .chart-header h3 {
+                font-size: 1.1rem;
+            }
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        /* Recent Orders Table - Responsive */
         .recent-orders {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow-x: auto;
+        }
+
+        @media (min-width: 768px) {
+            .recent-orders {
+                padding: 1.5rem;
+            }
         }
 
         .recent-orders table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 600px;
         }
 
         .recent-orders th {
             text-align: left;
-            padding: 1rem;
+            padding: 0.8rem;
             background: #f8f9fa;
             font-weight: 600;
             color: var(--admin-dark);
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 768px) {
+            .recent-orders th {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
         }
 
         .recent-orders td {
-            padding: 1rem;
+            padding: 0.8rem;
             border-bottom: 1px solid #eee;
+            font-size: 0.8rem;
+        }
+
+        @media (min-width: 768px) {
+            .recent-orders td {
+                padding: 1rem;
+                font-size: 0.9rem;
+            }
         }
 
         .status-badge {
-            padding: 0.3rem 0.8rem;
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.7rem;
             font-weight: 500;
+        }
+
+        @media (min-width: 768px) {
+            .status-badge {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.85rem;
+            }
         }
 
         .status-badge.pending { background: #fff3cd; color: #856404; }
@@ -257,40 +648,128 @@
         .status-badge.cancelled { background: #f8d7da; color: #721c24; }
 
         .action-btn {
-            padding: 0.3rem 0.8rem;
+            padding: 0.3rem 0.6rem;
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: all 0.3s ease;
+            font-size: 0.7rem;
+            margin: 0.2rem;
+            min-width: 30px;
+            min-height: 30px;
         }
 
-        .action-btn.edit {
-            background: var(--admin-primary);
+        @media (min-width: 768px) {
+            .action-btn {
+                padding: 0.3rem 0.8rem;
+                font-size: 0.85rem;
+                margin: 0.2rem;
+                min-width: auto;
+            }
+        }
+
+        .action-btn.edit { background: var(--admin-primary); color: white; }
+        .action-btn.delete { background: var(--admin-danger); color: white; }
+        .action-btn.view { background: var(--admin-warning); color: white; }
+
+        /* Modal - Responsive */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .btn-success {
+            background: var(--admin-success);
             color: white;
         }
 
-        .action-btn.delete {
-            background: var(--admin-danger);
+        .btn-secondary {
+            background: #6c757d;
             color: white;
         }
 
-        .action-btn.view {
-            background: var(--admin-warning);
-            color: white;
+        .mt-2 {
+            margin-top: 0.5rem;
         }
 
-        @media (max-width: 768px) {
-            .admin-sidebar {
-                width: 0;
-                display: none;
-            }
-            .admin-main {
-                margin-left: 0;
-            }
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
+        /* Touch-friendly improvements */
+        button, a, .stat-card, .action-btn {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        * {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
@@ -304,7 +783,7 @@
             </div>
             
             <div class="nav-search">
-                <input type="text" id="search-input" placeholder="Search for products, brands and more...">
+                <input type="text" id="search-input" placeholder="Search products...">
                 <button onclick="performSearch()">
                     <i class="fas fa-search"></i>
                 </button>
@@ -328,20 +807,28 @@
         </div>
     </nav>
 
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <i class="fas fa-bars"></i> Menu
+    </button>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeMobileMenu()"></div>
+
     <div class="admin-wrapper">
         <!-- Sidebar -->
-        <aside class="admin-sidebar">
+        <aside id="admin-sidebar" class="admin-sidebar">
             <div class="admin-sidebar-header">
                 <h2><i class="fas fa-store"></i> ShopHub Admin</h2>
                 <p>Manage your store</p>
             </div>
             <ul class="admin-menu">
-                <li><a href="#dashboard" class="active" onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                <li><a href="#products" onclick="showSection('products')"><i class="fas fa-box"></i> Products</a></li>
-                <li><a href="#orders" onclick="showSection('orders')"><i class="fas fa-shopping-cart"></i> Orders</a></li>
-                <li><a href="#users" onclick="showSection('users')"><i class="fas fa-users"></i> Users</a></li>
-                <li><a href="#reports" onclick="showSection('reports')"><i class="fas fa-chart-bar"></i> Reports</a></li>
-                <li><a href="#settings" onclick="showSection('settings')"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#dashboard" class="active" onclick="showSection('dashboard'); closeMobileMenu()"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#products" onclick="showSection('products'); closeMobileMenu()"><i class="fas fa-box"></i> Products</a></li>
+                <li><a href="#orders" onclick="showSection('orders'); closeMobileMenu()"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                <li><a href="#users" onclick="showSection('users'); closeMobileMenu()"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="#reports" onclick="showSection('reports'); closeMobileMenu()"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                <li><a href="#settings" onclick="showSection('settings'); closeMobileMenu()"><i class="fas fa-cog"></i> Settings</a></li>
                 <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </aside>
@@ -360,7 +847,7 @@
                     </div>
                     <div class="admin-profile">
                         <img src="https://via.placeholder.com/40" alt="Admin">
-                        <span>Admin User</span>
+                        <span class="admin-name">Admin User</span>
                         <i class="fas fa-chevron-down"></i>
                     </div>
                 </div>
@@ -421,7 +908,7 @@
                                     <option>Last 3 months</option>
                                 </select>
                             </div>
-                            <div style="height: 300px; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                            <div style="height: 250px; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
                                 <canvas id="salesChart" style="width: 100%; height: 100%;"></canvas>
                             </div>
                         </div>
@@ -429,7 +916,7 @@
                             <div class="chart-header">
                                 <h3>Top Categories</h3>
                             </div>
-                            <div style="height: 300px; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
+                            <div style="height: 250px; background: #f8f9fa; display: flex; align-items: center; justify-content: center;">
                                 <canvas id="categoryChart" style="width: 100%; height: 100%;"></canvas>
                             </div>
                         </div>
@@ -635,7 +1122,7 @@
                         <label>Description</label>
                         <textarea id="product-description" class="form-control" rows="3"></textarea>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
                         <div class="form-group">
                             <label>Price (₹)</label>
                             <input type="number" id="product-price" class="form-control" step="0.01" required>
@@ -662,6 +1149,57 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let currentEditingProductId = null;
+
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (window.innerWidth < 1024) {
+                sidebar.classList.toggle('mobile-open');
+                overlay.classList.toggle('active');
+                document.body.style.overflow = sidebar.classList.contains('mobile-open') ? 'hidden' : '';
+            }
+        }
+
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('admin-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (window.innerWidth < 1024) {
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 1024) {
+                const sidebar = document.getElementById('admin-sidebar');
+                const overlay = document.getElementById('sidebar-overlay');
+                
+                sidebar.classList.remove('mobile-open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        function formatPrice(value) {
+            const num = Number(value);
+            if (Number.isNaN(num)) return value;
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function showAlert(message, type) {
+            alert(message); // Simple alert for demo
+        }
 
         // Show section
         function showSection(sectionId) {
@@ -712,12 +1250,10 @@
                 const ordersData = await ordersAPI.getAll();
                 const usersData = await usersAPI.getAll();
 
-                // Update stats
                 document.getElementById('total-products').textContent = productsData.products?.length || 0;
                 document.getElementById('total-orders').textContent = ordersData.orders?.length || 0;
                 document.getElementById('total-users').textContent = usersData.users?.length || 0;
 
-                // Calculate revenue
                 const revenue = ordersData.orders?.reduce((sum, order) => {
                     const total = order.OrderItems?.reduce((itemSum, item) => {
                         return itemSum + (item.price * item.quantity);
@@ -726,7 +1262,6 @@
                 }, 0) || 0;
                 document.getElementById('total-revenue').textContent = formatPrice(revenue);
 
-                // Load recent orders
                 loadRecentOrders(ordersData.orders);
             } catch (error) {
                 showAlert('Error loading dashboard: ' + error.message, 'danger');
@@ -747,9 +1282,9 @@
                     return `
                         <tr>
                             <td>#${order.id}</td>
-                            <td>${order.customer_name}</td>
+                            <td>${order.customer_name || 'N/A'}</td>
                             <td>${formatPrice(total)}</td>
-                            <td><span class="status-badge ${order.status?.toLowerCase()}">${order.status || 'PENDING'}</span></td>
+                            <td><span class="status-badge ${order.status?.toLowerCase() || 'pending'}">${order.status || 'PENDING'}</span></td>
                             <td>${formatDate(order.created_at)}</td>
                             <td>
                                 <button class="action-btn view" onclick="viewOrder(${order.id})">
@@ -777,16 +1312,16 @@
                             <td>
                                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                                     <img src="${product.image_url || '/images/placeholder.png'}" 
-                                         style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px;">
+                                         style="width: 30px; height: 30px; object-fit: cover; border-radius: 4px;">
                                     ${product.name}
                                 </div>
                             </td>
-                            <td>${product.category}</td>
+                            <td>${product.category || 'N/A'}</td>
                             <td>${formatPrice(product.price)}</td>
-                            <td>${product.stock}</td>
+                            <td>${product.stock || 0}</td>
                             <td>
-                                <span class="status-badge ${product.stock > 0 ? 'processing' : 'cancelled'}">
-                                    ${product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                                <span class="status-badge ${(product.stock || 0) > 0 ? 'processing' : 'cancelled'}">
+                                    ${(product.stock || 0) > 0 ? 'In Stock' : 'Out of Stock'}
                                 </span>
                             </td>
                             <td>
@@ -822,9 +1357,9 @@
                         return `
                             <tr>
                                 <td>#${order.id}</td>
-                                <td>${order.customer_name}</td>
+                                <td>${order.customer_name || 'N/A'}</td>
                                 <td>${formatPrice(total)}</td>
-                                <td><span class="status-badge ${order.status?.toLowerCase()}">${order.status || 'PENDING'}</span></td>
+                                <td><span class="status-badge ${order.status?.toLowerCase() || 'pending'}">${order.status || 'PENDING'}</span></td>
                                 <td>${order.payment_method || 'N/A'}</td>
                                 <td>${formatDate(order.created_at)}</td>
                                 <td>
@@ -859,11 +1394,11 @@
                             <td>
                                 <div style="display: flex; align-items: center; gap: 0.5rem;">
                                     <img src="${user.avatar || 'https://via.placeholder.com/40'}" 
-                                         style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
-                                    ${user.name}
+                                         style="width: 30px; height: 30px; border-radius: 50%; object-fit: cover;">
+                                    ${user.name || 'N/A'}
                                 </div>
                             </td>
-                            <td>${user.email}</td>
+                            <td>${user.email || 'N/A'}</td>
                             <td>
                                 <span class="status-badge ${user.role === 'admin' ? 'processing' : 'pending'}">
                                     ${user.role || 'user'}
@@ -895,7 +1430,6 @@
             document.getElementById('product-modal-title').textContent = 'Add Product';
             document.getElementById('product-form').reset();
             
-            // Load categories
             await loadCategoryOptions();
             
             document.getElementById('product-modal').classList.add('active');
@@ -925,14 +1459,14 @@
                     currentEditingProductId = productId;
                     
                     document.getElementById('product-modal-title').textContent = 'Edit Product';
-                    document.getElementById('product-name').value = product.name;
+                    document.getElementById('product-name').value = product.name || '';
                     document.getElementById('product-description').value = product.description || '';
-                    document.getElementById('product-price').value = product.price;
-                    document.getElementById('product-stock').value = product.stock;
+                    document.getElementById('product-price').value = product.price || '';
+                    document.getElementById('product-stock').value = product.stock || '';
                     document.getElementById('product-image').value = product.image_url || '';
                     
                     await loadCategoryOptions();
-                    document.getElementById('product-category').value = product.category;
+                    document.getElementById('product-category').value = product.category || '';
                     
                     document.getElementById('product-modal').classList.add('active');
                 }
@@ -1002,17 +1536,14 @@
         }
 
         function viewUser(userId) {
-            // Implement view user logic
             showAlert('View user feature coming soon!', 'info');
         }
 
         function editUser(userId) {
-            // Implement edit user logic
             showAlert('Edit user feature coming soon!', 'info');
         }
 
         function exportUsers() {
-            // Implement export logic
             showAlert('Export feature coming soon!', 'info');
         }
 
@@ -1021,9 +1552,16 @@
             document.getElementById('product-modal').classList.remove('active');
         }
 
+        // Perform search
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if (query) {
+                window.location.href = `/products?search=${encodeURIComponent(query)}`;
+            }
+        }
+
         // Initialize charts
         function initCharts() {
-            // Sales chart
             const ctx1 = document.getElementById('salesChart')?.getContext('2d');
             if (ctx1) {
                 new Chart(ctx1, {
@@ -1046,7 +1584,6 @@
                 });
             }
 
-            // Category chart
             const ctx2 = document.getElementById('categoryChart')?.getContext('2d');
             if (ctx2) {
                 new Chart(ctx2, {
@@ -1072,9 +1609,20 @@
             }
         }
 
+        function logout() {
+            authAPI.logout().finally(() => {
+                window.location.href = '/';
+            });
+        }
+
+        document.getElementById('search-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
         // Initialize on load
         document.addEventListener('DOMContentLoaded', async () => {
-            // Check if user is admin
             try {
                 const response = await authAPI.checkAuth();
                 
@@ -1090,7 +1638,6 @@
                     return;
                 }
 
-                // User is admin, proceed
                 loadDashboard();
                 initCharts();
             } catch (error) {
