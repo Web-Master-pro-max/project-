@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>ShopHub - India's Best Shopping Destination</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Enhanced Modern Styles */
+        /* Enhanced Modern Styles with Mobile-First Approach */
         :root {
             --amazon-orange: #ff9900;
             --amazon-dark: #232f3e;
@@ -19,79 +19,220 @@
             --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
         }
 
-        /* Enhanced Navbar */
+        /* Mobile-First Base Styles */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            overflow-x: hidden;
+            width: 100%;
+            position: relative;
+        }
+
+        /* Enhanced Navbar - Mobile Optimized */
         .navbar {
             background: var(--amazon-dark);
             padding: 0.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
         }
 
         .navbar-container {
-            display: grid;
-            grid-template-columns: auto 1fr auto auto;
-            gap: 1rem;
+            display: flex;
+            flex-wrap: wrap;
             align-items: center;
+            gap: 0.5rem;
+            padding: 0 10px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-container {
+                display: grid;
+                grid-template-columns: auto 1fr auto auto;
+                gap: 1rem;
+                padding: 0 20px;
+            }
         }
 
         .navbar-brand {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             background: linear-gradient(135deg, #ff9900, #ffc34d);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
             letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-brand {
+                font-size: 1.8rem;
+            }
         }
 
         .nav-search {
-            max-width: 600px;
-            margin: 0;
+            width: 100%;
+            order: 3;
+            margin-top: 0.5rem;
             display: flex;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        @media (min-width: 768px) {
+            .nav-search {
+                width: auto;
+                order: initial;
+                margin-top: 0;
+            }
+        }
+
         .nav-search input {
             flex: 1;
-            padding: 0.75rem 1rem;
+            padding: 0.7rem 0.8rem;
             border: none;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .nav-search button {
             background: var(--amazon-orange);
             border: none;
-            padding: 0 1.5rem;
+            padding: 0 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            min-width: 48px;
+            min-height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .nav-search button:hover {
-            background: #ffaa33;
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: auto;
         }
 
-        .nav-search button i {
-            color: var(--amazon-dark);
-            font-size: 1.2rem;
+        @media (min-width: 480px) {
+            .nav-links {
+                gap: 0.8rem;
+            }
         }
 
-        /* Hero Carousel */
+        .nav-links li a {
+            color: white;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            justify-content: center;
+        }
+
+        @media (min-width: 480px) {
+            .nav-links li a {
+                font-size: 0.9rem;
+                flex-direction: row;
+                gap: 0.5rem;
+                padding: 0.5rem 0.8rem;
+            }
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff0000;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 480px) {
+            .cart-count {
+                top: -5px;
+                right: -5px;
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 0.8rem;
+            font-size: 0.8rem;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 768px) {
+            .btn {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Hero Carousel - Mobile Optimized */
         .hero-carousel {
             position: relative;
-            margin-bottom: 2rem;
-            width: 100vw;
-            left: 50%;
-            right: 50%;
-            margin-left: -50vw;
-            margin-right: -50vw;
-            border-radius: 0;
+            margin: 0 -12px 1rem -12px;
+            width: calc(100% + 24px);
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        @media (min-width: 768px) {
+            .hero-carousel {
+                margin: 0 auto 2rem auto;
+                width: 100%;
+                border-radius: 12px;
+            }
         }
 
         .carousel-container {
             position: relative;
-            height: 500px;
+            height: 180px;
             overflow: hidden;
+        }
+
+        @media (min-width: 480px) {
+            .carousel-container {
+                height: 220px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .carousel-container {
+                height: 350px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .carousel-container {
+                height: 450px;
+            }
         }
 
         .carousel-slide {
@@ -99,69 +240,93 @@
             width: 100%;
             height: 100%;
             opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            transition: opacity 0.5s ease;
             background-size: cover;
             background-position: center;
             display: flex;
             align-items: center;
-            padding: 0 5rem;
-        }
-
-        .carousel-slide.active {
-            opacity: 1;
+            padding: 0 1rem;
         }
 
         .carousel-content {
-            max-width: 500px;
+            max-width: 250px;
             color: white;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 480px) {
+            .carousel-content {
+                max-width: 300px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .carousel-content {
+                max-width: 500px;
+                padding: 0 2rem;
+            }
         }
 
         .carousel-content h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            animation: slideInLeft 0.5s ease;
+            font-size: 1.3rem;
+            margin-bottom: 0.3rem;
+        }
+
+        @media (min-width: 768px) {
+            .carousel-content h2 {
+                font-size: 2.2rem;
+                margin-bottom: 1rem;
+            }
         }
 
         .carousel-content p {
-            font-size: 1.2rem;
-            margin-bottom: 1.5rem;
-            animation: slideInRight 0.5s ease;
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        @media (min-width: 768px) {
+            .carousel-content p {
+                font-size: 1.1rem;
+                margin-bottom: 1.5rem;
+            }
         }
 
         .carousel-btn {
-            padding: 0.8rem 2rem;
-            font-size: 1.1rem;
+            padding: 0.5rem 1.2rem;
+            font-size: 0.9rem;
             background: var(--amazon-orange);
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             color: white;
             cursor: pointer;
-            transition: all 0.3s ease;
-            animation: fadeInUp 0.5s ease;
-        }
-
-        .carousel-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(255,153,0,0.3);
+            min-height: 44px;
+            min-width: 44px;
         }
 
         .carousel-dots {
             position: absolute;
-            bottom: 20px;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 10px;
+            gap: 6px;
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: rgba(255,255,255,0.5);
             cursor: pointer;
-            transition: all 0.3s ease;
+            min-width: 8px;
+            min-height: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .dot {
+                width: 12px;
+                height: 12px;
+            }
         }
 
         .dot.active {
@@ -169,65 +334,91 @@
             transform: scale(1.2);
         }
 
-        /* Category Cards */
+        /* Category Cards - Mobile Optimized */
         .category-section {
-            margin-bottom: 3rem;
+            margin-bottom: 2rem;
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
+            padding: 0 4px;
         }
 
         .section-header h2 {
-            font-size: 1.8rem;
+            font-size: 1.2rem;
             color: var(--amazon-dark);
             position: relative;
-            padding-bottom: 0.5rem;
+            padding-left: 8px;
         }
 
         .section-header h2::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -4px;
             left: 0;
-            width: 60px;
-            height: 3px;
+            width: 30px;
+            height: 2px;
             background: var(--amazon-orange);
-            border-radius: 3px;
+        }
+
+        @media (min-width: 768px) {
+            .section-header h2 {
+                font-size: 1.6rem;
+                padding-left: 0;
+            }
+            .section-header h2::after {
+                width: 50px;
+                height: 3px;
+            }
         }
 
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        @media (min-width: 480px) {
+            .category-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .category-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
         }
 
         .category-card {
             position: relative;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            aspect-ratio: 1/1;
+            min-height: 140px;
         }
 
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        @media (min-width: 480px) {
+            .category-card {
+                min-height: 160px;
+            }
         }
 
         .category-image {
-            height: 200px;
+            width: 100%;
+            height: 100%;
             background-size: cover;
             background-position: center;
-            transition: transform 0.5s ease;
-        }
-
-        .category-card:hover .category-image {
-            transform: scale(1.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
         }
 
         .category-overlay {
@@ -235,51 +426,68 @@
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 1.5rem;
+            padding: 1rem;
             background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
             color: white;
         }
 
         .category-overlay h3 {
-            font-size: 1.3rem;
-            margin-bottom: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 0.2rem;
         }
 
         .category-overlay p {
-            font-size: 0.9rem;
-            opacity: 0.9;
+            font-size: 0.75rem;
         }
 
-        /* Product Cards Enhanced */
+        /* Products Grid - Mobile Optimized */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.8rem;
+        }
+
+        @media (min-width: 480px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(5, 1fr);
+            }
         }
 
         .product-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            transition: all 0.3s ease;
-            position: relative;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.2s ease;
         }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+        .product-card:active {
+            transform: scale(0.98);
         }
 
         .product-badge {
             position: absolute;
-            top: 10px;
-            left: 10px;
-            background: var(--flipkart-yellow);
+            top: 6px;
+            left: 6px;
+            background: #ff6b6b;
             color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 16px;
+            font-size: 0.7rem;
             font-weight: bold;
             z-index: 1;
         }
@@ -298,163 +506,140 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 1rem;
-            transition: transform 0.3s ease;
-        }
-
-        .product-card:hover .product-image {
-            transform: scale(1.05);
-        }
-
-        .product-actions {
-            position: absolute;
-            bottom: -50px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 0.5rem;
-            padding: 0.5rem;
-            background: rgba(255,255,255,0.95);
-            transition: bottom 0.3s ease;
-        }
-
-        .product-card:hover .product-actions {
-            bottom: 0;
-        }
-
-        .product-actions button {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: none;
-            background: var(--amazon-dark);
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .product-actions button:hover {
-            background: var(--amazon-orange);
-            transform: scale(1.1);
+            padding: 0.8rem;
         }
 
         .product-info {
-            padding: 1rem;
+            padding: 0.8rem;
         }
 
         .product-category {
-            font-size: 0.8rem;
-            color: var(--amazon-orange);
+            font-size: 0.7rem;
+            color: var(--flipkart-blue);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .product-title {
-            font-size: 1rem;
-            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            margin: 0.3rem 0;
             font-weight: 600;
-            color: var(--amazon-dark);
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
+            line-height: 1.3;
+            min-height: 2.2rem;
         }
 
         .product-rating {
             display: flex;
             align-items: center;
-            gap: 0.3rem;
-            margin: 0.5rem 0;
+            gap: 0.2rem;
+            margin: 0.3rem 0;
+            font-size: 0.75rem;
         }
 
-        .stars {
-            color: #ffc107;
-        }
-
-        .rating-count {
-            color: var(--secondary-color);
-            font-size: 0.85rem;
+        .stars i {
+            font-size: 0.7rem;
         }
 
         .product-price {
             display: flex;
             align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 0.5rem;
+            flex-wrap: wrap;
+            gap: 0.3rem;
         }
 
         .current-price {
-            font-size: 1.3rem;
+            font-size: 1rem;
             font-weight: bold;
             color: var(--flipkart-blue);
         }
 
         .original-price {
-            font-size: 0.9rem;
-            color: var(--secondary-color);
+            font-size: 0.7rem;
+            color: #999;
             text-decoration: line-through;
         }
 
         .discount {
             color: var(--success-color);
             font-weight: bold;
+            font-size: 0.7rem;
         }
 
-        /* Banner Strip */
+        .product-actions {
+            display: none;
+        }
+
+        /* Banner Strip - Mobile Optimized */
         .banner-strip {
             background: var(--gradient-2);
-            padding: 2rem;
-            border-radius: 12px;
-            margin: 2rem 0;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
             color: white;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 1rem;
+            text-align: center;
+        }
+
+        @media (min-width: 480px) {
+            .banner-strip {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                text-align: left;
+            }
         }
 
         .banner-strip h3 {
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
         }
 
         .banner-strip p {
-            font-size: 1.1rem;
-            opacity: 0.9;
+            font-size: 0.85rem;
         }
 
         .countdown-timer {
             display: flex;
-            gap: 1rem;
-            font-size: 1.5rem;
-            font-weight: bold;
+            gap: 0.5rem;
+            justify-content: center;
         }
 
         .timer-block {
             background: rgba(255,255,255,0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            text-align: center;
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            min-width: 45px;
         }
 
-        .timer-block span {
-            font-size: 0.8rem;
+        .timer-block span:first-child {
+            font-size: 1rem;
             display: block;
-            opacity: 0.8;
         }
 
-        /* Features Section */
+        .timer-block span:last-child {
+            font-size: 0.6rem;
+        }
+
+        /* Features Section - Mobile Optimized */
         .features-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-            padding: 2rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+            padding: 1.2rem;
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        @media (min-width: 480px) {
+            .features-section {
+                grid-template-columns: repeat(4, 1fr);
+            }
         }
 
         .feature-item {
@@ -462,62 +647,128 @@
         }
 
         .feature-icon {
-            width: 60px;
-            height: 60px;
+            width: 40px;
+            height: 40px;
             background: linear-gradient(135deg, var(--flipkart-blue), var(--amazon-orange));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
+            margin: 0 auto 0.5rem;
             color: white;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
         }
 
         .feature-item h4 {
-            margin-bottom: 0.5rem;
-            color: var(--amazon-dark);
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
         }
 
         .feature-item p {
-            color: var(--secondary-color);
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Footer - Mobile Optimized */
+        footer {
+            background-color: var(--dark-color);
+            color: var(--white);
+            padding: 1.5rem 0 1rem 0;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.2rem;
+        }
+
+        @media (min-width: 480px) {
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 2rem;
+            }
+        }
+
+        .footer-section h3 {
             font-size: 0.9rem;
+            margin-bottom: 0.5rem;
         }
 
-        /* Animations */
-        @keyframes slideInLeft {
-            from {
-                opacity: 0;
-                transform: translateX(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
+        .footer-section ul li {
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-section ul li a {
+            color: #adb5bd;
+            font-size: 0.8rem;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #495057;
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        .payment-methods {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .payment-methods i {
+            font-size: 1.2rem;
+        }
+
+        /* Utility Classes */
+        .container {
+            width: 100%;
+            padding: 0 12px;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 20px;
             }
         }
 
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--flipkart-blue);
+            color: var(--flipkart-blue);
+            padding: 0.5rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            min-height: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* Touch-friendly improvements */
+        button, a, .product-card, .category-card {
+            touch-action: manipulation;
         }
 
+        /* Prevent text size adjustment on orientation change */
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        /* Better scrolling on iOS */
+        * {
+            -webkit-overflow-scrolling: touch;
+        }
     </style>
 </head>
 <body>
@@ -529,28 +780,29 @@
                 ShopHub
             </div>
             
-            <div class="nav-search">
-                <input type="text" id="search-input" placeholder="Search for products, brands and more...">
-                <button onclick="performSearch()">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-
             <ul class="nav-links">
-                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="/products"><i class="fas fa-box"></i> Products</a></li>
+                <li><a href="/"><i class="fas fa-home"></i><span class="nav-text">Home</span></a></li>
+                <li><a href="/products"><i class="fas fa-box"></i><span class="nav-text">Products</span></a></li>
                 <li>
                     <a href="/cart" class="cart-icon-wrapper">
                         <i class="fas fa-shopping-cart"></i>
+                        <span class="nav-text">Cart</span>
                         <span id="cart-count" class="cart-count" style="display: none;">0</span>
                     </a>
                 </li>
-                <li><a href="/orders"><i class="fas fa-truck"></i> Orders</a></li>
+                <li><a href="/orders"><i class="fas fa-truck"></i><span class="nav-text">Orders</span></a></li>
             </ul>
 
             <div id="auth-buttons" class="auth-buttons">
                 <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
                 <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+
+            <div class="nav-search">
+                <input type="text" id="search-input" placeholder="Search products...">
+                <button onclick="performSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
         </div>
     </nav>
@@ -559,7 +811,7 @@
     <div class="container">
         <div class="hero-carousel">
             <div class="carousel-container" id="carousel">
-                <div class="carousel-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)),  url('images/hero1.jpg');">
+                <div class="carousel-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('images/hero1.jpg');">
                     <div class="carousel-content">
                         <h2>Summer Sale</h2>
                         <p>Up to 50% off on electronics, fashion & more</p>
@@ -589,7 +841,6 @@
         </div>
     </div>
 
-    
     <!-- Main Content -->
     <div class="main-content">
         <div class="container">
@@ -619,12 +870,7 @@
             <div class="category-section">
                 <div class="section-header">
                     <h2>Today's Deals</h2>
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <button class="btn btn-outline" onclick="loadProducts()">
-                         <!--  <i class="fas fa-sync-alt"></i> Refresh--> 
-                        </button>
-                        <a href="/products" class="btn btn-outline">View All <i class="fas fa-arrow-right"></i></a>
-                    </div>
+                    <a href="/products" class="btn-outline">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div id="featured-products" class="products-grid">
                     <!-- Products loaded here -->
@@ -635,7 +881,7 @@
             <div class="category-section">
                 <div class="section-header">
                     <h2>Shop by Category</h2>
-                    <a href="/products" class="btn btn-outline">All Categories <i class="fas fa-arrow-right"></i></a>
+                    <a href="/products" class="btn-outline">All Categories <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div id="categories" class="category-grid">
                     <!-- Categories loaded here -->
@@ -646,7 +892,7 @@
             <div class="category-section">
                 <div class="section-header">
                     <h2>Electronics</h2>
-                    <a href="/products?category=electronics" class="btn btn-outline">See More <i class="fas fa-arrow-right"></i></a>
+                    <a href="/products?category=electronics" class="btn-outline">See More <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div id="electronics-products" class="products-grid">
                     <!-- Electronics products loaded here -->
@@ -657,7 +903,7 @@
             <div class="category-section">
                 <div class="section-header">
                     <h2>Fashion Store</h2>
-                    <a href="/products?category=fashion" class="btn btn-outline">See More <i class="fas fa-arrow-right"></i></a>
+                    <a href="/products?category=fashion" class="btn-outline">See More <i class="fas fa-arrow-right"></i></a>
                 </div>
                 <div id="fashion-products" class="products-grid">
                     <!-- Fashion products loaded here -->
@@ -681,36 +927,34 @@
                     <i class="fas fa-shield-alt"></i>
                 </div>
                 <h4>Secure Payment</h4>
-                <p>100% secure transactions</p>
+                <p>100% secure</p>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">
                     <i class="fas fa-undo-alt"></i>
                 </div>
                 <h4>Easy Returns</h4>
-                <p>7-day return policy</p>
+                <p>7-day policy</p>
             </div>
             <div class="feature-item">
                 <div class="feature-icon">
                     <i class="fas fa-headset"></i>
                 </div>
                 <h4>24/7 Support</h4>
-                <p>Dedicated customer care</p>
+                <p>Dedicated care</p>
             </div>
         </div>
     </div>
-
 
     <!-- Enhanced Footer -->
     <footer>
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>About ShopHub</h3>
+                    <h3>About</h3>
                     <ul>
                         <li><a href="/about">About Us</a></li>
                         <li><a href="/careers">Careers</a></li>
-                        <li><a href="/press">Press Releases</a></li>
                         <li><a href="/blog">Blog</a></li>
                     </ul>
                 </div>
@@ -728,8 +972,6 @@
                     <ul>
                         <li><a href="/privacy">Privacy Policy</a></li>
                         <li><a href="/terms">Terms of Use</a></li>
-                        <li><a href="/security">Security</a></li>
-                        <li><a href="/sitemap">Sitemap</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
@@ -738,26 +980,16 @@
                         <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
                         <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
                         <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Download App</h3>
-                    <ul>
-                        <li><a href="#"><i class="fab fa-google-play"></i> Google Play</a></li>
-                        <li><a href="#"><i class="fab fa-app-store"></i> App Store</a></li>
                     </ul>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 ShopHub. All rights reserved. | Prices are inclusive of GST</p>
+                <p>&copy; 2026 ShopHub. All rights reserved.</p>
                 <div class="payment-methods">
                     <i class="fab fa-cc-visa"></i>
                     <i class="fab fa-cc-mastercard"></i>
                     <i class="fab fa-cc-amex"></i>
                     <i class="fab fa-cc-paypal"></i>
-                    <i class="fab fa-google-pay"></i>
-                    <i class="fab fa-apple-pay"></i>
                 </div>
             </div>
         </div>
@@ -791,16 +1023,17 @@
         function currentSlide(n) {
             slideIndex = n;
             showSlide(slideIndex);
+            clearInterval(autoSlideInterval);
+            startCarousel();
         }
 
-        // Start auto carousel
         function startCarousel() {
             autoSlideInterval = setInterval(nextSlide, 5000);
         }
 
         // Countdown timer
         function startCountdown() {
-            const countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000); // 24 hours from now
+            const countDownDate = new Date().getTime() + (24 * 60 * 60 * 1000);
             
             const x = setInterval(function() {
                 const now = new Date().getTime();
@@ -810,9 +1043,9 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
                 
-                $('#hours').textContent = hours.toString().padStart(2, '0');
-                $('#minutes').textContent = minutes.toString().padStart(2, '0');
-                $('#seconds').textContent = seconds.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
                 
                 if (distance < 0) {
                     clearInterval(x);
@@ -820,25 +1053,22 @@
             }, 1000);
         }
 
-        // Enhanced product loading with categories
+        // Load products
         async function loadProducts() {
             try {
-                // Featured (newest) products
-                const featured = await productsAPI.getAll({ limit: 12, sort: 'newest' });
+                const featured = await productsAPI.getAll({ limit: 4, sort: 'newest' });
                 if (featured.products) {
-                    $('#featured-products').innerHTML = featured.products.map(createProductCard).join('');
+                    document.getElementById('featured-products').innerHTML = featured.products.map(createProductCard).join('');
                 }
 
-                // Electronics
-                const electronics = await productsAPI.getAll({ category: 'electronics', limit: 4 });
+                const electronics = await productsAPI.getAll({ category: 'electronics', limit: 2 });
                 if (electronics.products) {
-                    $('#electronics-products').innerHTML = electronics.products.map(createProductCard).join('');
+                    document.getElementById('electronics-products').innerHTML = electronics.products.map(createProductCard).join('');
                 }
 
-                // Fashion
-                const fashion = await productsAPI.getAll({ category: 'fashion', limit: 4 });
+                const fashion = await productsAPI.getAll({ category: 'fashion', limit: 2 });
                 if (fashion.products) {
-                    $('#fashion-products').innerHTML = fashion.products.map(createProductCard).join('');
+                    document.getElementById('fashion-products').innerHTML = fashion.products.map(createProductCard).join('');
                 }
             } catch (error) {
                 console.error('Error loading products:', error);
@@ -846,22 +1076,17 @@
         }
 
         function createProductCard(product) {
-            const discount = Math.floor(Math.random() * 30) + 10; // Random discount for demo
+            const discount = Math.floor(Math.random() * 30) + 10;
             const originalPrice = product.price * (1 + discount/100);
             
             return `
-                <div class="card product-card" onclick="window.location.href='/products/${product.id}'">
+                <div class="product-card" onclick="window.location.href='/products/${product.id}'">
                     <span class="product-badge">-${discount}%</span>
                     <div class="product-image-container">
                         <img src="${product.image_url || '/images/placeholder.png'}" alt="${product.name}" class="product-image">
                     </div>
-                    <div class="product-actions">
-                        <button onclick="event.stopPropagation(); addToCart(${product.id})"><i class="fas fa-shopping-cart"></i></button>
-                        <button onclick="event.stopPropagation(); addToWishlist(${product.id})"><i class="fas fa-heart"></i></button>
-                        <button onclick="event.stopPropagation(); viewQuick(${product.id})"><i class="fas fa-eye"></i></button>
-                    </div>
                     <div class="product-info">
-                        <span class="product-category">${product.category}</span>
+                        <span class="product-category">${product.category || 'General'}</span>
                         <h3 class="product-title">${product.name}</h3>
                         <div class="product-rating">
                             <div class="stars">
@@ -883,13 +1108,13 @@
             `;
         }
 
-        // Load categories with enhanced design
+        // Load categories
         async function loadCategories() {
             try {
                 const data = await productsAPI.getCategories();
-                const container = $('#categories');
+                const container = document.getElementById('categories');
                 
-                const categoryImages = {
+                const categoryIcons = {
                     'electronics': '📱',
                     'fashion': '👕',
                     'home': '🏠',
@@ -901,8 +1126,8 @@
                 if (data.categories && data.categories.length > 0) {
                     container.innerHTML = data.categories.map(category => `
                         <div class="category-card" onclick="window.location.href='/products?category=${encodeURIComponent(category)}'">
-                            <div class="category-image" style="background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 4rem;">
-                                ${categoryImages[category.toLowerCase()] || '📦'}
+                            <div class="category-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem;">
+                                ${categoryIcons[category.toLowerCase()] || '📦'}
                             </div>
                             <div class="category-overlay">
                                 <h3>${category}</h3>
@@ -916,25 +1141,15 @@
             }
         }
 
-        // Enhanced search functionality
+        // Search functionality
         function performSearch() {
-            const query = $('#search-input').value.trim();
+            const query = document.getElementById('search-input').value.trim();
             if (query) {
                 window.location.href = `/products?search=${encodeURIComponent(query)}`;
             }
         }
 
-        // Quick view modal
-        function viewQuick(productId) {
-            showAlert('Quick view coming soon!', 'info');
-        }
-
-        // Add to wishlist
-        function addToWishlist(productId) {
-            showAlert('Added to wishlist!', 'success');
-        }
-
-        // Initialize page
+        // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             startCarousel();
             startCountdown();
@@ -942,8 +1157,7 @@
             loadCategories();
         });
 
-        // Search input enter key
-        $('#search-input')?.addEventListener('keypress', (e) => {
+        document.getElementById('search-input')?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 performSearch();
             }
