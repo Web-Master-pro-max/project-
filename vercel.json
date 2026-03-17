@@ -2,7 +2,19 @@
   "version": 2,
   "builds": [
     {
-      "src": "ecommerce-project/frontend/public/**/*",
+      "src": "ecommerce-project/frontend/public/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "ecommerce-project/frontend/public/css/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "ecommerce-project/frontend/public/js/**",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "ecommerce-project/frontend/public/images/**",
       "use": "@vercel/static"
     }
   ],
