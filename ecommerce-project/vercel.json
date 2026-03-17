@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "http://51.20.87.184:3000/api/$1"
+      "dest": "http://51.20.87.184:3000/api/"
     },
     {
       "handle": "filesystem"
