@@ -6,7 +6,8 @@ const compression = require('compression');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const rateLimit = require('express-rate-limit');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 
 const { sequelize, testConnection } = require('./backend/config/database');
 const errorHandler = require('./backend/middleware/errorHandler');
