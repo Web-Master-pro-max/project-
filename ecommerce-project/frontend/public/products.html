@@ -702,22 +702,22 @@
                         <h3><i class="fas fa-list"></i> Categories</h3>
                         <div class="filter-options" id="category-filters">
                             <label class="filter-checkbox">
-                                <input type="checkbox" value="all" checked> All Categories
+                                <input type="checkbox" name="category" value="all" checked> All Categories
                             </label>
                             <label class="filter-checkbox">
-                                <input type="checkbox" value="books"> Books
+                                <input type="checkbox" name="category" value="books"> Books
                             </label>
                             <label class="filter-checkbox">
-                                <input type="checkbox" value="electronics"> Electronics
+                                <input type="checkbox" name="category" value="electronics"> Electronics
                             </label>
                             <label class="filter-checkbox">
-                                <input type="checkbox" value="fashion"> Fashion
+                                <input type="checkbox" name="category" value="fashion"> Fashion
                             </label>
                             <label class="filter-checkbox">
-                                <input type="checkbox" value="home"> Home & Kitchen
+                                <input type="checkbox" name="category" value="home"> Home & Kitchen
                             </label>
                             <label class="filter-checkbox">
-                                <input type="checkbox" value="sports"> Sports
+                                <input type="checkbox" name="category" value="sports"> Sports
                             </label>
                         </div>
                     </div>
@@ -770,180 +770,7 @@
 
                     <!-- Products Grid -->
                     <div id="products-grid" class="products-grid">
-                        <!-- Home & Kitchen Products -->
-                        <div class="product-card" onclick="viewProduct(1)">
-                            <span class="product-badge">-20%</span>
-                            <div class="product-image-container">
-                                <img src="https://via.placeholder.com/300x300/2874f0/ffffff?text=Cup+Set" alt="Cup Set" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-category">Home & Kitchen</span>
-                                <h3 class="product-title">Premium Ceramic Cup Set - 6 Pieces</h3>
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                    </div>
-                                    <span class="rating-count">(124)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span class="current-price">₹1,999</span>
-                                    <span class="original-price">₹2,499</span>
-                                    <span class="discount">20% off</span>
-                                </div>
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(1)">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="product-card" onclick="viewProduct(2)">
-                            <span class="product-badge">-15%</span>
-                            <div class="product-image-container">
-                                <img src="https://via.placeholder.com/300x300/fb641b/ffffff?text=Knife+Set" alt="Kitchen Knife Set" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-category">Home & Kitchen</span>
-                                <h3 class="product-title">Professional Kitchen Knife Set - 5 Pieces</h3>
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <span class="rating-count">(89)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span class="current-price">₹2,999</span>
-                                    <span class="original-price">₹3,499</span>
-                                    <span class="discount">15% off</span>
-                                </div>
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(2)">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="product-card" onclick="viewProduct(3)">
-                            <span class="product-badge">-16%</span>
-                            <div class="product-image-container">
-                                <img src="https://via.placeholder.com/300x300/388e3c/ffffff?text=Cutting+Board" alt="Cutting Board" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-category">Home & Kitchen</span>
-                                <h3 class="product-title">Bamboo Cutting Board Set - 3 Sizes</h3>
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <span class="rating-count">(156)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span class="current-price">₹599</span>
-                                    <span class="original-price">₹799</span>
-                                    <span class="discount">16% off</span>
-                                </div>
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(3)">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="product-card" onclick="viewProduct(4)">
-                            <span class="product-badge">-24%</span>
-                            <div class="product-image-container">
-                                <img src="https://via.placeholder.com/300x300/ffc107/000000?text=Storage+Containers" alt="Storage Containers" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-category">Home & Kitchen</span>
-                                <h3 class="product-title">Airtight Food Storage Containers - 12 pcs</h3>
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <span class="rating-count">(203)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span class="current-price">₹1,499</span>
-                                    <span class="original-price">₹1,999</span>
-                                    <span class="discount">24% off</span>
-                                </div>
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(4)">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="product-card" onclick="viewProduct(5)">
-                            <span class="product-badge">-33%</span>
-                            <div class="product-image-container">
-                                <img src="https://via.placeholder.com/300x300/9c27b0/ffffff?text=Measuring+Cups" alt="Measuring Cups" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-category">Home & Kitchen</span>
-                                <h3 class="product-title">Stainless Steel Measuring Cups Set - 6 pcs</h3>
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <span class="rating-count">(67)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span class="current-price">₹899</span>
-                                    <span class="original-price">₹1,299</span>
-                                    <span class="discount">33% off</span>
-                                </div>
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(5)">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="product-card" onclick="viewProduct(6)">
-                            <span class="product-badge">-29%</span>
-                            <div class="product-image-container">
-                                <img src="https://via.placeholder.com/300x300/ff5722/ffffff?text=Blender" alt="Blender" class="product-image">
-                            </div>
-                            <div class="product-info">
-                                <span class="product-category">Home & Kitchen</span>
-                                <h3 class="product-title">High-Speed Mixer Grinder - 750W</h3>
-                                <div class="product-rating">
-                                    <div class="stars">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <span class="rating-count">(342)</span>
-                                </div>
-                                <div class="product-price">
-                                    <span class="current-price">₹6,999</span>
-                                    <span class="original-price">₹9,999</span>
-                                    <span class="discount">29% off</span>
-                                </div>
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(6)">
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Products will be loaded dynamically -->
                     </div>
 
                     <!-- Pagination -->
@@ -1011,6 +838,163 @@
             window.location.href = `/products/${productId}`;
         }
 
+        function formatPrice(value) {
+            const num = Number(value);
+            if (Number.isNaN(num)) return value;
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function createProductCard(product) {
+            const discount = Math.floor(Math.random() * 30) + 10;
+            const originalPrice = product.price * (1 + discount / 100);
+            const placeholderImage = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect width=%22300%22 height=%22300%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%22150%22 y=%22160%22 font-size=%2220%22 font-family=%22Arial%2C%20sans-serif%22 fill=%22%23666%22 text-anchor=%22middle%22%3ENo%20Image%3C/text%3E%3C/svg%3E';
+            const imageUrl = product.image_url ? product.image_url : placeholderImage;
+
+            return `
+                <div class="product-card" onclick="viewProduct(${product.id})">
+                    <span class="product-badge">-${discount}%</span>
+                    <div class="product-image-container">
+                        <img src="${imageUrl}" alt="${product.name || 'Product'}" class="product-image">
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">${product.category || 'General'}</span>
+                        <h3 class="product-title">${product.name}</h3>
+                        <div class="product-rating">
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <span class="rating-count">(${product.rating ?? 0})</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">${formatPrice(product.price)}</span>
+                            <span class="original-price">${formatPrice(originalPrice)}</span>
+                            <span class="discount">${discount}% off</span>
+                        </div>
+                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
+                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('products-grid');
+            if (!grid) return;
+            grid.innerHTML = products.map(createProductCard).join('');
+        }
+
+        function renderPagination(pagination) {
+            const container = document.querySelector('.pagination');
+            if (!container) return;
+
+            const totalPages = pagination.pages || 1;
+            const current = pagination.page || 1;
+
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const buttons = [];
+
+            const addButton = (page) => {
+                const activeClass = page === current ? 'active' : '';
+                buttons.push(`<button class="${activeClass}" onclick="changePage(${page})">${page}</button>`);
+            };
+
+            addButton(1);
+
+            if (current > 3) {
+                buttons.push('<span class="dots">...</span>');
+            }
+
+            for (let i = Math.max(2, current - 1); i <= Math.min(totalPages - 1, current + 1); i++) {
+                addButton(i);
+            }
+
+            if (current < totalPages - 2) {
+                buttons.push('<span class="dots">...</span>');
+            }
+
+            if (totalPages > 1) {
+                addButton(totalPages);
+            }
+
+            container.innerHTML = buttons.join('');
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            loadProducts();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function getFilters() {
+            const params = {
+                page: currentPage,
+                limit: productsPerPage,
+                sort: document.getElementById('sort-select')?.value || 'featured'
+            };
+
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                .map(cb => cb.value)
+                .filter(v => v && v !== 'all');
+
+            if (selectedCategories.length === 1) {
+                params.category = selectedCategories[0];
+            }
+
+            const minPrice = document.getElementById('min-price')?.value;
+            const maxPrice = document.getElementById('max-price')?.value;
+
+            if (minPrice) params.minPrice = minPrice;
+            if (maxPrice) params.maxPrice = maxPrice;
+
+            const querySearch = new URLSearchParams(window.location.search).get('search');
+            if (querySearch) params.search = querySearch;
+
+            return params;
+        }
+
+        async function loadProducts() {
+            const grid = document.getElementById('products-grid');
+            const loading = document.getElementById('loading');
+            const noProducts = document.getElementById('no-products');
+            const countEl = document.getElementById('product-count');
+
+            if (loading) loading.style.display = 'block';
+            if (noProducts) noProducts.style.display = 'none';
+
+            try {
+                const params = getFilters();
+                const result = await productsAPI.getAll(params);
+                const products = result.products || [];
+                const pagination = result.pagination || { total: products.length, page: currentPage, pages: 1 };
+
+                if (countEl) countEl.textContent = pagination.total ?? products.length;
+
+                if (!products.length) {
+                    if (grid) grid.innerHTML = '';
+                    if (noProducts) noProducts.style.display = 'block';
+                } else {
+                    renderProducts(products);
+                    if (noProducts) noProducts.style.display = 'none';
+                }
+
+                renderPagination(pagination);
+            } catch (error) {
+                console.error('Error loading products:', error);
+                showAlert('Unable to load products. Please try again later.', 'danger');
+            } finally {
+                if (loading) loading.style.display = 'none';
+            }
+        }
+
         async function addToCart(productId) {
             try {
                 const authStatus = await authAPI.checkAuth();
@@ -1038,20 +1022,8 @@
         }
 
         function applyFilters() {
-            // Get selected categories
-            const selectedCategories = [];
-            document.querySelectorAll('input[name="category"]:checked').forEach(cb => {
-                if (cb.value !== 'all') {
-                    selectedCategories.push(cb.value);
-                }
-            });
-            
-            const minPrice = document.getElementById('min-price').value;
-            const maxPrice = document.getElementById('max-price').value;
-            const rating = document.querySelector('input[name="rating"]:checked')?.value;
-            const sort = document.getElementById('sort-select').value;
-
-            console.log('Filters:', { selectedCategories, minPrice, maxPrice, rating, sort });
+            currentPage = 1;
+            loadProducts();
             showAlert('Filters applied!', 'success');
         }
 
@@ -1064,7 +1036,9 @@
             document.getElementById('min-price').value = '';
             document.getElementById('max-price').value = '';
             document.getElementById('sort-select').value = 'featured';
-            
+
+            currentPage = 1;
+            loadProducts();
             showAlert('Filters cleared!', 'success');
         }
 
@@ -1079,8 +1053,46 @@
             alert(message); // Simple alert for demo
         }
 
-        function updateCartCount() {
-            // Implement cart count update logic
+        async function updateCartCount() {
+            try {
+                const response = await cartAPI.getCart();
+                const count = response.items ? response.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+                document.querySelectorAll('.cart-count').forEach(el => {
+                    el.textContent = count;
+                    el.style.display = count > 0 ? 'inline-flex' : 'none';
+                });
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+            }
+        }
+
+        async function updateAuthUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            if (!authButtons) return;
+
+            try {
+                const status = await authAPI.checkAuth();
+
+                if (status.authenticated && status.user) {
+                    authButtons.innerHTML = `
+                        <span class="auth-user">Hi, ${status.user.name}</span>
+                        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+                    `;
+                } else {
+                    authButtons.innerHTML = `
+                        <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error updating auth UI:', error);
+            }
+        }
+
+        function logout() {
+            authAPI.logout().finally(() => {
+                window.location.reload();
+            });
         }
 
         document.getElementById('search-input')?.addEventListener('keypress', (e) => {
@@ -1090,11 +1102,31 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if user is logged in
-            const authButtons = document.getElementById('auth-buttons');
-            if (authButtons) {
-                authButtons.style.display = 'none';
-            }
+            updateAuthUI();
+            loadProducts();
+            updateCartCount();
+
+            document.querySelectorAll('input[name="category"]').forEach(cb => {
+                cb.addEventListener('change', () => {
+                    currentPage = 1;
+                    loadProducts();
+                });
+            });
+
+            document.getElementById('sort-select')?.addEventListener('change', () => {
+                currentPage = 1;
+                loadProducts();
+            });
+
+            document.getElementById('min-price')?.addEventListener('change', () => {
+                currentPage = 1;
+                loadProducts();
+            });
+
+            document.getElementById('max-price')?.addEventListener('change', () => {
+                currentPage = 1;
+                loadProducts();
+            });
         });
     </script>
 </body>

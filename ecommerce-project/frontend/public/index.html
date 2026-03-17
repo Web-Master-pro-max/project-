@@ -179,6 +179,15 @@
             align-items: center;
         }
 
+        .auth-user {
+            color: white;
+            font-weight: 600;
+            padding: 0.4rem 0.6rem;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.12);
+            white-space: nowrap;
+        }
+
         .btn {
             padding: 0.5rem 0.8rem;
             font-size: 0.8rem;
@@ -1108,15 +1117,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        function formatPrice(value) {
+            const num = Number(value);
+            if (Number.isNaN(num)) return value;
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+        }
+
         function createProductCard(product) {
             const discount = Math.floor(Math.random() * 30) + 10;
             const originalPrice = product.price * (1 + discount/100);
-            
+            const placeholderImage = 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22%3E%3Crect width=%22300%22 height=%22300%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%22150%22 y=%22160%22 font-size=%2220%22 font-family=%22Arial%2C%20sans-serif%22 fill=%22%23666%22 text-anchor=%22middle%22%3ENo%20Image%3C/text%3E%3C/svg%3E';
+            const imageUrl = product.image_url ? product.image_url : placeholderImage;
+
             return `
                 <div class="product-card" onclick="window.location.href='/products/${product.id}'">
                     <span class="product-badge">-${discount}%</span>
                     <div class="product-image-container">
-                        <img src="${product.image_url || '/images/placeholder.png'}" alt="${product.name}" class="product-image">
+                        <img src="${imageUrl}" alt="${product.name || 'Product'}" class="product-image">
                     </div>
                     <div class="product-info">
                         <span class="product-category">${product.category || 'General'}</span>
@@ -1182,12 +1199,42 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+        async function updateAuthUI() {
+            const authButtons = document.getElementById('auth-buttons');
+            if (!authButtons) return;
+
+            try {
+                const status = await authAPI.checkAuth();
+
+                if (status.authenticated && status.user) {
+                    authButtons.innerHTML = `
+                        <span class="auth-user">Hi, ${status.user.name}</span>
+                        <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
+                    `;
+                } else {
+                    authButtons.innerHTML = `
+                        <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
+                        <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error updating auth UI:', error);
+            }
+        }
+
+        function logout() {
+            authAPI.logout().finally(() => {
+                window.location.href = '/';
+            });
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             startCarousel();
             startCountdown();
             loadProducts();
             loadCategories();
+            updateAuthUI();
         });
 
         document.getElementById('search-input')?.addEventListener('keypress', (e) => {

@@ -30,6 +30,7 @@ const API_BASE_URL = '/api';
 async function apiCall(endpoint, method = 'GET', data = null) {
     const options = {
         method,
+        credentials: 'include',
         headers: {
             'Content-Type': 'application/json'
         }
