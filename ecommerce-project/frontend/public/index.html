@@ -996,39 +996,73 @@
 
     <script src="/js/api.js"></script>
     <script>
-        // Carousel functionality
-        let slideIndex = 1;
-        let autoSlideInterval;
+       // Carousel functionality
+let slideIndex = 1;
+let autoSlideInterval;
 
-        function showSlide(n) {
-            const slides = document.querySelectorAll('.carousel-slide');
-            const dots = document.querySelectorAll('.dot');
-            
-            if (n > slides.length) slideIndex = 1;
-            if (n < 1) slideIndex = slides.length;
-            
-            slides.forEach(slide => slide.classList.remove('active'));
-            dots.forEach(dot => dot.classList.remove('active'));
-            
-            slides[slideIndex - 1].classList.add('active');
-            dots[slideIndex - 1].classList.add('active');
-        }
+function showSlide(n) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+    
+    if (!slides.length) return;
+    
+    if (n > slides.length) slideIndex = 1;
+    if (n < 1) slideIndex = slides.length;
+    
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    slides[slideIndex - 1].classList.add('active');
+    dots[slideIndex - 1].classList.add('active');
+}
 
-        function nextSlide() {
-            showSlide(slideIndex + 1);
-            slideIndex++;
-        }
+function nextSlide() {
+    showSlide(slideIndex + 1);
+    slideIndex++;
+}
 
-        function currentSlide(n) {
-            slideIndex = n;
-            showSlide(slideIndex);
-            clearInterval(autoSlideInterval);
-            startCarousel();
-        }
+function currentSlide(n) {
+    slideIndex = n;
+    showSlide(slideIndex);
+    // Reset the auto slide interval
+    clearInterval(autoSlideInterval);
+    startCarousel();
+}
 
-        function startCarousel() {
-            autoSlideInterval = setInterval(nextSlide, 5000);
-        }
+function startCarousel() {
+    // Clear any existing interval
+    if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+    }
+    autoSlideInterval = setInterval(nextSlide, 5000);
+}
+
+// Initialize carousel when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Make sure first slide is active
+    const slides = document.querySelectorAll('.carousel-slide');
+    if (slides.length > 0) {
+        slides.forEach((slide, index) => {
+            if (index === 0) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+        
+        // Activate first dot
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, index) => {
+            if (index === 0) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+        
+        startCarousel();
+    }
+});
 
         // Countdown timer
         function startCountdown() {
