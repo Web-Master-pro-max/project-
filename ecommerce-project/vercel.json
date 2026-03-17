@@ -2,29 +2,14 @@
   "version": 2,
   "builds": [
     {
-      "src": "frontend/public/**",
+      "src": "frontend/views/**",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "http://51.20.87.184:3000/api/$1"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/$",
-      "dest": "/frontend/public/index.html"
-    },
-    {
       "src": "/(.*)",
-      "dest": "/frontend/public/$1"
+      "dest": "/frontend/views/$1"
     }
-  ],
-  "github": {
-    "enabled": true,
-    "silent": true
-  }
+  ]
 }
