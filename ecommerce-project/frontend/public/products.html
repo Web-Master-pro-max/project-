@@ -34,310 +34,237 @@
             width: 100%;
         }
 
-        /* Navbar - Responsive */
-        .navbar {
-            background: var(--amazon-dark);
-            padding: 0.5rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            width: 100%;
-        }
+       /* Navbar - Exactly like Home Page */
+.navbar {
+    background: var(--amazon-dark);
+    padding: 0.5rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
 
-        .navbar-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.75rem;
-        }
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
 
-        @media (min-width: 768px) {
-            .navbar-container {
-                padding: 0 2rem;
-                display: grid;
-                grid-template-columns: auto 1fr auto auto;
-                gap: 1.5rem;
-            }
-        }
+@media (min-width: 768px) {
+    .navbar-container {
+        padding: 0 2rem;
+        display: grid;
+        grid-template-columns: auto auto 1fr auto auto;
+        gap: 1rem;
+        align-items: center;
+    }
+}
 
-        @media (min-width: 1024px) {
-            .navbar-container {
-                grid-template-columns: 200px 1fr 350px auto;
-                gap: 2rem;
-            }
-        }
+.navbar-brand {
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, #ff9900, #ffc34d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
 
-        .navbar-brand {
-            font-size: 1.4rem;
-            background: linear-gradient(135deg, #ff9900, #ffc34d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+@media (min-width: 768px) {
+    .navbar-brand {
+        font-size: 1.8rem;
+    }
+}
 
-        @media (min-width: 768px) {
-            .navbar-brand {
-                font-size: 1.8rem;
-            }
-        }
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: auto;
+    order: 1;
+}
 
-        .nav-search {
-            width: 100%;
-            order: 3;
-            display: flex;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            background: white;
-        }
+@media (min-width: 480px) {
+    .nav-links {
+        gap: 0.8rem;
+    }
+}
 
-        @media (min-width: 768px) {
-            .nav-search {
-                width: auto;
-                order: 0;
-                max-width: 500px;
-            }
-        }
+@media (min-width: 768px) {
+    .nav-links {
+        order: 0;
+        margin-left: 0;
+        gap: 1rem;
+    }
+}
 
-        @media (min-width: 1024px) {
-            .nav-search {
-                max-width: 600px;
-            }
-        }
+.nav-links li a {
+    color: white;
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    text-decoration: none;
+}
 
-        .nav-search input {
-            flex: 1;
-            padding: 0.7rem 0.8rem;
-            border: none;
-            font-size: 0.9rem;
-            outline: none;
-            background: white;
-            min-width: 0;
-        }
+@media (min-width: 480px) {
+    .nav-links li a {
+        font-size: 0.9rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.5rem 0.8rem;
+    }
+}
 
-        @media (min-width: 768px) {
-            .nav-search input {
-                padding: 0.85rem 1.2rem;
-                font-size: 0.95rem;
-            }
-        }
+.nav-links li a i {
+    font-size: 1.1rem;
+}
 
-        .nav-search input:focus {
-            outline: 2px solid var(--flipkart-blue);
-        }
+.cart-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
-        .nav-search button {
-            background: var(--flipkart-blue);
-            border: none;
-            padding: 0 1.2rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 48px;
-            min-height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+.cart-count {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #ff0000;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
 
-        @media (min-width: 768px) {
-            .nav-search button {
-                padding: 0 1.8rem;
-            }
-        }
+@media (min-width: 480px) {
+    .cart-count {
+        top: -5px;
+        right: -5px;
+        width: 20px;
+        height: 20px;
+        font-size: 0.75rem;
+    }
+}
 
-        .nav-search button i {
-            color: white;
-            font-size: 1.1rem;
-        }
+.auth-buttons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    order: 2;
+}
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            align-items: center;
-            margin-left: auto;
-            order: 1;
-        }
+@media (min-width: 768px) {
+    .auth-buttons {
+        order: 0;
+    }
+}
 
-        @media (min-width: 480px) {
-            .nav-links {
-                gap: 0.8rem;
-            }
-        }
+.auth-user {
+    color: white;
+    font-weight: 600;
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.12);
+    white-space: nowrap;
+}
 
-        @media (min-width: 768px) {
-            .nav-links {
-                order: 0;
-                margin-left: 0;
-                gap: 1.5rem;
-            }
-        }
+.btn {
+    padding: 0.5rem 0.8rem;
+    border: 2px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 500;
+    min-height: 40px;
+}
 
-        .nav-links li a {
-            color: white;
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding: 0.5rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            min-width: 44px;
-            min-height: 44px;
-            justify-content: center;
-        }
+.btn-primary {
+    background: var(--flipkart-blue);
+    color: white;
+}
 
-        @media (min-width: 480px) {
-            .nav-links li a {
-                font-size: 0.85rem;
-                flex-direction: row;
-                gap: 0.5rem;
-                padding: 0.5rem 0.8rem;
-            }
-        }
+.btn-outline {
+    background: transparent;
+    color: white;
+    border: 2px solid white;
+}
 
-        @media (min-width: 768px) {
-            .nav-links li a {
-                font-size: 0.95rem;
-                padding: 0.6rem 1rem;
-                font-weight: 500;
-            }
-        }
+.btn-sm {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.75rem;
+}
 
-        .nav-links li a:hover {
-            background: rgba(255,255,255,0.15);
-            color: var(--amazon-orange);
-        }
+.nav-search {
+    width: 100%;
+    order: 3;
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: white;
+}
 
-        .cart-icon-wrapper {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
+@media (min-width: 768px) {
+    .nav-search {
+        width: auto;
+        order: 0;
+        max-width: 400px;
+    }
+}
 
-        .cart-count {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #ff0000;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 0.7rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
+.nav-search input {
+    flex: 1;
+    padding: 0.7rem 0.8rem;
+    border: none;
+    font-size: 0.9rem;
+    outline: none;
+    background: white;
+}
 
-        @media (min-width: 480px) {
-            .cart-count {
-                top: -8px;
-                right: -8px;
-                width: 20px;
-                height: 20px;
-                font-size: 0.75rem;
-            }
-        }
+.nav-search button {
+    background: var(--amazon-orange);
+    border: none;
+    padding: 0 1.2rem;
+    cursor: pointer;
+    min-width: 48px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .auth-buttons {
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-            order: 2;
-        }
+.nav-search button i {
+    color: var(--amazon-dark);
+    font-size: 1.1rem;
+}
 
-        @media (min-width: 768px) {
-            .auth-buttons {
-                order: 0;
-                gap: 1rem;
-            }
-        }
-
-        .btn {
-            padding: 0.5rem 0.8rem;
-            border: 2px solid transparent;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-weight: 600;
-            white-space: nowrap;
-            min-height: 40px;
-        }
-
-        @media (min-width: 768px) {
-            .btn {
-                padding: 0.7rem 1.4rem;
-                font-size: 0.9rem;
-                gap: 0.6rem;
-            }
-        }
-
-        .btn-primary {
-            background: var(--flipkart-blue);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #1a4d8c;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(40, 116, 240, 0.3);
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: white;
-            border: 2px solid white;
-        }
-
-        .btn-outline:hover {
-            background: white;
-            color: var(--flipkart-blue);
-        }
-
-        .btn-sm {
-            padding: 0.35rem 0.7rem;
-            font-size: 0.75rem;
-        }
-
-        @media (min-width: 768px) {
-            .btn-sm {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.85rem;
-            }
-        }
-
-        .auth-user {
-            color: white;
-            font-weight: 600;
-            padding: 0.4rem 0.6rem;
-            border-radius: 4px;
-            background: rgba(255,255,255,0.12);
-            white-space: nowrap;
-            font-size: 0.8rem;
-        }
-
-        @media (min-width: 768px) {
-            .auth-user {
-                font-size: 0.9rem;
-            }
-        }
+/* Remove any extra navigation items */
+.nav-links li:last-child {
+    display: none; /* Hides the logout link since it's in auth buttons */
+}
 
         /* Main Content */
         .main-content {
@@ -1380,39 +1307,42 @@
 </head>
 <body>
     <!-- Navigation Header -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="navbar-brand">
-                <i class="fas fa-store"></i>
-                ShopHub
-            </div>
-            
-            <div class="nav-search">
-                <input type="text" id="search-input" placeholder="Search products...">
-                <button onclick="performSearch()">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-
-            <ul class="nav-links">
-                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="/products"><i class="fas fa-box"></i> Products</a></li>
-                <li>
-                    <a href="/cart" class="cart-icon-wrapper">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="cart-count">0</span>
-                    </a>
-                </li>
-                <li><a href="/orders"><i class="fas fa-truck"></i> Orders</a></li>
-                <li><a href="/dashboard"><i class="fas fa-user"></i> Dashboard</a></li>
-                <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-            </ul>
-
-            <div id="auth-buttons" class="auth-buttons">
-                <!-- Will be populated by JS -->
-            </div>
+    <!-- Navigation Header - Matches Home Page -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="navbar-brand">
+            <i class="fas fa-store"></i>
+            ShopHub
         </div>
-    </nav>
+        
+        <ul class="nav-links">
+    <li><a href="/"><i class="fas fa-home"></i><span class="nav-text">Home</span></a></li>
+    <li><a href="/products"><i class="fas fa-box"></i><span class="nav-text">Products</span></a></li>
+    <li>
+        <a href="/cart" class="cart-icon-wrapper">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="nav-text">Cart</span>
+            <span id="cart-count" class="cart-count" style="display: none;">0</span>
+        </a>
+    </li>
+    <li><a href="/orders"><i class="fas fa-truck"></i><span class="nav-text">Orders</span></a></li>
+    <li id="dashboard-link" style="display:none;"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i><span class="nav-text">Dashboard</span></a></li>
+    <li id="admin-nav-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;"><i class="fas fa-crown"></i><span class="nav-text">Admin</span></a></li>
+</ul>
+
+        <div id="auth-buttons" class="auth-buttons">
+            <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
+        </div>
+
+        <div class="nav-search">
+            <input type="text" id="search-input" placeholder="Search products...">
+            <button onclick="performSearch()">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </div>
+</nav>
 
     <!-- Mobile Filter Toggle -->
     <div class="container">
@@ -1903,11 +1833,21 @@
                         <span class="auth-user">Hi, ${status.user.name}</span>
                         <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
                     `;
+                    
+                    // Show Dashboard link
+                    const dashboardLink = document.getElementById('dashboard-link');
+                    if (dashboardLink) dashboardLink.style.display = 'block';
                 } else {
                     authButtons.innerHTML = `
                         <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
                         <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
                     `;
+                }
+
+                // Show Admin link if user is admin
+                if (status.authenticated && status.user && status.user.role === 'admin') {
+                    const adminLink = document.getElementById('admin-nav-link');
+                    if (adminLink) adminLink.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Error updating auth UI:', error);
