@@ -730,6 +730,10 @@ a:hover {
     padding: 0 1.5rem;
 }
 
+.carousel-slide.active {
+    opacity: 1;
+}
+
 @media (min-width: 768px) {
     .carousel-slide {
         padding: 0 4rem;
