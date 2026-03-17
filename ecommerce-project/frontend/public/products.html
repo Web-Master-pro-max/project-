@@ -239,22 +239,69 @@
             position: relative;
         }
 
-        /* Layout Wrapper */
+        /* Layout Wrapper - Mobile First */
         .layout-wrapper {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 2rem;
-            align-items: start;
+            display: block;
         }
 
-        /* Filters Sidebar */
+        @media (min-width: 992px) {
+            .layout-wrapper {
+                display: grid;
+                grid-template-columns: 280px 1fr;
+                gap: 2rem;
+                align-items: start;
+            }
+        }
+
+        /* Mobile Filter Toggle */
+        .mobile-filter-toggle {
+            display: block;
+            width: 100%;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--flipkart-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .mobile-filter-toggle i {
+            font-size: 1.1rem;
+        }
+
+        @media (min-width: 992px) {
+            .mobile-filter-toggle {
+                display: none;
+            }
+        }
+
+        /* Filters Sidebar - Mobile Hidden by Default */
         .filters-sidebar {
             background: white;
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 90px;
+            margin-bottom: 2rem;
+            display: none; /* Hidden on mobile */
+        }
+
+        .filters-sidebar.mobile-open {
+            display: block;
+        }
+
+        @media (min-width: 992px) {
+            .filters-sidebar {
+                position: sticky;
+                top: 90px;
+                display: block; /* Always visible on desktop */
+            }
         }
 
         .filter-section {
@@ -389,11 +436,31 @@
             border-color: var(--flipkart-blue);
         }
 
-        /* Products Grid */
+        /* Products Grid - Mobile First */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.5rem;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 576px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.2rem;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1.5rem;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         @media (min-width: 1200px) {
