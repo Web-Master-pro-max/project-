@@ -52,11 +52,11 @@
                     <div class="dashboard-sidebar">
                         <h3 style="margin-bottom: 1rem;">Menu</h3>
                         <ul class="dashboard-menu">
-                            <li><a href="/dashboard" class="active">Overview</a></li>
-                            <li><a href="/orders">My Orders</a></li>
-                            <li><a href="/dashboard/account">Account Settings</a></li>
-                            <li id="admin-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;">📊 Admin Dashboard</a></li>
-                            <li><a href="#" onclick="logout()">Logout</a></li>
+                            <li><a href="/dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                            <li><a href="/orders"><i class="fas fa-truck"></i> My Orders</a></li>
+                            <li><a href="/dashboard/account"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+                            <li id="admin-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;"><i class="fas fa-crown"></i> Admin Dashboard</a></li>
+                            <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                         </ul>
                     </div>
                 </aside>
@@ -67,32 +67,41 @@
                         <h2 style="margin-bottom: 1.5rem;">Dashboard Overview</h2>
 
                         <!-- User Info -->
-                        <div style="background: linear-gradient(135deg, #007bff, #0056b3); color: white; padding: 2rem; border-radius: 8px; margin-bottom: 2rem;">
+                        <div class="user-info-card">
                             <p style="opacity: 0.9;">Welcome back!</p>
                             <h3 id="user-name" style="margin: 0.5rem 0;">User</h3>
                             <p id="user-email" style="margin: 0; opacity: 0.9;">user@example.com</p>
                         </div>
 
                         <!-- Stats Cards -->
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                            <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);">
-                                <p style="color: var(--secondary-color); margin-bottom: 0.5rem;">Total Orders</p>
-                                <p style="font-size: 1.8rem; font-weight: bold; color: var(--primary-color); margin: 0;" id="total-orders">0</p>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-shopping-bag"></i>
+                                </div>
+                                <p class="stat-label">Total Orders</p>
+                                <p class="stat-value" id="total-orders">0</p>
                             </div>
-                            <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);">
-                                <p style="color: var(--secondary-color); margin-bottom: 0.5rem;">Total Spent</p>
-                                <p style="font-size: 1.8rem; font-weight: bold; color: var(--success-color); margin: 0;" id="total-spent">₹0</p>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-rupee-sign"></i>
+                                </div>
+                                <p class="stat-label">Total Spent</p>
+                                <p class="stat-value" id="total-spent">₹0</p>
                             </div>
-                            <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);">
-                                <p style="color: var(--secondary-color); margin-bottom: 0.5rem;">Pending Orders</p>
-                                <p style="font-size: 1.8rem; font-weight: bold; color: var(--warning-color); margin: 0;" id="pending-orders">0</p>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <p class="stat-label">Pending Orders</p>
+                                <p class="stat-value" id="pending-orders">0</p>
                             </div>
                         </div>
 
                         <!-- Quick Actions -->
-                        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075); margin-bottom: 2rem;">
+                        <div class="quick-actions-card">
                             <h3 style="margin-bottom: 1rem;">Quick Actions</h3>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                            <div class="quick-actions-grid">
                                 <a href="/products" class="btn btn-primary">Shop Now</a>
                                 <a href="/orders" class="btn btn-secondary">View Orders</a>
                                 <a href="/cart" class="btn btn-outline">View Cart</a>
@@ -101,14 +110,16 @@
                         </div>
 
                         <!-- Recent Orders -->
-                        <div style="background: white; padding: 1.5rem; border-radius: 8px; box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);">
+                        <div class="recent-orders-card">
                             <h3 style="margin-bottom: 1rem;">Recent Orders</h3>
                             <div id="recent-orders-list">
-                                <!-- Recent orders loaded here -->
+                                <div style="text-align: center; color: var(--secondary-color); padding: 2rem;">
+                                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+                                    <p>Loading your orders...</p>
+                                </div>
                             </div>
                             <a href="/orders" class="btn btn-secondary mt-3">View All Orders</a>
                         </div>
-                    </div>
                 </main>
             </div>
         </div>
@@ -238,7 +249,7 @@
                             `;
                         }).join('');
                     } else {
-                        recentOrdersList.innerHTML = '<p style="color: var(--secondary-color);">No orders yet. Start shopping!</p>';
+                        recentOrdersList.innerHTML = '<p style="color: var(--secondary-color); text-align: center; padding: 2rem;">No orders yet. Start shopping!</p>';
                     }
                 }
             } catch (error) {

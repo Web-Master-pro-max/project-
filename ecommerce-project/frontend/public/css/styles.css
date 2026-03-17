@@ -1348,6 +1348,221 @@ footer {
     }
 }
 
+/* ==================== DASHBOARD PAGE ==================== */
+.user-dashboard {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+@media (min-width: 768px) {
+    .user-dashboard {
+        grid-template-columns: 280px 1fr;
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+}
+
+.dashboard-sidebar {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    padding: 1.5rem;
+    height: fit-content;
+    order: 2; /* Show sidebar after main content on mobile */
+}
+
+@media (min-width: 768px) {
+    .dashboard-sidebar {
+        position: sticky;
+        top: 120px;
+        order: 1; /* Show sidebar first on desktop */
+    }
+}
+
+.dashboard-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dashboard-menu li {
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-menu a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    color: var(--secondary-color);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.dashboard-menu a:hover {
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+}
+
+.dashboard-menu a.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dashboard-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    padding: 1.5rem;
+    order: 1; /* Show main content first on mobile */
+}
+
+@media (min-width: 768px) {
+    .dashboard-content {
+        padding: 2rem;
+        order: 2; /* Show main content after sidebar on desktop */
+    }
+}
+
+.dashboard-content h2 {
+    color: var(--dark-color);
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .dashboard-content h2 {
+        font-size: 1.8rem;
+    }
+}
+
+.user-info-card {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+@media (min-width: 768px) {
+    .user-info-card {
+        padding: 2rem;
+    }
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    text-align: center;
+    position: relative;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary-color), var(--flipkart-blue));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    margin: 0 auto 1rem;
+    font-size: 1.2rem;
+}
+
+.stat-label {
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.stat-card:nth-child(1) .stat-value {
+    color: var(--primary-color);
+}
+
+.stat-card:nth-child(2) .stat-value {
+    color: var(--success-color);
+}
+
+.stat-card:nth-child(3) .stat-value {
+    color: var(--warning-color);
+}
+
+.quick-actions-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    margin-bottom: 2rem;
+}
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.recent-orders-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+}
+
+.order-status {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-processing {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.status-shipped {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-delivered {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 .order-status {
     padding: 0.2rem 0.5rem;
     border-radius: 12px;
