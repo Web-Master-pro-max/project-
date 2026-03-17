@@ -27,12 +27,15 @@ require('./backend/models');
 
 const app = express();
 
+// Trust proxy - important for Vercel and nginx (MUST be set before rate limiter)
+app.set('trust proxy', 1);
+
 // Security middleware
 app.use(helmet({
     contentSecurityPolicy: false,
 }));
 
-// Rate limiting
+// Rate limiting - Updated to handle X-Forwarded-For headers properly
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 const RATE_LIMIT_MAX = parseInt(process.env.RATE_LIMIT_MAX, 10) || (process.env.NODE_ENV === 'production' ? 1000 : 5000);
 
@@ -41,12 +44,18 @@ const limiter = rateLimit({
     max: RATE_LIMIT_MAX,
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false,  // Disable the `X-RateLimit-*` headers
+    // Proper key generator for proxied requests (Vercel/nginx)
+    keyGenerator: (req) => {
+        // For Vercel/nginx, use X-Forwarded-For header
+        const forwarded = req.headers['x-forwarded-for'];
+        const ip = forwarded ? forwarded.split(',')[0].trim() : req.ip || req.socket.remoteAddress;
+        return ip;
+    },
     handler: (req, res) => {
         res.status(429).json({ error: 'Too many requests. Please try again later.' });
     },
-    // Skip rate limiting for authenticated users to avoid accidental request throttling
-    // Also skip on order creation so users don't hit the limiter when placing an order.
-    skip: (req, res) => {
+    // Skip rate limiting for authenticated users and order creation
+    skip: (req) => {
         if (req.method === 'POST' && req.path === '/orders') return true;
         // Allow all authenticated users (session or JWT) to bypass limit
         if (req.session && req.session.user) return true;
@@ -56,7 +65,7 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Update CORS configuration - This is the key part to fix
+// CORS configuration - Updated with your Vercel domain
 app.use(cors({
     origin: function (origin, callback) {
         // Allow requests with no origin (like mobile apps or curl requests)
@@ -98,7 +107,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Serve static files - Note: Your frontend files are in 'public' folder
+// Serve static files
 app.use(express.static(path.join(__dirname, 'frontend', 'public')));
 app.use('/uploads', express.static(path.join(__dirname, 'frontend', 'uploads')));
 
@@ -128,17 +137,18 @@ sessionStore.destroy = (function(originalDestroy) {
   };
 })(sessionStore.destroy);
 
+// Session configuration with proper cookie settings for Vercel
 app.use(session({
     store: sessionStore,
     secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: true,
     saveUninitialized: false,
-    proxy: true, // Changed to true for Vercel proxy
+    proxy: true, // Trust proxy for Vercel
     cookie: {
-        secure: process.env.NODE_ENV === 'production', // Will be true on Vercel (HTTPS)
+        secure: process.env.NODE_ENV === 'production', // true on Vercel (HTTPS)
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        sameSite: 'lax' // Changed from 'lax' to 'none' for cross-site requests
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax' // 'none' for cross-site requests
     }
 }));
 
@@ -149,8 +159,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 
-// Frontend Routes - These are for when you access EC2 directly
-// Note: When using Vercel, these routes won't be used because Vercel serves the frontend
+// Frontend Routes - Serve HTML files (for when accessing EC2 directly)
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'public', 'index.html'));
 });
@@ -223,6 +232,7 @@ const initializeServer = async () => {
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server running on port ${PORT}`);
             console.log(`CORS enabled for: .vercel.app domains`);
+            console.log(`Trust proxy enabled for X-Forwarded-* headers`);
             console.log(`Server ready to accept requests from Vercel`);
         });
     } catch (error) {
