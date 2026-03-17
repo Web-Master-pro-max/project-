@@ -2,38 +2,303 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Checkout - ShopHub</title>
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Checkout Page Specific Styles */
+        :root {
+            --primary-color: #2874f0;
+            --secondary-color: #fb641b;
+            --success-color: #388e3c;
+            --danger-color: #ff6161;
+            --amazon-dark: #232f3e;
+            --amazon-orange: #ff9900;
+            --border-color: #eaeaea;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+        }
+
+        /* Navbar - Responsive */
+        .navbar {
+            background: var(--amazon-dark);
+            padding: 0.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+        }
+
+        .navbar-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-container {
+                padding: 0 2rem;
+                display: grid;
+                grid-template-columns: auto 1fr auto auto;
+                gap: 1rem;
+            }
+        }
+
+        .navbar-brand {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #ff9900, #ffc34d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (min-width: 768px) {
+            .navbar-brand {
+                font-size: 1.8rem;
+            }
+        }
+
+        .nav-search {
+            width: 100%;
+            order: 3;
+            display: flex;
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        @media (min-width: 768px) {
+            .nav-search {
+                width: auto;
+                order: 0;
+                max-width: 400px;
+            }
+        }
+
+        .nav-search input {
+            flex: 1;
+            padding: 0.7rem;
+            border: none;
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .nav-search button {
+            background: var(--amazon-orange);
+            border: none;
+            padding: 0 1rem;
+            cursor: pointer;
+            min-width: 44px;
+            min-height: 44px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 0.5rem;
+            align-items: center;
+            margin-left: auto;
+            order: 1;
+        }
+
+        @media (min-width: 768px) {
+            .nav-links {
+                order: 0;
+                margin-left: 0;
+                gap: 1rem;
+            }
+        }
+
+        .nav-links li a {
+            color: white;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0.5rem;
+            min-width: 44px;
+            min-height: 44px;
+            text-decoration: none;
+        }
+
+        @media (min-width: 480px) {
+            .nav-links li a {
+                font-size: 0.9rem;
+                flex-direction: row;
+                gap: 0.5rem;
+                padding: 0.5rem 0.8rem;
+            }
+        }
+
+        .cart-icon-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ff0000;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 480px) {
+            .cart-count {
+                top: -8px;
+                right: -8px;
+                width: 20px;
+                height: 20px;
+                font-size: 0.75rem;
+            }
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            order: 2;
+        }
+
+        .btn {
+            padding: 0.5rem 0.8rem;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            min-height: 40px;
+        }
+
+        .btn-primary {
+            background: var(--flipkart-blue);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-sm {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.75rem;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            min-height: calc(100vh - 200px);
+            padding: 1rem 0;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 2rem 0;
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 0 2rem;
+            }
+        }
+
+        /* Checkout Steps - Responsive */
         .checkout-steps {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
+        @media (min-width: 640px) {
+            .checkout-steps {
+                flex-direction: row;
+                justify-content: space-between;
+                padding: 1.5rem;
+            }
+        }
+
         .step {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0.5rem;
             flex: 1;
+            font-size: 0.8rem;
             position: relative;
         }
 
+        @media (min-width: 640px) {
+            .step {
+                font-size: 0.9rem;
+            }
+        }
+
         .step:not(:last-child)::after {
-            content: '';
-            position: absolute;
-            right: 0;
-            width: calc(100% - 60px);
-            height: 2px;
-            background: #eaeaea;
-            top: 25px;
+            display: none;
+        }
+
+        @media (min-width: 640px) {
+            .step:not(:last-child)::after {
+                content: '';
+                display: block;
+                position: absolute;
+                right: 0;
+                width: calc(100% - 60px);
+                height: 2px;
+                background: #eaeaea;
+                top: 20px;
+            }
         }
 
         .step.active:not(:last-child)::after {
@@ -41,8 +306,8 @@
         }
 
         .step-number {
-            width: 40px;
-            height: 40px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: #eaeaea;
             color: #999;
@@ -50,7 +315,16 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            z-index: 1;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 640px) {
+            .step-number {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
         }
 
         .step.active .step-number {
@@ -64,49 +338,100 @@
         }
 
         .step-info h4 {
-            margin: 0;
-            font-size: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
         }
 
         .step-info p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--secondary-color);
+            font-size: 0.7rem;
+            color: #666;
         }
 
-        .checkout-section-enhanced {
+        /* Checkout Layout */
+        .checkout-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .checkout-layout {
+                flex-direction: row;
+            }
+        }
+
+        .checkout-main {
+            flex: 2;
+        }
+
+        .checkout-sidebar {
+            flex: 1;
+        }
+
+        /* Checkout Sections */
+        .checkout-section {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1.2rem;
+            margin-bottom: 1.2rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
 
-        .section-header-with-edit {
+        @media (min-width: 768px) {
+            .checkout-section {
+                padding: 1.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #eaeaea;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .section-header-with-edit h3 {
-            margin: 0;
-            font-size: 1.2rem;
+        .section-header h3 {
+            font-size: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
+        @media (min-width: 768px) {
+            .section-header h3 {
+                font-size: 1.1rem;
+            }
+        }
+
+        .section-header h3 i {
+            color: var(--flipkart-blue);
+        }
+
         .edit-link {
             color: var(--flipkart-blue);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
+            padding: 0.3rem;
+        }
+
+        /* Address List */
+        .address-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .address-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
         .address-card {
-            border: 2px solid #eaeaea;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             padding: 1rem;
             cursor: pointer;
@@ -114,10 +439,7 @@
             position: relative;
         }
 
-        .address-card:hover {
-            border-color: var(--flipkart-blue);
-        }
-
+        .address-card:hover,
         .address-card.selected {
             border-color: var(--flipkart-blue);
             background: #e3f2fd;
@@ -130,9 +452,9 @@
 
         .address-type {
             display: inline-block;
-            padding: 0.2rem 0.8rem;
+            padding: 0.2rem 0.6rem;
             border-radius: 20px;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             margin-bottom: 0.5rem;
         }
 
@@ -146,29 +468,28 @@
             color: #856404;
         }
 
+        /* Payment Methods */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
         .payment-method-card {
-            border: 2px solid #eaeaea;
+            border: 2px solid var(--border-color);
             border-radius: 8px;
             padding: 1rem;
             display: flex;
             align-items: center;
             gap: 1rem;
             cursor: pointer;
-            margin-bottom: 1rem;
             transition: all 0.3s ease;
         }
 
-        .payment-method-card:hover {
-            border-color: var(--flipkart-blue);
-        }
-
+        .payment-method-card:hover,
         .payment-method-card.selected {
             border-color: var(--flipkart-blue);
             background: #e3f2fd;
-        }
-
-        .payment-method-card input[type="radio"] {
-            margin: 0;
         }
 
         .payment-icon {
@@ -179,10 +500,11 @@
             justify-content: center;
             border-radius: 8px;
             background: #f8f9fa;
+            flex-shrink: 0;
         }
 
         .payment-icon i {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
         }
 
         .payment-details {
@@ -190,57 +512,97 @@
         }
 
         .payment-details h4 {
-            margin: 0 0 0.2rem 0;
-            font-size: 1rem;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
         }
 
         .payment-details p {
-            margin: 0;
-            font-size: 0.85rem;
-            color: var(--secondary-color);
+            font-size: 0.75rem;
+            color: #666;
         }
 
-        .order-summary-enhanced {
+        /* Payment Forms */
+        .payment-details-form {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.7rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.8rem;
+        }
+
+        /* Order Summary */
+        .order-summary {
             background: white;
             border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             position: sticky;
             top: 90px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            max-height: calc(100vh - 180px);
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
         }
 
-        .order-summary-enhanced > div:first-of-type {
-            flex: 1;
+        @media (min-width: 768px) {
+            .order-summary {
+                padding: 1.5rem;
+            }
+        }
+
+        .order-summary h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .order-items {
+            max-height: 250px;
             overflow-y: auto;
+            margin-bottom: 1rem;
         }
 
         .order-item-mini {
             display: flex;
-            gap: 1rem;
-            padding: 1rem 0;
-            border-bottom: 1px solid #eaeaea;
-        }
-
-        .order-item-mini:last-child {
-            border-bottom: none;
+            gap: 0.8rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
         .order-item-mini-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
+            width: 45px;
+            height: 45px;
+            border-radius: 6px;
             overflow: hidden;
             background: #f8f9fa;
+            flex-shrink: 0;
         }
 
         .order-item-mini-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
         }
 
         .order-item-mini-details {
@@ -248,13 +610,20 @@
         }
 
         .order-item-mini-details h4 {
-            margin: 0 0 0.2rem 0;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .order-item-mini-details p {
+            font-size: 0.75rem;
+            color: #666;
         }
 
         .order-item-mini-price {
             font-weight: bold;
             color: var(--flipkart-blue);
+            font-size: 0.85rem;
+            white-space: nowrap;
         }
 
         .price-breakdown {
@@ -265,40 +634,15 @@
             display: flex;
             justify-content: space-between;
             margin-bottom: 0.5rem;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
         }
 
         .price-row.total {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             border-top: 2px dashed #ddd;
             padding-top: 1rem;
             margin-top: 0.5rem;
-        }
-
-        .place-order-btn {
-            background: linear-gradient(135deg, var(--flipkart-blue), #1a4d8c);
-            color: white;
-            border: none;
-            padding: 1rem;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            margin-top: auto;
-            flex-shrink: 0;
-        }
-
-        .place-order-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(40, 116, 240, 0.3);
-        }
-
-        .place-order-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         .terms-checkbox {
@@ -306,12 +650,207 @@
             align-items: center;
             gap: 0.5rem;
             margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .terms-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .place-order-btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, var(--flipkart-blue), #1a4d8c);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 48px;
+        }
+
+        .place-order-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .secure-text {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #232f3e;
+            color: white;
+            padding: 2rem 0 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 480px) {
+            .footer-content {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        .footer-section h3 {
             font-size: 0.9rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.4rem;
+        }
+
+        .footer-section ul li a {
+            color: #adb5bd;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #495057;
+            padding-top: 1rem;
+            text-align: center;
+            color: #adb5bd;
+            font-size: 0.75rem;
+        }
+
+        /* Alert */
+        .alert {
+            position: fixed;
+            top: 80px;
+            right: 1rem;
+            left: 1rem;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 1rem;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 2000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @media (min-width: 768px) {
+            .alert {
+                left: auto;
+                margin: 0;
+            }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        /* Touch-friendly improvements */
+        button, a, .address-card, .payment-method-card {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            -webkit-text-size-adjust: 100%;
+        }
+
+        * {
+            -webkit-overflow-scrolling: touch;
         }
     </style>
 </head>
 <body>
-    <!-- Enhanced Navbar -->
+    <!-- Navigation Header -->
     <nav class="navbar">
         <div class="navbar-container">
             <div class="navbar-brand">
@@ -320,7 +859,7 @@
             </div>
             
             <div class="nav-search">
-                <input type="text" id="search-input" placeholder="Search for products, brands and more...">
+                <input type="text" id="search-input" placeholder="Search products...">
                 <button onclick="performSearch()">
                     <i class="fas fa-search"></i>
                 </button>
@@ -332,7 +871,7 @@
                 <li>
                     <a href="/cart" class="cart-icon-wrapper">
                         <i class="fas fa-shopping-cart"></i>
-                        <span id="cart-count" class="cart-count" style="display: none;">0</span>
+                        <span id="cart-count" class="cart-count">0</span>
                     </a>
                 </li>
                 <li><a href="/orders"><i class="fas fa-truck"></i> Orders</a></li>
@@ -360,15 +899,15 @@
                 <div class="step" id="step-2">
                     <div class="step-number">2</div>
                     <div class="step-info">
-                        <h4>Delivery Address</h4>
-                        <p>Enter your address</p>
+                        <h4>Delivery</h4>
+                        <p>Enter address</p>
                     </div>
                 </div>
                 <div class="step" id="step-3">
                     <div class="step-number">3</div>
                     <div class="step-info">
                         <h4>Payment</h4>
-                        <p>Choose payment method</p>
+                        <p>Choose method</p>
                     </div>
                 </div>
                 <div class="step" id="step-4">
@@ -380,39 +919,39 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+            <div class="checkout-layout">
                 <!-- Checkout Form -->
-                <div>
+                <div class="checkout-main">
                     <!-- Delivery Address Section -->
-                    <div class="checkout-section-enhanced" id="address-section">
-                        <div class="section-header-with-edit">
-                            <h3><i class="fas fa-map-marker-alt" style="color: var(--flipkart-blue);"></i> Delivery Address</h3>
-                            <span class="edit-link" onclick="showAddressForm()">+ Add New Address</span>
+                    <div class="checkout-section" id="address-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-map-marker-alt"></i> Delivery Address</h3>
+                            <span class="edit-link" onclick="showAddressForm()">+ Add New</span>
                         </div>
                         
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem;" id="address-list">
+                        <div class="address-list" id="address-list">
                             <!-- Saved addresses will be shown here -->
                         </div>
                     </div>
 
                     <!-- Payment Section -->
-                    <div class="checkout-section-enhanced" id="payment-section">
-                        <div class="section-header-with-edit">
-                            <h3><i class="fas fa-credit-card" style="color: var(--flipkart-blue);"></i> Payment Method</h3>
+                    <div class="checkout-section" id="payment-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-credit-card"></i> Payment Method</h3>
                         </div>
                         
-                        <div id="payment-methods">
+                        <div id="payment-methods" class="payment-methods">
                             <!-- Payment methods loaded here -->
                         </div>
 
                         <!-- Card Details Form -->
-                        <div id="card-details" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <div id="card-details" class="payment-details-form" style="display: none;">
                             <h4 style="margin-bottom: 1rem;">Enter Card Details</h4>
                             <div class="form-group">
                                 <label>Card Number</label>
                                 <input type="text" class="form-control" placeholder="1234 5678 9012 3456" id="card-number">
                             </div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-row">
                                 <div class="form-group">
                                     <label>Expiry Date</label>
                                     <input type="text" class="form-control" placeholder="MM/YY" id="card-expiry">
@@ -429,23 +968,21 @@
                         </div>
 
                         <!-- UPI Section -->
-                        <div id="upi-details" style="display: none; margin-top: 1rem; padding: 1rem; background: #f8f9fa; border-radius: 8px;">
+                        <div id="upi-details" class="payment-details-form" style="display: none;">
                             <h4 style="margin-bottom: 1rem;">Enter UPI ID</h4>
                             <div class="form-group">
                                 <input type="text" class="form-control" placeholder="username@okhdfcbank" id="upi-id">
                             </div>
-                            <p style="font-size: 0.85rem; color: var(--secondary-color); margin-top: 0.5rem;">
-                                <i class="fas fa-info-circle"></i> You will be redirected to your UPI app to complete payment
+                            <p style="font-size: 0.8rem; color: #666;">
+                                <i class="fas fa-info-circle"></i> You will be redirected to your UPI app
                             </p>
                         </div>
                     </div>
-
-                    <!-- Order Summary Mobile (shown on desktop in sidebar) -->
                 </div>
 
                 <!-- Order Summary Sidebar -->
-                <div>
-                    <div class="order-summary-enhanced" id="order-summary">
+                <div class="checkout-sidebar">
+                    <div class="order-summary" id="order-summary">
                         <!-- Order summary loaded here -->
                     </div>
                 </div>
@@ -455,7 +992,7 @@
 
     <!-- Add Address Modal -->
     <div id="address-modal" class="modal">
-        <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h2 class="modal-title">Add New Address</h2>
                 <button class="modal-close" onclick="closeAddressModal()">&times;</button>
@@ -475,14 +1012,14 @@
                         <input type="text" class="form-control" id="address-pin" required>
                     </div>
                     <div class="form-group">
-                        <label>Address (House No, Building, Street)</label>
+                        <label>Address</label>
                         <textarea class="form-control" id="address-line" rows="2" required></textarea>
                     </div>
                     <div class="form-group">
                         <label>Landmark</label>
                         <input type="text" class="form-control" id="address-landmark">
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-row">
                         <div class="form-group">
                             <label>City</label>
                             <input type="text" class="form-control" id="address-city" required>
@@ -508,9 +1045,37 @@
         </div>
     </div>
 
-    <!-- Enhanced Footer -->
+    <!-- Footer -->
     <footer>
-        <!-- ... footer content from home page ... -->
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About ShopHub</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Help</h3>
+                    <ul>
+                        <li><a href="/shipping">Shipping</a></li>
+                        <li><a href="/returns">Returns</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Policy</h3>
+                    <ul>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
     </footer>
 
     <script src="/js/api.js"></script>
@@ -518,6 +1083,30 @@
         let cartData = null;
         let selectedAddress = null;
         let selectedPayment = 'card';
+
+        function formatPrice(value) {
+            const num = Number(value);
+            if (Number.isNaN(num)) return value;
+            return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(num);
+        }
+
+        function $(id) {
+            return document.getElementById(id);
+        }
+
+        function showAlert(message, type) {
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" style="background:none;border:none;font-size:1.2rem;cursor:pointer;">&times;</button>
+            `;
+            document.body.appendChild(alert);
+            setTimeout(() => alert.remove(), 3000);
+        }
 
         async function loadCheckout() {
             try {
@@ -531,7 +1120,6 @@
                 loadPaymentMethods();
                 loadOrderSummary();
             } catch (error) {
-                // Handle authentication errors
                 if (error.message.includes('Session expired')) {
                     showAlert('Please login to continue checkout', 'warning');
                     setTimeout(() => {
@@ -544,7 +1132,6 @@
         }
 
         function loadAddresses() {
-            // Demo addresses
             const addresses = [
                 {
                     id: 1,
@@ -568,7 +1155,7 @@
                 }
             ];
 
-            const container = $('#address-list');
+            const container = $('address-list');
             container.innerHTML = addresses.map(addr => `
                 <div class="address-card ${selectedAddress?.id === addr.id ? 'selected' : ''}" 
                      onclick="selectAddress(${addr.id})">
@@ -577,10 +1164,10 @@
                     <span class="address-type ${addr.type}">
                         <i class="fas fa-${addr.type === 'home' ? 'home' : 'building'}"></i> ${addr.type}
                     </span>
-                    <p style="margin: 0.5rem 0; font-weight: bold;">${addr.name}</p>
-                    <p style="margin: 0.2rem 0; font-size: 0.9rem;">${addr.address}</p>
-                    <p style="margin: 0.2rem 0; font-size: 0.9rem;">${addr.city}, ${addr.state} - ${addr.pin}</p>
-                    <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">
+                    <p style="margin: 0.3rem 0; font-weight: bold;">${addr.name}</p>
+                    <p style="margin: 0.2rem 0; font-size: 0.85rem;">${addr.address}</p>
+                    <p style="margin: 0.2rem 0; font-size: 0.85rem;">${addr.city}, ${addr.state} - ${addr.pin}</p>
+                    <p style="margin: 0.3rem 0 0; font-size: 0.85rem;">
                         <i class="fas fa-phone"></i> ${addr.phone}
                     </p>
                 </div>
@@ -593,18 +1180,18 @@
 
         function loadPaymentMethods() {
             const methods = [
-                { id: 'card', name: 'Credit/Debit Card', icon: 'fa-credit-card', desc: 'Pay with Visa, Mastercard, RuPay' },
+                { id: 'card', name: 'Credit/Debit Card', icon: 'fa-credit-card', desc: 'Visa, Mastercard, RuPay' },
                 { id: 'upi', name: 'UPI', icon: 'fa-mobile-alt', desc: 'Google Pay, PhonePe, Paytm' },
                 { id: 'netbanking', name: 'Net Banking', icon: 'fa-university', desc: 'All major banks' },
                 { id: 'cod', name: 'Cash on Delivery', icon: 'fa-money-bill-wave', desc: 'Pay when you receive' }
             ];
 
-            const container = $('#payment-methods');
+            const container = $('payment-methods');
             container.innerHTML = methods.map(method => `
                 <div class="payment-method-card ${selectedPayment === method.id ? 'selected' : ''}" 
                      onclick="selectPayment('${method.id}')">
                     <input type="radio" name="payment" value="${method.id}" 
-                           ${selectedPayment === method.id ? 'checked' : ''}>
+                           ${selectedPayment === method.id ? 'checked' : ''} style="display: none;">
                     <div class="payment-icon">
                         <i class="fas ${method.icon}"></i>
                     </div>
@@ -620,18 +1207,18 @@
 
         function selectAddress(addressId) {
             selectedAddress = { id: addressId };
-            loadAddresses(); // Refresh to show selection
+            loadAddresses();
         }
 
         function selectPayment(method) {
             selectedPayment = method;
-            loadPaymentMethods(); // Refresh to show selection
+            loadPaymentMethods();
             updatePaymentFields();
         }
 
         function updatePaymentFields() {
-            $('#card-details').style.display = selectedPayment === 'card' ? 'block' : 'none';
-            $('#upi-details').style.display = selectedPayment === 'upi' ? 'block' : 'none';
+            $('card-details').style.display = selectedPayment === 'card' ? 'block' : 'none';
+            $('upi-details').style.display = selectedPayment === 'upi' ? 'block' : 'none';
         }
 
         function loadOrderSummary() {
@@ -639,79 +1226,76 @@
                 return sum + ((item.Product?.price || 0) * item.quantity);
             }, 0);
 
-            const discount = subtotal * 0.3; // 30% discount
+            const discount = subtotal * 0.3;
             const delivery = subtotal > 999 ? 0 : 40;
             const total = subtotal - discount + delivery;
 
-            const summary = $('#order-summary');
+            const summary = $('order-summary');
             summary.innerHTML = `
-                <div style="display: flex; flex-direction: column; height: 100%; gap: 1rem;">
-                    <h3 style="margin-bottom: 0; flex-shrink: 0;">Order Summary</h3>
-                    
-                    <div style="max-height: 250px; overflow-y: auto; flex-shrink: 1;">
-                        ${cartData.items.map(item => `
-                            <div class="order-item-mini">
-                                <div class="order-item-mini-image">
-                                    <img src="${item.Product?.image_url || '/images/placeholder.png'}" alt="${item.Product?.name}">
-                                </div>
-                                <div class="order-item-mini-details">
-                                    <h4>${item.Product?.name}</h4>
-                                    <p style="font-size: 0.85rem; color: #666;">Qty: ${item.quantity}</p>
-                                </div>
-                                <div class="order-item-mini-price">
-                                    ${formatPrice((item.Product?.price || 0) * item.quantity)}
-                                </div>
+                <h3>Order Summary</h3>
+                
+                <div class="order-items">
+                    ${cartData.items.map(item => `
+                        <div class="order-item-mini">
+                            <div class="order-item-mini-image">
+                                <img src="${item.Product?.image_url || '/images/placeholder.png'}" alt="${item.Product?.name}">
                             </div>
-                        `).join('')}
-                    </div>
-                    
-                    <div class="price-breakdown" style="flex-shrink: 0;">
-                        <div class="price-row">
-                            <span>Subtotal</span>
-                            <span>${formatPrice(subtotal)}</span>
+                            <div class="order-item-mini-details">
+                                <h4>${item.Product?.name || 'Product'}</h4>
+                                <p>Qty: ${item.quantity}</p>
+                            </div>
+                            <div class="order-item-mini-price">
+                                ${formatPrice((item.Product?.price || 0) * item.quantity)}
+                            </div>
                         </div>
-                        <div class="price-row">
-                            <span>Discount</span>
-                            <span style="color: var(--success-color);">- ${formatPrice(discount)}</span>
-                        </div>
-                        <div class="price-row">
-                            <span>Delivery</span>
-                            <span style="color: ${delivery === 0 ? 'var(--success-color)' : 'inherit'};">
-                                ${delivery === 0 ? 'FREE' : formatPrice(delivery)}
-                            </span>
-                        </div>
-                        <div class="price-row total">
-                            <span>Total</span>
-                            <span style="color: var(--flipkart-blue);">${formatPrice(total)}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="terms-checkbox" style="flex-shrink: 0;">
-                        <input type="checkbox" id="agree-terms" checked>
-                        <label for="agree-terms">I agree to the Terms & Conditions</label>
-                    </div>
-                    
-                    <button class="place-order-btn" onclick="placeOrder()" id="place-order-btn" style="flex-shrink: 0;">
-                        <i class="fas fa-lock"></i> PLACE ORDER
-                    </button>
-                    
-                    <p style="text-align: center; margin-top: 0; font-size: 0.85rem; color: var(--secondary-color); flex-shrink: 0;">
-                        <i class="fas fa-shield-alt"></i> Safe and Secure Payments
-                    </p>
+                    `).join('')}
                 </div>
+                
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Subtotal</span>
+                        <span>${formatPrice(subtotal)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Discount</span>
+                        <span style="color: var(--success-color);">- ${formatPrice(discount)}</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Delivery</span>
+                        <span style="color: ${delivery === 0 ? 'var(--success-color)' : 'inherit'};">
+                            ${delivery === 0 ? 'FREE' : formatPrice(delivery)}
+                        </span>
+                    </div>
+                    <div class="price-row total">
+                        <span>Total</span>
+                        <span style="color: var(--flipkart-blue);">${formatPrice(total)}</span>
+                    </div>
+                </div>
+                
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="agree-terms" checked>
+                    <label for="agree-terms">I agree to the Terms & Conditions</label>
+                </div>
+                
+                <button class="place-order-btn" onclick="placeOrder()" id="place-order-btn">
+                    <i class="fas fa-lock"></i> PLACE ORDER
+                </button>
+                
+                <p class="secure-text">
+                    <i class="fas fa-shield-alt"></i> Safe and Secure Payments
+                </p>
             `;
         }
 
         function showAddressForm() {
-            $('#address-modal').classList.add('active');
+            $('address-modal').classList.add('active');
         }
 
         function closeAddressModal() {
-            $('#address-modal').classList.remove('active');
+            $('address-modal').classList.remove('active');
         }
 
         function saveAddress() {
-            // Save address logic
             closeAddressModal();
             showAlert('Address saved successfully!', 'success');
         }
@@ -722,7 +1306,7 @@
                 return;
             }
 
-            const btn = $('#place-order-btn');
+            const btn = $('place-order-btn');
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
 
@@ -753,7 +1337,36 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadCheckout);
+        async function updateCartCount() {
+            try {
+                const response = await cartAPI.getCart();
+                const count = response.items ? response.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
+                document.querySelectorAll('.cart-count').forEach(el => {
+                    el.textContent = count;
+                    el.style.display = count > 0 ? 'flex' : 'none';
+                });
+            } catch (error) {
+                console.error('Error updating cart count:', error);
+            }
+        }
+
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if (query) {
+                window.location.href = `/products?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCheckout();
+            updateCartCount();
+        });
+
+        document.getElementById('search-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
     </script>
 </body>
 </html>
