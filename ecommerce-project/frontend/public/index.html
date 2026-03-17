@@ -807,40 +807,39 @@
         </div>
     </nav>
 
-    <!-- Hero Carousel -->
-    <div class="container">
-        <div class="hero-carousel">
-            <div class="carousel-container" id="carousel">
-                <div class="carousel-slide active" style="background-image: linear-gradient(rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.35)), url('images/hero1.jpg');">
-                    <div class="carousel-content">
-                        <h2>Summer Sale</h2>
-                        <p>Up to 50% off on electronics, fashion & more</p>
-                        <button class="carousel-btn" onclick="window.location.href='/products?category=sale'">Shop Now <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero2.jpg');">
-                    <div class="carousel-content">
-                        <h2>Fashion Festival</h2>
-                        <p>Min 50% off on top brands</p>
-                        <button class="carousel-btn" onclick="window.location.href='/products?category=fashion'">Explore Now <i class="fas fa-arrow-right"></i></button>
-                    </div>
-                </div>
-                <div class="carousel-slide" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('images/hero3.png');">
-                    <div class="carousel-content">
-                        <h2>Electronics Week</h2>
-                        <p>Special offers on smartphones & laptops</p>
-                        <button class="carousel-btn" onclick="window.location.href='/products?category=electronics'">View Deals <i class="fas fa-arrow-right"></i></button>
-                    </div>
+    <!-- Hero Carousel - With Image Fallback -->
+<div class="container">
+    <div class="hero-carousel">
+        <div class="carousel-container" id="carousel">
+            <div class="carousel-slide active" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero1.jpg'); background-size: cover; background-position: center; background-color: #667eea;">
+                <div class="carousel-content">
+                    <h2>Summer Sale</h2>
+                    <p>Up to 50% off on electronics, fashion & more</p>
+                    <button class="carousel-btn" onclick="window.location.href='/products?category=sale'">Shop Now <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
-            <div class="carousel-dots" id="carousel-dots">
-                <span class="dot active" onclick="currentSlide(1)"></span>
-                <span class="dot" onclick="currentSlide(2)"></span>
-                <span class="dot" onclick="currentSlide(3)"></span>
+            <div class="carousel-slide" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero2.jpg'); background-size: cover; background-position: center; background-color: #f093fb;">
+                <div class="carousel-content">
+                    <h2>Fashion Festival</h2>
+                    <p>Min 50% off on top brands</p>
+                    <button class="carousel-btn" onclick="window.location.href='/products?category=fashion'">Explore Now <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+            <div class="carousel-slide" style="background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('images/hero3.png'); background-size: cover; background-position: center; background-color: #4facfe;">
+                <div class="carousel-content">
+                    <h2>Electronics Week</h2>
+                    <p>Special offers on smartphones & laptops</p>
+                    <button class="carousel-btn" onclick="window.location.href='/products?category=electronics'">View Deals <i class="fas fa-arrow-right"></i></button>
+                </div>
             </div>
         </div>
+        <div class="carousel-dots" id="carousel-dots">
+            <span class="dot active" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
     </div>
-
+</div>
     <!-- Main Content -->
     <div class="main-content">
         <div class="container">
