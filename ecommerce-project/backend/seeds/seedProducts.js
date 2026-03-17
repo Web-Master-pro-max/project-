@@ -1,6 +1,8 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+
 const { sequelize, testConnection } = require('../config/database');
 const { Product } = require('../models');
-require('dotenv').config();
 
 // Sample products data - 100+ items
 const products = [

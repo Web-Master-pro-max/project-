@@ -1,6 +1,8 @@
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+
 const { sequelize, testConnection } = require('../config/database');
 const { User } = require('../models');
-require('dotenv').config();
 
 // Admin user data
 const adminUser = {
