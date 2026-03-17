@@ -35,3 +35,12 @@ build/
 !.elasticbeanstalk/*.cfg.yaml
 .env.production
 .env.staging
+
+# Vercel
+.vercel/
+.vercel.json
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini

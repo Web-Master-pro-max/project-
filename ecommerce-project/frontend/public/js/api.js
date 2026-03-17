@@ -22,9 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ==================== UTILITY & API FUNCTIONS ====================
+// ==================== ENVIRONMENT CONFIGURATION ====================
 
-const API_BASE_URL = '/api';
+// Determine if we're in production (Vercel) or development
+const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
+
+// API Base URL configuration
+const API_BASE_URL = isProduction
+    ? '/api'  // Use relative path for Vercel (will be proxied)
+    : 'http://51.20.87.184:3000/api';  // Use direct EC2 IP for local development
+
+console.log('Environment:', isProduction ? 'Production (Vercel)' : 'Development (Local)');
+console.log('API Base URL:', API_BASE_URL);
 
 // ==================== API CALLS ====================
 async function apiCall(endpoint, method = 'GET', data = null) {

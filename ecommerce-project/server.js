@@ -57,7 +57,33 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+
+        // Allow localhost for development
+        if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+            return callback(null, true);
+        }
+
+        // Allow Vercel deployments (*.vercel.app)
+        if (origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+
+        // Allow your specific domain if you have one
+        // if (origin === 'https://yourdomain.com') {
+        //     return callback(null, true);
+        // }
+
+        // Reject other origins
+        return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
