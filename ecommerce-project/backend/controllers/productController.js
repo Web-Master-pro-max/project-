@@ -1,5 +1,6 @@
 const { Product } = require('../models');
 const { Op } = require('sequelize');
+const { sequelize } = require('../config/database');
 
 // @desc    Get all products with pagination and filters
 // @route   GET /api/products
@@ -29,6 +30,7 @@ const getProducts = async (req, res) => {
     }
 
     // Build order
+    // Default: newest items first
     let order = [['created_at', 'DESC']];
     if (sort) {
       switch(sort) {
@@ -40,6 +42,13 @@ const getProducts = async (req, res) => {
           break;
         case 'name_asc':
           order = [['name', 'ASC']];
+          break;
+        case 'newest':
+          order = [['created_at', 'DESC']];
+          break;
+        case 'random':
+        case 'popular':
+          order = sequelize.random();
           break;
       }
     }

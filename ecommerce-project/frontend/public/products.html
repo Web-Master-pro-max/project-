@@ -121,25 +121,53 @@
             .layout-wrapper {
                 grid-template-columns: 1fr;
             }
-        }
 
-        .filters-sidebar {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            position: sticky;
-            top: 90px;
-            height: fit-content;
-            width: 100%;
-        }
+            #mobile-filter-toggle {
+                display: block;
+            }
 
-        @media (max-width: 1024px) {
             .filters-sidebar {
-                position: relative;
-                top: auto;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 280px;
+                max-width: 85%;
+                height: 100vh;
+                overflow-y: auto;
+                transform: translateX(-110%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+                box-shadow: 4px 0 12px rgba(0,0,0,0.15);
+                padding: 1.5rem;
+            }
+
+            .filters-sidebar.mobile-active {
+                transform: translateX(0);
+            }
+
+            .filters-sidebar::after {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                background: rgba(0,0,0,0.4);
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            .filters-sidebar.mobile-active::after {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            main {
+                padding-top: 1rem;
             }
         }
+
 
         .filter-section {
             margin-bottom: 1.5rem;
@@ -637,9 +665,12 @@
                 </button>
             </div>
 
+            <button id="mobile-filter-toggle" class="btn btn-primary" style="display: none; margin-bottom: 1rem; width: 100%; max-width: 360px;">
+                <i class="fas fa-sliders-h"></i> Filters
+            </button>
             <div class="layout-wrapper">
                 <!-- Filters Sidebar -->
-                <aside class="filters-sidebar">
+                <aside class="filters-sidebar" id="filters-sidebar">
                     <div class="filter-section">
                         <h3><i class="fas fa-list"></i> Categories</h3>
                         <div class="filter-options" id="category-filters">
@@ -1012,6 +1043,19 @@
             }
         }
 
+        // Mobile filter toggle helpers
+        function toggleFilters() {
+            const sidebar = document.getElementById('filters-sidebar');
+            if (!sidebar) return;
+            sidebar.classList.toggle('mobile-active');
+        }
+
+        function closeFilters() {
+            const sidebar = document.getElementById('filters-sidebar');
+            if (!sidebar) return;
+            sidebar.classList.remove('mobile-active');
+        }
+
         // Load categories
         async function loadCategories() {
             try {
@@ -1065,6 +1109,24 @@
                 localStorage.removeItem('auth');
             }
             
+            const toggleBtn = document.getElementById('mobile-filter-toggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleFilters();
+                });
+            }
+
+            // Close filters if clicking outside
+            document.addEventListener('click', (event) => {
+                const sidebar = document.getElementById('filters-sidebar');
+                const toggle = document.getElementById('mobile-filter-toggle');
+                if (!sidebar || !toggle) return;
+                if (sidebar.classList.contains('mobile-active') && !sidebar.contains(event.target) && !toggle.contains(event.target)) {
+                    closeFilters();
+                }
+            });
+
             loadCategories();
             loadProducts();
         });
