@@ -30,35 +30,6 @@
             grid-template-columns: auto 1fr auto auto;
             gap: 1rem;
             align-items: center;
-            width: 100%;
-        }
-
-        @media (max-width: 992px) {
-            .navbar-container {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-                padding: 0.5rem 1rem;
-            }
-
-            .nav-search {
-                width: 100%;
-                max-width: none;
-            }
-
-            .nav-links {
-                justify-content: space-between;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-            }
-
-            .auth-buttons {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .nav-links li a {
-                padding: 0.5rem 0.75rem;
-            }
         }
 
         .navbar-brand {
@@ -77,7 +48,6 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            width: 100%;
         }
 
         .nav-search input {
@@ -108,17 +78,14 @@
         .hero-carousel {
             position: relative;
             margin-bottom: 2rem;
-            width: 100%;
-            max-width: 100%;
+            width: 100vw;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
             border-radius: 0;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        @media (max-width: 768px) {
-            .hero-carousel {
-                margin-bottom: 1.2rem;
-            }
         }
 
         .carousel-container {
