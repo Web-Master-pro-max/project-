@@ -12,8 +12,11 @@
       "dest": "http://51.20.87.184:3000/api/$1"
     },
     {
+      "handle": "filesystem"
+    },
+    {
       "src": "/(.*)",
-      "dest": "/frontend/views/$1"
+      "dest": "/$1"
     }
   ]
 }
