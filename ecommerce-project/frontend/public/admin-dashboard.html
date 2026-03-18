@@ -1136,6 +1136,32 @@
                         <label>Product Image URL</label>
                         <input type="url" id="product-image" class="form-control" placeholder="https://...">
                     </div>
+
+                    <div id="product-specs-section" style="display: none; margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem;">
+                        <h4 style="margin-bottom: 0.8rem;">Product Specifications</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
+                            <div class="form-group">
+                                <label>RAM</label>
+                                <input type="text" id="product-spec-ram" class="form-control" placeholder="e.g. 8 GB">
+                            </div>
+                            <div class="form-group">
+                                <label>Storage</label>
+                                <input type="text" id="product-spec-storage" class="form-control" placeholder="e.g. 256 GB">
+                            </div>
+                            <div class="form-group">
+                                <label>Camera</label>
+                                <input type="text" id="product-spec-camera" class="form-control" placeholder="e.g. 50MP">
+                            </div>
+                            <div class="form-group">
+                                <label>Display</label>
+                                <input type="text" id="product-spec-display" class="form-control" placeholder="e.g. 6.55 inch">
+                            </div>
+                            <div class="form-group">
+                                <label>Battery</label>
+                                <input type="text" id="product-spec-battery" class="form-control" placeholder="e.g. 4700 mAh">
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -1429,9 +1455,11 @@
             currentEditingProductId = null;
             document.getElementById('product-modal-title').textContent = 'Add Product';
             document.getElementById('product-form').reset();
+            clearSpecInputs();
             
             await loadCategoryOptions();
-            
+            updateSpecsSectionVisibility('');
+
             document.getElementById('product-modal').classList.add('active');
         }
 
@@ -1445,9 +1473,57 @@
                     select.innerHTML = '<option value="">Select Category</option>' +
                         data.categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
                 }
+
+                // Show/hide specs section when category changes
+                select.onchange = () => {
+                    updateSpecsSectionVisibility(select.value);
+                };
             } catch (error) {
                 console.error('Error loading categories:', error);
             }
+        }
+
+        function updateSpecsSectionVisibility(category) {
+            const section = document.getElementById('product-specs-section');
+            if (!section) return;
+
+            const shouldShow = category && category.toLowerCase() === 'electronics';
+            section.style.display = shouldShow ? '' : 'none';
+        }
+
+        function clearSpecInputs() {
+            ['ram', 'storage', 'camera', 'display', 'battery'].forEach(key => {
+                const el = document.getElementById(`product-spec-${key}`);
+                if (el) el.value = '';
+            });
+        }
+
+        function fillSpecInputs(specs) {
+            if (!specs || typeof specs !== 'object') return;
+
+            const map = {
+                ram: specs.ram || specs.RAM || specs.memory,
+                storage: specs.storage || specs.Storage,
+                camera: specs.camera || specs.Camera,
+                display: specs.display || specs.Display,
+                battery: specs.battery || specs.Battery
+            };
+
+            Object.entries(map).forEach(([key, value]) => {
+                const el = document.getElementById(`product-spec-${key}`);
+                if (el) el.value = value || '';
+            });
+        }
+
+        function collectSpecInputs() {
+            const specs = {};
+            ['ram', 'storage', 'camera', 'display', 'battery'].forEach(key => {
+                const el = document.getElementById(`product-spec-${key}`);
+                if (el && el.value.trim()) {
+                    specs[key] = el.value.trim();
+                }
+            });
+            return Object.keys(specs).length ? specs : null;
         }
 
         // Edit product
@@ -1467,7 +1543,10 @@
                     
                     await loadCategoryOptions();
                     document.getElementById('product-category').value = product.category || '';
-                    
+
+                    updateSpecsSectionVisibility(product.category || '');
+                    fillSpecInputs(product.specifications || product.specs);
+
                     document.getElementById('product-modal').classList.add('active');
                 }
             } catch (error) {
@@ -1487,6 +1566,17 @@
                 stock: parseInt(document.getElementById('product-stock').value),
                 image_url: document.getElementById('product-image').value
             };
+
+            // If this is an electronics product, include specs
+            if (productData.category && productData.category.toLowerCase() === 'electronics') {
+                const specs = collectSpecInputs();
+                if (specs) {
+                    productData.specifications = specs;
+                }
+            } else {
+                // Remove specs when category changes away from electronics
+                delete productData.specifications;
+            }
 
             try {
                 if (currentEditingProductId) {

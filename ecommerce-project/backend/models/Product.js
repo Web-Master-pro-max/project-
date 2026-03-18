@@ -41,6 +41,10 @@ const Product = sequelize.define('Product', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
+  specifications: {
+    type: DataTypes.JSON,
+    allowNull: true
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
