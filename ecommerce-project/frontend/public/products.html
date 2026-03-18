@@ -2003,7 +2003,8 @@
             imageEl.src = 'https://via.placeholder.com/500x500?text=Loading...';
 
             try {
-                const product = await productsAPI.getById(productId);
+                const response = await productsAPI.getById(productId);
+                const product = response?.product || response;
                 if (!product) throw new Error('Product not found');
 
                 titleEl.textContent = product.name || 'Unnamed Product';
