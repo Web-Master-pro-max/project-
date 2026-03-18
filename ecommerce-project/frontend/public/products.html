@@ -1678,13 +1678,12 @@
             const sidebar = document.getElementById('filters-sidebar');
             const overlay = document.getElementById('filter-overlay');
             const closeBtn = document.getElementById('mobile-close-filters');
-            
-            if (window.innerWidth < 1024) {
-                sidebar.classList.remove('mobile-open');
-                overlay.classList.remove('active');
-                if (closeBtn) closeBtn.style.display = 'none';
-                document.body.style.overflow = '';
-            }
+
+            // Always close overlay/sidebar if open (mobile or desktop)
+            if (sidebar) sidebar.classList.remove('mobile-open');
+            if (overlay) overlay.classList.remove('active');
+            if (closeBtn) closeBtn.style.display = 'none';
+            document.body.style.overflow = '';
         }
 
         // Handle window resize
@@ -1702,7 +1701,7 @@
         });
 
         function viewProduct(productId) {
-            window.location.href = `/product.html?id=${productId}`;
+            window.location.href = `/products/${productId}`;
         }
 
         function formatPrice(value) {

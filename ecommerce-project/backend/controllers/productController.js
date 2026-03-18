@@ -34,6 +34,10 @@ const getProducts = async (req, res) => {
     let order = [['created_at', 'DESC']];
     if (sort) {
       switch(sort) {
+        case 'featured':
+          // Featured: most recent + best stock
+          order = [['stock', 'DESC'], ['created_at', 'DESC']];
+          break;
         case 'price_asc':
           order = [['price', 'ASC']];
           break;
@@ -43,6 +47,10 @@ const getProducts = async (req, res) => {
         case 'name_asc':
           order = [['name', 'ASC']];
           break;
+        case 'rating_desc':
+          // Fallback in absence of rating data: sort by stock descending
+          order = [['stock', 'DESC'], ['created_at', 'DESC']];
+          break;
         case 'newest':
           order = [['created_at', 'DESC']];
           break;
@@ -50,6 +58,8 @@ const getProducts = async (req, res) => {
         case 'popular':
           order = sequelize.random();
           break;
+        default:
+          order = [['created_at', 'DESC']];
       }
     }
 
