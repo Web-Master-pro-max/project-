@@ -1138,29 +1138,11 @@
                     </div>
 
                     <div id="product-specs-section" style="display: none; margin-top: 1rem; border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem;">
-                        <h4 style="margin-bottom: 0.8rem;">Product Specifications</h4>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
-                            <div class="form-group">
-                                <label>RAM</label>
-                                <input type="text" id="product-spec-ram" class="form-control" placeholder="e.g. 8 GB">
-                            </div>
-                            <div class="form-group">
-                                <label>Storage</label>
-                                <input type="text" id="product-spec-storage" class="form-control" placeholder="e.g. 256 GB">
-                            </div>
-                            <div class="form-group">
-                                <label>Camera</label>
-                                <input type="text" id="product-spec-camera" class="form-control" placeholder="e.g. 50MP">
-                            </div>
-                            <div class="form-group">
-                                <label>Display</label>
-                                <input type="text" id="product-spec-display" class="form-control" placeholder="e.g. 6.55 inch">
-                            </div>
-                            <div class="form-group">
-                                <label>Battery</label>
-                                <input type="text" id="product-spec-battery" class="form-control" placeholder="e.g. 4700 mAh">
-                            </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <h4 style="margin-bottom: 0.8rem;">Product Specifications</h4>
+                            <button type="button" class="btn btn-outline" style="font-size: 0.85rem; padding: 0.4rem 0.7rem;" onclick="addSpecRow()">+ Add spec</button>
                         </div>
+                        <div id="product-specs-rows" style="display: grid; gap: 0.6rem;"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1483,47 +1465,127 @@
             }
         }
 
+        const categorySpecTemplates = {
+            Electronics: [
+                { label: 'RAM' },
+                { label: 'Storage' },
+                { label: 'Camera' },
+                { label: 'Display' },
+                { label: 'Battery' }
+            ],
+            Fashion: [
+                { label: 'Material Composition' },
+                { label: 'Sleeve Type' },
+                { label: 'Length' },
+                { label: 'Fit' }
+            ],
+            'Home & Kitchen': [
+                { label: 'Material' },
+                { label: 'Dimensions' },
+                { label: 'Weight' },
+                { label: 'Warranty' }
+            ],
+            Books: [
+                { label: 'Author' },
+                { label: 'Publisher' },
+                { label: 'Pages' },
+                { label: 'Language' }
+            ],
+            Sports: [
+                { label: 'Material' },
+                { label: 'Size' },
+                { label: 'Weight' },
+                { label: 'Brand' }
+            ]
+        };
+
         function updateSpecsSectionVisibility(category) {
             const section = document.getElementById('product-specs-section');
             if (!section) return;
 
-            const shouldShow = category && category.toLowerCase() === 'electronics';
+            const shouldShow = !!category;
             section.style.display = shouldShow ? '' : 'none';
+
+            if (shouldShow) {
+                // If no specs are present, prefill defaults for the selected category
+                const existing = getSpecsFromInputs();
+                if (!existing.length) {
+                    const defaults = categorySpecTemplates[category] || [];
+                    setSpecRows(defaults.map(d => ({ label: d.label, value: '' })));
+                }
+            }
+        }
+
+        function createSpecRow(label = '', value = '') {
+            const row = document.createElement('div');
+            row.style.display = 'grid';
+            row.style.gridTemplateColumns = '1fr 1fr auto';
+            row.style.gap = '0.6rem';
+
+            const labelGroup = document.createElement('div');
+            labelGroup.className = 'form-group';
+            labelGroup.style.marginBottom = '0';
+            labelGroup.innerHTML = `
+                <label>Label</label>
+                <input type="text" class="form-control spec-label" value="${label}" placeholder="Specification name">
+            `;
+
+            const valueGroup = document.createElement('div');
+            valueGroup.className = 'form-group';
+            valueGroup.style.marginBottom = '0';
+            valueGroup.innerHTML = `
+                <label>Value</label>
+                <input type="text" class="form-control spec-value" value="${value}" placeholder="Specification value">
+            `;
+
+            const removeBtn = document.createElement('button');
+            removeBtn.type = 'button';
+            removeBtn.className = 'btn btn-outline';
+            removeBtn.style.alignSelf = 'end';
+            removeBtn.style.height = '38px';
+            removeBtn.textContent = 'Remove';
+            removeBtn.onclick = () => row.remove();
+
+            row.appendChild(labelGroup);
+            row.appendChild(valueGroup);
+            row.appendChild(removeBtn);
+
+            return row;
+        }
+
+        function addSpecRow(label = '', value = '') {
+            const container = document.getElementById('product-specs-rows');
+            if (!container) return;
+            container.appendChild(createSpecRow(label, value));
+        }
+
+        function setSpecRows(specs = []) {
+            const container = document.getElementById('product-specs-rows');
+            if (!container) return;
+            container.innerHTML = '';
+            specs.forEach(spec => {
+                addSpecRow(spec.label || '', spec.value || '');
+            });
         }
 
         function clearSpecInputs() {
-            ['ram', 'storage', 'camera', 'display', 'battery'].forEach(key => {
-                const el = document.getElementById(`product-spec-${key}`);
-                if (el) el.value = '';
-            });
+            // Clear any existing spec rows (used when adding a new product)
+            setSpecRows([]);
         }
 
-        function fillSpecInputs(specs) {
-            if (!specs || typeof specs !== 'object') return;
+        function getSpecsFromInputs() {
+            const container = document.getElementById('product-specs-rows');
+            if (!container) return [];
 
-            const map = {
-                ram: specs.ram || specs.RAM || specs.memory,
-                storage: specs.storage || specs.Storage,
-                camera: specs.camera || specs.Camera,
-                display: specs.display || specs.Display,
-                battery: specs.battery || specs.Battery
-            };
-
-            Object.entries(map).forEach(([key, value]) => {
-                const el = document.getElementById(`product-spec-${key}`);
-                if (el) el.value = value || '';
-            });
-        }
-
-        function collectSpecInputs() {
-            const specs = {};
-            ['ram', 'storage', 'camera', 'display', 'battery'].forEach(key => {
-                const el = document.getElementById(`product-spec-${key}`);
-                if (el && el.value.trim()) {
-                    specs[key] = el.value.trim();
-                }
-            });
-            return Object.keys(specs).length ? specs : null;
+            const rows = Array.from(container.children);
+            return rows.map(row => {
+                const labelEl = row.querySelector('.spec-label');
+                const valueEl = row.querySelector('.spec-value');
+                const label = labelEl?.value?.trim();
+                const value = valueEl?.value?.trim();
+                if (!label || !value) return null;
+                return { label, value };
+            }).filter(Boolean);
         }
 
         // Edit product
@@ -1545,7 +1607,14 @@
                     document.getElementById('product-category').value = product.category || '';
 
                     updateSpecsSectionVisibility(product.category || '');
-                    fillSpecInputs(product.specifications || product.specs);
+
+                    const existingSpecs = Array.isArray(product.specs)
+                        ? product.specs
+                        : product.specifications
+                            ? Object.entries(product.specifications).map(([k, v]) => ({ label: k, value: v }))
+                            : [];
+
+                    setSpecRows(existingSpecs);
 
                     document.getElementById('product-modal').classList.add('active');
                 }
@@ -1567,16 +1636,9 @@
                 image_url: document.getElementById('product-image').value
             };
 
-            // If this is an electronics product, include specs
-            if (productData.category && productData.category.toLowerCase() === 'electronics') {
-                const specs = collectSpecInputs();
-                if (specs) {
-                    productData.specifications = specs;
-                }
-            } else {
-                // Remove specs when category changes away from electronics
-                delete productData.specifications;
-            }
+            // Include specs (empty specs will clear existing specs on update)
+            const specs = getSpecsFromInputs();
+            productData.specs = specs.length ? specs : null;
 
             try {
                 if (currentEditingProductId) {
