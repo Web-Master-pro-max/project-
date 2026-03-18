@@ -1016,6 +1016,7 @@
 
         function renderCartItem(item) {
             const product = item.Product || {};
+            const cartItemId = item.id || item._id || item.cartItemId || item.cart_item_id || item.product_id;
             const originalPrice = product.price * 1.3;
             const discount = 30;
             
@@ -1037,21 +1038,21 @@
                         </div>
                         
                         <div class="cart-item-quantity">
-                            <button class="qty-btn" onclick="updateQuantity(${item.product_id}, ${item.quantity - 1})">
+                            <button class="qty-btn" onclick="updateQuantity('${cartItemId}', ${item.product_id}, ${item.quantity - 1})">
                                 <i class="fas fa-minus"></i>
                             </button>
                             <input type="number" class="qty-input" value="${item.quantity}" 
-                                   min="1" onchange="updateQuantity(${item.product_id}, this.value)">
-                            <button class="qty-btn" onclick="updateQuantity(${item.product_id}, ${item.quantity + 1})">
+                                   min="1" onchange="updateQuantity('${cartItemId}', ${item.product_id}, this.value)">
+                            <button class="qty-btn" onclick="updateQuantity('${cartItemId}', ${item.product_id}, ${item.quantity + 1})">
                                 <i class="fas fa-plus"></i>
                             </button>
                         </div>
                         
                         <div class="cart-item-actions">
-                            <button class="cart-item-action" onclick="removeFromCart(${item.product_id})">
+                            <button class="cart-item-action" onclick="removeFromCart('${cartItemId}', ${item.product_id})">
                                 <i class="fas fa-trash"></i> Remove
                             </button>
-                            <button class="cart-item-action" onclick="saveForLater(${item.product_id})">
+                            <button class="cart-item-action" onclick="saveForLater('${cartItemId}')">
                                 <i class="fas fa-heart"></i> Save
                             </button>
                         </div>
@@ -1081,32 +1082,61 @@
             }, 0);
         }
 
-        async function updateQuantity(productId, quantity) {
+        async function updateQuantity(cartItemId, productIdFallback, quantity) {
             quantity = parseInt(quantity);
             if (quantity < 1) {
-                removeFromCart(productId);
+                removeFromCart(cartItemId, productIdFallback);
                 return;
             }
 
             try {
-                await cartAPI.updateItem(productId, quantity);
+                await cartAPI.updateItem(cartItemId, quantity);
                 loadCart();
                 updateCartCount();
+                return;
             } catch (error) {
+                // Fall back to using productId when cartItemId fails (some APIs use productId instead)
+                if (productIdFallback && error.message.toLowerCase().includes('not found')) {
+                    try {
+                        await cartAPI.updateItem(productIdFallback, quantity);
+                        loadCart();
+                        updateCartCount();
+                        return;
+                    } catch (fallbackError) {
+                        showAlert('Error updating cart: ' + fallbackError.message, 'danger');
+                        return;
+                    }
+                }
+
                 showAlert('Error updating cart: ' + error.message, 'danger');
             }
         }
 
-        async function removeFromCart(productId) {
-            if (confirm('Remove this item from cart?')) {
-                try {
-                    await cartAPI.removeItem(productId);
-                    loadCart();
-                    updateCartCount();
-                    showAlert('Item removed from cart', 'success');
-                } catch (error) {
-                    showAlert('Error removing item: ' + error.message, 'danger');
+        async function removeFromCart(cartItemId, productIdFallback) {
+            if (!confirm('Remove this item from cart?')) return;
+
+            try {
+                await cartAPI.removeItem(cartItemId);
+                loadCart();
+                updateCartCount();
+                showAlert('Item removed from cart', 'success');
+                return;
+            } catch (error) {
+                // If we couldn't remove by cart item ID, try by product ID as a fallback.
+                if (productIdFallback && error.message.toLowerCase().includes('not found')) {
+                    try {
+                        await cartAPI.removeItem(productIdFallback);
+                        loadCart();
+                        updateCartCount();
+                        showAlert('Item removed from cart', 'success');
+                        return;
+                    } catch (fallbackError) {
+                        showAlert('Error removing item: ' + fallbackError.message, 'danger');
+                        return;
+                    }
                 }
+
+                showAlert('Error removing item: ' + error.message, 'danger');
             }
         }
 

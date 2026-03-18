@@ -797,64 +797,65 @@
             }
         }
 
-        async function handleRegister(e) {
-            e.preventDefault();
+       async function handleRegister(e) {
+    e.preventDefault();
 
-            const name = document.getElementById('name').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirm-password').value;
-            const submitBtn = document.getElementById('submit-btn');
-            const agreeTerms = document.getElementById('agree-terms').checked;
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const submitBtn = document.getElementById('submit-btn');
+    const agreeTerms = document.getElementById('agree-terms').checked;
 
-            // Validation
-            if (!registerValidators.name(name)) {
-                showAlert('Please enter a valid name (minimum 2 characters)', 'danger');
-                return;
-            }
+    // Validation
+    if (!validators.name(name)) {
+        showAlert('Please enter a valid name (minimum 2 characters)', 'danger');
+        return;
+    }
 
-            if (!registerValidators.email(email)) {
-                showAlert('Please enter a valid email address', 'danger');
-                return;
-            }
+    if (!validators.email(email)) {
+        showAlert('Please enter a valid email address', 'danger');
+        return;
+    }
 
-            if (!registerValidators.password(password)) {
-                showAlert('Password must be at least 6 characters', 'danger');
-                return;
-            }
+    if (!validators.password(password)) {
+        showAlert('Password must be at least 6 characters', 'danger');
+        return;
+    }
 
-            if (password !== confirmPassword) {
-                showAlert('Passwords do not match', 'danger');
-                return;
-            }
+    if (password !== confirmPassword) {
+        showAlert('Passwords do not match', 'danger');
+        return;
+    }
 
-            if (!agreeTerms) {
-                showAlert('Please agree to the Terms & Conditions', 'danger');
-                return;
-            }
+    if (!agreeTerms) {
+        showAlert('Please agree to the Terms & Conditions', 'danger');
+        return;
+    }
 
-            try {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
+    try {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creating Account...';
 
-                const response = await authAPI.register({ name, email, password });
-
-                if (response.success || response.user) {
-                    showAlert('Account created successfully! Redirecting...', 'success');
-                    setTimeout(() => {
-                        window.location.href = '/login';
-                    }, 2000);
-                } else {
-                    showAlert(response.error || 'Registration failed', 'danger');
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-                }
-            } catch (error) {
-                showAlert('Error: ' + error.message, 'danger');
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
-            }
+        const response = await authAPI.register({ name, email, password });
+        
+        if (response.success || response.user) {
+            showAlert('Account created successfully! Redirecting...', 'success');
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
+        } else {
+            showAlert(response.error || 'Registration failed', 'danger');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
         }
+    } catch (error) {
+        console.error('Registration error:', error);
+        showAlert('Error: ' + error.message, 'danger');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-user-plus"></i> Create Account';
+    }
+}
 
         function socialLogin(provider) {
             showAlert(`${provider} login coming soon!`, 'info');

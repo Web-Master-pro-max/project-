@@ -22,18 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// ==================== ENVIRONMENT CONFIGURATION ====================
+// ==================== UTILITY & API FUNCTIONS ====================
 
-// Determine if we're in production (Vercel) or development
-const isProduction = window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1';
-
-// API Base URL configuration
-const API_BASE_URL = isProduction
-    ? '/api'  // Use relative path for Vercel (will be proxied)
-    : 'http://51.20.87.184:3000/api';  // Use direct EC2 IP for local development
-
-console.log('Environment:', isProduction ? 'Production (Vercel)' : 'Development (Local)');
-console.log('API Base URL:', API_BASE_URL);
+// Update this line to use your EC2 IP for local development
+// Change this line from your old IP to the new one
+const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://13.62.153.215:3000/api'  // Updated to new IP
+  : '/api';  // Production - use relative path
+console.log('API Base URL:', API_BASE_URL); // Add this for debugging
 
 // ==================== API CALLS ====================
 async function apiCall(endpoint, method = 'GET', data = null) {
@@ -45,12 +41,24 @@ async function apiCall(endpoint, method = 'GET', data = null) {
         }
     };
 
+    // Add authorization header if token exists
+    if (localStorage.getItem('token')) {
+        options.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+    }
+
     if (data) {
         options.body = JSON.stringify(data);
     }
 
+    const url = `${API_BASE_URL}${endpoint}`;
+    console.log(`Making ${method} request to:`, url); // Debug log
+
     try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+        const response = await fetch(url, options);
+        
+        // Log response details for debugging
+        console.log('Response status:', response.status);
+        console.log('Response headers:', response.headers);
         
         // Handle rate limiting explicitly so we can show a clear message
         if (response.status === 429) {
@@ -63,9 +71,11 @@ async function apiCall(endpoint, method = 'GET', data = null) {
         
         if (contentType && contentType.includes('application/json')) {
             result = await response.json();
+            console.log('Response data:', result); // Debug log
         } else {
             // Non-JSON response (could be HTML error page)
             const text = await response.text();
+            console.error('Non-JSON response:', text.substring(0, 200)); // Log first 200 chars
             result = { 
                 error: `Server error: ${response.status}`,
                 statusCode: response.status
@@ -76,7 +86,7 @@ async function apiCall(endpoint, method = 'GET', data = null) {
             // Handle authentication errors
             if (response.status === 401) {
                 localStorage.removeItem('user');
-                window.location.href = '/login';
+                // Don't redirect immediately, let the calling function handle it
                 throw new Error('Session expired. Please login again.');
             }
             
@@ -112,15 +122,14 @@ const productsAPI = {
         
         return fetch(`${API_BASE_URL}/products/upload-image`, {
             method: 'POST',
+            credentials: 'include',
             body: formData
         })
         .then(response => {
             if (response.status === 401) {
                 localStorage.removeItem('user');
-                window.location.href = '/login';
                 throw new Error('Session expired. Please login again.');
             }
-            // Check if response is JSON
             const contentType = response.headers.get('content-type');
             if (contentType && contentType.includes('application/json')) {
                 return response.json();
@@ -158,61 +167,89 @@ const ordersAPI = {
         apiCall(`/orders/${id}`, 'PUT', { status })
 };
 
-// Auth API
+// Auth API - Enhanced with better error handling
 const authAPI = {
     register: async (data) => {
-        const response = await fetch(`${API_BASE_URL}/auth/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
+        console.log('Registering user with data:', { ...data, password: '[REDACTED]' });
         
-        const contentType = response.headers.get('content-type');
-        let result;
+        const url = `${API_BASE_URL}/auth/register`;
+        console.log('Registration URL:', url);
         
-        if (contentType && contentType.includes('application/json')) {
-            result = await response.json();
-        } else {
-            result = { error: `Server error: ${response.status}` };
-        }
-        
-        if (!response.ok) {
-            if (result.errors && Array.isArray(result.errors)) {
-                const errorMessage = result.errors.map(err => err.msg).join(', ');
-                throw new Error(errorMessage);
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            });
+            
+            console.log('Registration response status:', response.status);
+            
+            const contentType = response.headers.get('content-type');
+            let result;
+            
+            if (contentType && contentType.includes('application/json')) {
+                result = await response.json();
+                console.log('Registration response data:', result);
+            } else {
+                const text = await response.text();
+                console.error('Non-JSON response:', text);
+                result = { error: `Server error: ${response.status}` };
             }
-            throw new Error(result.error || `HTTP error! status: ${response.status}`);
+            
+            if (!response.ok) {
+                if (result.errors && Array.isArray(result.errors)) {
+                    const errorMessage = result.errors.map(err => err.msg).join(', ');
+                    throw new Error(errorMessage);
+                }
+                throw new Error(result.error || `Registration failed with status: ${response.status}`);
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Registration error:', error);
+            throw error;
         }
-        
-        return result;
     },
     login: async (data) => {
-        const response = await fetch(`${API_BASE_URL}/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include',
-            body: JSON.stringify(data)
-        });
+        console.log('Logging in user with email:', data.email);
         
-        const contentType = response.headers.get('content-type');
-        let result;
+        const url = `${API_BASE_URL}/auth/login`;
         
-        if (contentType && contentType.includes('application/json')) {
-            result = await response.json();
-        } else {
-            result = { error: `Server error: ${response.status}` };
-        }
-        
-        if (!response.ok) {
-            if (result.errors && Array.isArray(result.errors)) {
-                const errorMessage = result.errors.map(err => err.msg).join(', ');
-                throw new Error(errorMessage);
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(data)
+            });
+            
+            console.log('Login response status:', response.status);
+            
+            const contentType = response.headers.get('content-type');
+            let result;
+            
+            if (contentType && contentType.includes('application/json')) {
+                result = await response.json();
+            } else {
+                const text = await response.text();
+                console.error('Non-JSON response:', text);
+                result = { error: `Server error: ${response.status}` };
             }
-            throw new Error(result.error || `HTTP error! status: ${response.status}`);
+            
+            if (!response.ok) {
+                if (result.errors && Array.isArray(result.errors)) {
+                    const errorMessage = result.errors.map(err => err.msg).join(', ');
+                    throw new Error(errorMessage);
+                }
+                throw new Error(result.error || `Login failed with status: ${response.status}`);
+            }
+            
+            return result;
+        } catch (error) {
+            console.error('Login error:', error);
+            throw error;
         }
-        
-        return result;
     },
     logout: async () => {
         const response = await fetch(`${API_BASE_URL}/auth/logout`, {
@@ -317,8 +354,8 @@ function createAlertsContainer() {
             position: 'fixed',
             top: '80px',
             right: '20px',
-            zIndex: '999',
-            width: '300px'
+            zIndex: '9999',
+            maxWidth: '400px'
         }
     });
     document.body.appendChild(container);
@@ -490,15 +527,14 @@ const validators = {
 
 async function checkUserSession() {
     try {
-        const response = await fetch('/api/auth/check', {
+        const response = await fetch(`${API_BASE_URL}/auth/check`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
-            credentials: 'include' // Important for cookies/sessions
+            credentials: 'include'
         });
         
-        // Handle authentication state even on non-ok responses
         if (response.status === 401) {
             localStorage.removeItem('user');
             stopSessionRefresh();
@@ -513,7 +549,6 @@ async function checkUserSession() {
         
         const data = await response.json();
         
-        // Store user session data if authenticated
         if (data.authenticated && data.user) {
             localStorage.setItem('user', JSON.stringify(data.user));
             return data.user;
@@ -536,15 +571,15 @@ function updateNavBar(user) {
 
     if (user) {
         authButtons.innerHTML = `
-            <div class="nav-links" style="gap: 1rem;">
-                <span>${user.name}</span>
-                ${user.role === 'admin' ? '<a href="/dashboard">Dashboard</a>' : ''}
-                <a href="#" onclick="logout(event)">Logout</a>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span style="color: white;">${user.name}</span>
+                ${user.role === 'admin' ? '<a href="/dashboard" style="color: white;">Dashboard</a>' : ''}
+                <a href="#" onclick="logout(event)" style="color: white;">Logout</a>
             </div>
         `;
     } else {
         authButtons.innerHTML = `
-            <div class="nav-links" style="gap: 1rem;">
+            <div style="display: flex; gap: 1rem; align-items: center;">
                 <a href="/login" class="btn btn-primary" style="margin: 0;">Login</a>
                 <a href="/register" class="btn btn-outline" style="margin: 0;">Register</a>
             </div>
@@ -585,7 +620,6 @@ function handleImageUpload(event) {
     const fileInput = document.getElementById('image-input');
     const previewImg = document.getElementById('preview-img');
     
-    // Show preview
     const reader = new FileReader();
     reader.onload = (e) => {
         previewImg.src = e.target.result;
@@ -615,14 +649,11 @@ async function uploadProductImage() {
         uploadMessage.className = 'upload-message success active';
         uploadMessage.innerHTML = `<strong>✓ Success!</strong> Image uploaded: ${result.imageUrl}`;
         
-        // Store the image URL for use
         window.lastUploadedImageUrl = result.imageUrl;
         
-        // Clear input after successful upload
         fileInput.value = '';
         document.getElementById('file-preview').classList.remove('active');
         
-        // Auto-close message after 3 seconds
         setTimeout(() => {
             uploadMessage.classList.remove('active');
         }, 3000);
@@ -678,7 +709,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function updateCartCount() {
     try {
-        const response = await fetch('/api/cart');
+        const response = await fetch(`${API_BASE_URL}/cart`, {
+            credentials: 'include'
+        });
         if (response.ok) {
             const data = await response.json();
             const count = data.items ? data.items.length : 0;
@@ -703,7 +736,6 @@ const ACTIVITY_TIMEOUT = 60 * 1000; // 1 minute
 const SESSION_REFRESH_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 function startSessionRefresh() {
-    // Refresh session every 5 minutes
     if (sessionRefreshInterval) clearInterval(sessionRefreshInterval);
     
     sessionRefreshInterval = setInterval(async () => {
@@ -730,7 +762,6 @@ function stopSessionRefresh() {
     }
 }
 
-// Enhanced activity-based session refresh
 function setupActivityBasedRefresh() {
     const refreshSessionOnActivity = async () => {
         const now = Date.now();
@@ -753,24 +784,22 @@ function setupActivityBasedRefresh() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Clean up any corrupted localStorage data
+    console.log('API Base URL on load:', API_BASE_URL); // Debug log
+    
     try {
         const authData = localStorage.getItem('user');
         if (authData) {
-            JSON.parse(authData); // Test if valid JSON
+            JSON.parse(authData);
         }
     } catch (e) {
         console.warn('Clearing corrupted auth localStorage');
         localStorage.removeItem('user');
     }
 
-    // Update cart count on page load
     updateCartCount();
-
-    // Check and update user session
+    
     checkUserSession().then(user => {
         updateNavBar(user);
-        // Start periodic session refresh if user is authenticated
         if (user) {
             startSessionRefresh();
             setupActivityBasedRefresh();

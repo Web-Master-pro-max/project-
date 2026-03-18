@@ -113,41 +113,75 @@
             justify-content: center;
         }
 
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 0.5rem;
-            align-items: center;
-            margin-left: auto;
-        }
+       /* Update these sections in your existing CSS */
 
-        @media (min-width: 480px) {
-            .nav-links {
-                gap: 0.8rem;
-            }
-        }
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 0.2rem;  /* Reduced from 0.5rem */
+    align-items: center;
+    margin-left: auto;
+    flex-wrap: wrap;  /* Allow wrapping */
+    justify-content: flex-end;
+}
 
-        .nav-links li a {
-            color: white;
-            font-size: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 2px;
-            padding: 0.5rem;
-            min-width: 44px;
-            min-height: 44px;
-            justify-content: center;
-        }
+@media (min-width: 480px) {
+    .nav-links {
+        gap: 0.4rem;  /* Adjusted for tablet */
+    }
+}
 
-        @media (min-width: 480px) {
-            .nav-links li a {
-                font-size: 0.9rem;
-                flex-direction: row;
-                gap: 0.5rem;
-                padding: 0.5rem 0.8rem;
-            }
-        }
+@media (min-width: 768px) {
+    .nav-links {
+        gap: 0.8rem;
+        flex-wrap: nowrap;  /* No wrapping on desktop */
+    }
+}
+
+.nav-links li a {
+    color: white;
+    font-size: 0.7rem;  /* Slightly smaller for mobile */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0.3rem 0.3rem;  /* Reduced padding */
+    min-width: 36px;  /* Smaller minimum width */
+    min-height: 36px;  /* Smaller minimum height */
+    justify-content: center;
+}
+
+@media (min-width: 480px) {
+    .nav-links li a {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.5rem;
+        min-width: 40px;
+        min-height: 40px;
+    }
+}
+
+@media (min-width: 768px) {
+    .nav-links li a {
+        font-size: 0.9rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        padding: 0.5rem 0.8rem;
+        min-width: 44px;
+        min-height: 44px;
+    }
+}
+
+/* For very small screens, hide text and show only icons */
+@media (max-width: 400px) {
+    .nav-links li a .nav-text {
+        display: none;
+    }
+    
+    .nav-links li a {
+        font-size: 1rem;
+        padding: 0.3rem;
+    }
+}
 
         .cart-count {
             position: absolute;
@@ -802,6 +836,7 @@
                 <li><a href="/orders"><i class="fas fa-truck"></i><span class="nav-text">Orders</span></a></li>
                 <li id="dashboard-link" style="display:none;"><a href="/dashboard"><i class="fas fa-tachometer-alt"></i><span class="nav-text">Dashboard</span></a></li>
                 <li id="admin-nav-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;"><i class="fas fa-crown"></i><span class="nav-text">Admin</span></a></li>
+                <li><a href="/credits"><i class="fas fa-heart"></i><span class="nav-text">Credits</span></a></li>
             </ul>
 
             <div id="auth-buttons" class="auth-buttons">
@@ -826,21 +861,21 @@
                 <div class="carousel-content">
                     <h2>Summer Sale</h2>
                     <p>Up to 50% off on electronics, fashion & more</p>
-                    <button class="carousel-btn" onclick="window.location.href='/products?category=sale'">Shop Now <i class="fas fa-arrow-right"></i></button>
+                    <button class="carousel-btn" onclick="window.location.href='/products.html?category=sale'">Shop Now <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
             <div class="carousel-slide" style="background-image: url('images/hero2.jpg'); background-size: cover; background-position: center;">
                 <div class="carousel-content">
                     <h2>Fashion Festival</h2>
                     <p>Min 50% off on top brands</p>
-                    <button class="carousel-btn" onclick="window.location.href='/products?category=fashion'">Explore Now <i class="fas fa-arrow-right"></i></button>
+                    <button class="carousel-btn" onclick="window.location.href='/products.html?category=fashion'">Explore Now <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
             <div class="carousel-slide" style="background-image: url('images/hero3.png'); background-size: cover; background-position: center;">
                 <div class="carousel-content">
                     <h2>Electronics Week</h2>
                     <p>Special offers on smartphones & laptops</p>
-                    <button class="carousel-btn" onclick="window.location.href='/products?category=electronics'">View Deals <i class="fas fa-arrow-right"></i></button>
+                    <button class="carousel-btn" onclick="window.location.href='/products.html?category=electronics'">View Deals <i class="fas fa-arrow-right"></i></button>
                 </div>
             </div>
         </div>
@@ -1132,7 +1167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const imageUrl = product.image_url ? product.image_url : placeholderImage;
 
             return `
-                <div class="product-card" onclick="window.location.href='/products/${product.id}'">
+                <div class="product-card" onclick="window.location.href='/product.html?id=${product.id}'">
                     <span class="product-badge">-${discount}%</span>
                     <div class="product-image-container">
                         <img src="${imageUrl}" alt="${product.name || 'Product'}" class="product-image">
@@ -1177,7 +1212,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 if (data.categories && data.categories.length > 0) {
                     container.innerHTML = data.categories.map(category => `
-                        <div class="category-card" onclick="window.location.href='/products?category=${encodeURIComponent(category)}'">
+                        <div class="category-card" onclick="window.location.href='/products.html?category=${encodeURIComponent(category)}'">
                             <div class="category-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 3rem;">
                                 ${categoryIcons[category.toLowerCase()] || '📦'}
                             </div>
@@ -1197,7 +1232,7 @@ document.addEventListener('DOMContentLoaded', function() {
         function performSearch() {
             const query = document.getElementById('search-input').value.trim();
             if (query) {
-                window.location.href = `/products?search=${encodeURIComponent(query)}`;
+                window.location.href = `/products.html?search=${encodeURIComponent(query)}`;
             }
         }
 

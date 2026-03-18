@@ -1303,6 +1303,118 @@
         .filter-overlay.active {
             display: block;
         }
+
+        /* Product Detail View */
+        .product-detail-view {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .product-detail-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        @media (min-width: 900px) {
+            .product-detail-grid {
+                grid-template-columns: 1fr 1.1fr;
+                align-items: start;
+            }
+        }
+
+        .product-detail-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 2px 18px rgba(0,0,0,0.08);
+        }
+
+        .product-detail-info h1 {
+            margin-top: 0;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-detail-info p {
+            margin: 1rem 0 1.5rem;
+            line-height: 1.6;
+            color: #444;
+        }
+
+        .product-details-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.3rem;
+        }
+
+        .product-details-meta .current-price {
+            font-size: 1.75rem;
+        }
+
+        .product-specs {
+            margin: 1.5rem 0;
+        }
+
+        .product-specs h2 {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .spec-card {
+            background: white;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 12px;
+            padding: 0.9rem 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-height: 70px;
+        }
+
+        .spec-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(40, 116, 240, 0.1);
+            color: #2874f0;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .spec-body {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: 0.9rem;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .spec-value {
+            color: #555;
+            font-weight: 500;
+        }
+
+        .no-specs {
+            color: #666;
+            font-size: 0.95rem;
+            padding: 1rem 0.5rem;
+        }
     </style>
 </head>
 <body>
@@ -1356,12 +1468,44 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="container">
-            <!-- Products Header -->
-            <div class="products-header">
-                <h1>Explore Our Products</h1>
-                <p>Discover thousands of products at amazing prices</p>
+        <!-- Product Detail View (when URL is /products/:id) -->
+        <div id="product-detail-view" class="product-detail-view" style="display: none;">
+            <div class="container">
+                <button class="btn btn-outline" onclick="goToProductList()">
+                    <i class="fas fa-arrow-left"></i> Back to products
+                </button>
+
+                <div class="product-detail-grid">
+                    <div class="product-detail-image">
+                        <img id="product-image" src="https://via.placeholder.com/500x500?text=No+Image" alt="Product Image">
+                    </div>
+                    <div class="product-detail-info">
+                        <h1 id="product-title">Loading...</h1>
+                        <div class="product-details-meta" id="product-details-meta"></div>
+                        <p id="product-description">Please wait while we load the product details.</p>
+
+                        <div class="product-specs">
+                            <h2>Product Highlights</h2>
+                            <div id="product-specs-grid" class="specs-grid">
+                                <!-- Specs will be inserted here -->
+                            </div>
+                        </div>
+
+                        <button class="add-to-cart-btn" id="detail-add-to-cart" onclick="addToCartDetail()">
+                            <i class="fas fa-shopping-cart"></i> Add to cart
+                        </button>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div id="product-list-view">
+            <div class="container">
+                <!-- Products Header -->
+                <div class="products-header">
+                    <h1>Explore Our Products</h1>
+                    <p>Discover thousands of products at amazing prices</p>
+                </div>
 
             <div class="layout-wrapper">
                 <!-- Filters Sidebar -->
@@ -1468,6 +1612,7 @@
             </div>
         </div>
     </div>
+</div>
 
     <!-- Footer -->
     <footer>
@@ -1557,7 +1702,7 @@
         });
 
         function viewProduct(productId) {
-            window.location.href = `/products/${productId}`;
+            window.location.href = `/product.html?id=${productId}`;
         }
 
         function formatPrice(value) {
@@ -1808,6 +1953,204 @@
             return container;
         }
 
+        // Product Detail Helpers
+        let currentProductId = null;
+
+        function getProductIdFromPath() {
+            const match = window.location.pathname.match(/^\/products\/([^\/\?]+)/);
+            return match ? match[1] : null;
+        }
+
+        function goToProductList() {
+            window.location.href = '/products';
+        }
+
+        async function initPage() {
+            updateAuthUI();
+            updateCartCount();
+
+            const productId = getProductIdFromPath();
+            if (productId) {
+                await showProductDetail(productId);
+            } else {
+                showProductList();
+            }
+        }
+
+        function showProductList() {
+            document.getElementById('product-detail-view')?.style.setProperty('display', 'none');
+            document.getElementById('product-list-view')?.style.setProperty('display', '');
+            loadProducts();
+        }
+
+        async function showProductDetail(productId) {
+            currentProductId = productId;
+            document.getElementById('product-list-view')?.style.setProperty('display', 'none');
+            const detailView = document.getElementById('product-detail-view');
+            if (!detailView) return;
+            detailView.style.display = 'block';
+
+            const imageEl = document.getElementById('product-image');
+            const titleEl = document.getElementById('product-title');
+            const priceMeta = document.getElementById('product-details-meta');
+            const descEl = document.getElementById('product-description');
+            const specsGrid = document.getElementById('product-specs-grid');
+
+            titleEl.textContent = 'Loading...';
+            descEl.textContent = 'Please wait while we load the product details.';
+            priceMeta.textContent = '';
+            specsGrid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div>Loading specifications...</div>';
+            imageEl.src = 'https://via.placeholder.com/500x500?text=Loading...';
+
+            try {
+                const product = await productsAPI.getById(productId);
+                if (!product) throw new Error('Product not found');
+
+                titleEl.textContent = product.name || 'Unnamed Product';
+                descEl.textContent = product.description || 'No description available.';
+
+                if (product.price != null) {
+                    priceMeta.innerHTML = `<span class="current-price">${formatPrice(product.price)}</span>`;
+                } else {
+                    priceMeta.textContent = '';
+                }
+
+                imageEl.src = product.image_url || 'https://via.placeholder.com/500x500?text=No+Image';
+                imageEl.alt = product.name || 'Product Image';
+                imageEl.onerror = () => { imageEl.src = 'https://via.placeholder.com/500x500?text=No+Image'; };
+
+                renderProductSpecs(product);
+            } catch (error) {
+                console.error('Error loading product details:', error);
+                titleEl.textContent = 'Product not found';
+                descEl.textContent = 'We could not load this product. Please try again later.';
+                priceMeta.textContent = '';
+                specsGrid.innerHTML = '<div class="no-specs">No specifications available</div>';
+            }
+        }
+
+        function addToCartDetail() {
+            if (!currentProductId) return;
+            addToCart(currentProductId);
+        }
+
+        function renderProductSpecs(product) {
+            const specsGrid = document.getElementById('product-specs-grid');
+            if (!specsGrid) return;
+
+            const specs = normalizeProductSpecs(product);
+            if (!specs.length) {
+                specsGrid.innerHTML = '<div class="no-specs">No specifications available</div>';
+                return;
+            }
+
+            specsGrid.innerHTML = specs.map(spec => `
+                <div class="spec-card">
+                    <div class="spec-icon"><i class="${spec.icon}"></i></div>
+                    <div class="spec-body">
+                        <div class="spec-label">${escapeHtml(spec.label)}</div>
+                        <div class="spec-value">${escapeHtml(spec.value)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function normalizeProductSpecs(product) {
+            if (!product) return [];
+
+            const iconMap = {
+                ram: 'fas fa-microchip',
+                storage: 'fas fa-hdd',
+                memory: 'fas fa-memory',
+                camera: 'fas fa-camera',
+                battery: 'fas fa-battery-full',
+                display: 'fas fa-mobile-alt',
+                processor: 'fas fa-microchip',
+                os: 'fas fa-desktop',
+                weight: 'fas fa-weight-hanging',
+                dimensions: 'fas fa-ruler-combined'
+            };
+
+            const labelMap = {
+                ram: 'RAM',
+                storage: 'Storage',
+                memory: 'Memory',
+                camera: 'Camera',
+                battery: 'Battery',
+                display: 'Display',
+                processor: 'Processor',
+                os: 'Operating System',
+                weight: 'Weight',
+                dimensions: 'Dimensions'
+            };
+
+            const resolveIcon = (key) => {
+                if (!key) return 'fas fa-info-circle';
+                const normalized = key.toString().toLowerCase();
+                return iconMap[normalized] || 'fas fa-info-circle';
+            };
+
+            const resolveLabel = (key) => {
+                if (!key) return '';
+                const normalized = key.toString().toLowerCase();
+                return labelMap[normalized] || key.toString().replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            };
+
+            // 1) Array form
+            if (Array.isArray(product.specs) && product.specs.length) {
+                return product.specs
+                    .map(item => {
+                        if (!item) return null;
+                        const key = item.key || item.label || '';
+                        const label = item.label || resolveLabel(key);
+                        const value = item.value || '';
+                        const icon = item.icon || resolveIcon(key);
+                        return value ? { label, value, icon } : null;
+                    })
+                    .filter(Boolean);
+            }
+
+            // 2) Object form
+            if (product.specifications && typeof product.specifications === 'object' && !Array.isArray(product.specifications)) {
+                return Object.entries(product.specifications)
+                    .map(([key, value]) => {
+                        if (value === undefined || value === null || value === '') return null;
+                        return {
+                            label: resolveLabel(key),
+                            value: String(value),
+                            icon: resolveIcon(key)
+                        };
+                    })
+                    .filter(Boolean);
+            }
+
+            // 3) Individual fields
+            const knownKeys = ['ram', 'storage', 'memory', 'camera', 'battery', 'display', 'processor', 'os', 'weight', 'dimensions'];
+            return knownKeys
+                .map((key) => {
+                    if (product[key]) {
+                        return {
+                            label: resolveLabel(key),
+                            value: String(product[key]),
+                            icon: resolveIcon(key)
+                        };
+                    }
+                    return null;
+                })
+                .filter(Boolean);
+        }
+
+        function escapeHtml(str) {
+            if (typeof str !== 'string') return str;
+            return str.replace(/[&<>"']/g, (m) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[m]));
+        }
+
         async function updateCartCount() {
             try {
                 const response = await cartAPI.getCart();
@@ -1868,9 +2211,7 @@
         });
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateAuthUI();
-            loadProducts();
-            updateCartCount();
+            initPage();
 
             document.querySelectorAll('input[name="category"]').forEach(cb => {
                 cb.addEventListener('change', () => {

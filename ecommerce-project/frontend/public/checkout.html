@@ -468,6 +468,16 @@
             color: #856404;
         }
 
+        .empty-address {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: #666;
+        }
+
+        .empty-address p {
+            margin: 0.5rem 0;
+        }
+
         /* Payment Methods */
         .payment-methods {
             display: flex;
@@ -1132,31 +1142,23 @@
         }
 
         function loadAddresses() {
-            const addresses = [
-                {
-                    id: 1,
-                    name: 'John Doe',
-                    phone: '9876543210',
-                    address: '123, MG Road, Bangalore',
-                    city: 'Bangalore',
-                    state: 'Karnataka',
-                    pin: '560001',
-                    type: 'home'
-                },
-                {
-                    id: 2,
-                    name: 'John Doe',
-                    phone: '9876543210',
-                    address: '456, Tech Park, Whitefield',
-                    city: 'Bangalore',
-                    state: 'Karnataka',
-                    pin: '560066',
-                    type: 'work'
-                }
-            ];
+            // Load addresses from localStorage
+            const savedAddresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
 
             const container = $('address-list');
-            container.innerHTML = addresses.map(addr => `
+            if (savedAddresses.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-address">
+                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <p>No addresses saved yet</p>
+                        <p style="font-size: 0.9rem; color: #666;">Add your delivery address to continue</p>
+                    </div>
+                `;
+                selectedAddress = null;
+                return;
+            }
+
+            container.innerHTML = savedAddresses.map(addr => `
                 <div class="address-card ${selectedAddress?.id === addr.id ? 'selected' : ''}" 
                      onclick="selectAddress(${addr.id})">
                     <input type="radio" name="address" value="${addr.id}" 
@@ -1173,8 +1175,8 @@
                 </div>
             `).join('');
 
-            if (!selectedAddress && addresses.length > 0) {
-                selectAddress(addresses[0].id);
+            if (!selectedAddress && savedAddresses.length > 0) {
+                selectAddress(savedAddresses[0].id);
             }
         }
 
@@ -1206,7 +1208,8 @@
         }
 
         function selectAddress(addressId) {
-            selectedAddress = { id: addressId };
+            const savedAddresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            selectedAddress = savedAddresses.find(addr => addr.id === addressId) || null;
             loadAddresses();
         }
 
@@ -1296,7 +1299,40 @@
         }
 
         function saveAddress() {
+            const form = $('address-form');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const addressData = {
+                id: Date.now(), // Simple ID generation
+                name: $('address-name').value.trim(),
+                phone: $('address-phone').value.trim(),
+                address: $('address-line').value.trim(),
+                landmark: $('address-landmark').value.trim(),
+                city: $('address-city').value.trim(),
+                state: $('address-state').value.trim(),
+                pin: $('address-pin').value.trim(),
+                type: $('address-type').value
+            };
+
+            // Load existing addresses
+            const savedAddresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            
+            // Add new address
+            savedAddresses.push(addressData);
+            
+            // Save back to localStorage
+            localStorage.setItem('userAddresses', JSON.stringify(savedAddresses));
+
+            // Clear form
+            form.reset();
+
+            // Close modal and reload addresses
             closeAddressModal();
+            loadAddresses();
+            
             showAlert('Address saved successfully!', 'success');
         }
 
