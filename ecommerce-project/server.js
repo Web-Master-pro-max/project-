@@ -65,10 +65,10 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// CORS configuration - Updated with your Vercel domain
+// Find the CORS configuration and update the origin section
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
+        // Allow requests with no origin
         if (!origin) return callback(null, true);
 
         // Allow localhost for development
@@ -76,25 +76,22 @@ app.use(cors({
             return callback(null, true);
         }
 
-        // Allow Vercel deployments (*.vercel.app)
+        // Allow Vercel deployments
         if (origin.endsWith('.vercel.app')) {
             return callback(null, true);
         }
 
-        // Allow your specific Vercel project URL
+        // Allow your specific Vercel URL
         if (origin === 'https://project-seven-zeta-69.vercel.app') {
             return callback(null, true);
         }
 
-        // Allow your EC2 IP (for direct access)
-        if (origin === 'http://51.20.87.184:3000') {
+        // Allow your new EC2 IP
+        if (origin === 'http://13.62.223.231:3000') {
             return callback(null, true);
         }
 
-        // Log rejected origins for debugging
         console.log('CORS rejected origin:', origin);
-        
-        // Reject other origins
         return callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
