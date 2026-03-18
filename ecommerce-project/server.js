@@ -65,28 +65,25 @@ const limiter = rateLimit({
 });
 app.use('/api', limiter);
 
-// Find the CORS configuration and update the origin section
+/// In your CORS configuration, update the allowed origins
 app.use(cors({
     origin: function (origin, callback) {
-        // Allow requests with no origin
         if (!origin) return callback(null, true);
 
-        // Allow localhost for development
         if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
             return callback(null, true);
         }
 
-        // Allow Vercel deployments
         if (origin.endsWith('.vercel.app')) {
             return callback(null, true);
         }
 
-        // Allow your specific Vercel URL
-        if (origin === 'https://project-seven-zeta-69.vercel.app') {
+        // Add your new IP
+        if (origin === 'http://13.62.153.215:3000') {
             return callback(null, true);
         }
 
-        // Allow your new EC2 IP
+        // Also keep the old one temporarily if needed
         if (origin === 'http://13.62.223.231:3000') {
             return callback(null, true);
         }
