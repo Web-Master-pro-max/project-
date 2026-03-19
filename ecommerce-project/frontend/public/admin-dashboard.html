@@ -1153,10 +1153,70 @@
         </div>
     </div>
 
+    <!-- Edit User Modal -->
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="user-modal-title">Edit User</h2>
+                <button class="modal-close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <form id="user-form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="user-name">Full Name *</label>
+                        <input type="text" id="user-name" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-email">Email Address *</label>
+                        <input type="email" id="user-email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-phone">Phone Number</label>
+                        <input type="tel" id="user-phone" name="phone" class="form-control">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="user-dob">Date of Birth</label>
+                            <input type="date" id="user-dob" name="date_of_birth" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="user-gender">Gender</label>
+                            <select id="user-gender" name="gender" class="form-control">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-role">Role *</label>
+                        <select id="user-role" name="role" class="form-control" required>
+                            <option value="customer">Customer</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="user-status">Status *</label>
+                        <select id="user-status" name="is_active" class="form-control" required>
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeUserModal()">Cancel</button>
+                    <button type="button" id="save-user-btn" class="btn btn-primary" onclick="saveUser()">Save User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script src="/js/api.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let currentEditingProductId = null;
+        let currentEditingUserId = null;
 
         // Mobile Menu Functions
         function toggleMobileMenu() {
@@ -1692,7 +1752,82 @@
         }
 
         function editUser(userId) {
-            showAlert('Edit user feature coming soon!', 'info');
+            currentEditingUserId = userId;
+            
+            // Get user details
+            usersAPI.getById(userId).then(response => {
+                if (response.success && response.user) {
+                    const user = response.user;
+                    
+                    // Populate form
+                    document.getElementById('user-name').value = user.name || '';
+                    document.getElementById('user-email').value = user.email || '';
+                    document.getElementById('user-phone').value = user.phone || '';
+                    document.getElementById('user-dob').value = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
+                    document.getElementById('user-gender').value = user.gender || '';
+                    document.getElementById('user-role').value = user.role || 'customer';
+                    document.getElementById('user-status').value = user.is_active ? 'true' : 'false';
+                    
+                    // Show modal
+                    document.getElementById('user-modal').classList.add('active');
+                    document.getElementById('user-modal-title').textContent = 'Edit User';
+                }
+            }).catch(error => {
+                console.error('Error loading user:', error);
+                showAlert('Error loading user details: ' + error.message, 'danger');
+            });
+        }
+
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.remove('active');
+            document.getElementById('user-form').reset();
+            currentEditingUserId = null;
+        }
+
+        function saveUser() {
+            if (!currentEditingUserId) {
+                showAlert('No user selected for editing', 'danger');
+                return;
+            }
+
+            const formData = new FormData(document.getElementById('user-form'));
+            const userData = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                date_of_birth: formData.get('date_of_birth'),
+                gender: formData.get('gender'),
+                role: formData.get('role'),
+                is_active: formData.get('is_active') === 'true'
+            };
+
+            // Validate required fields
+            if (!userData.name || !userData.email) {
+                showAlert('Name and email are required', 'danger');
+                return;
+            }
+
+            // Show loading state
+            const saveBtn = document.getElementById('save-user-btn');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = 'Saving...';
+            saveBtn.disabled = true;
+
+            usersAPI.updateUser(currentEditingUserId, userData).then(response => {
+                if (response.success) {
+                    showAlert('User updated successfully!', 'success');
+                    closeUserModal();
+                    loadUsers(); // Refresh the users list
+                } else {
+                    showAlert('Error updating user: ' + (response.message || 'Unknown error'), 'danger');
+                }
+            }).catch(error => {
+                console.error('Error updating user:', error);
+                showAlert('Error updating user: ' + error.message, 'danger');
+            }).finally(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.disabled = false;
+            });
         }
 
         function exportUsers() {

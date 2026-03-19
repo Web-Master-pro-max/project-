@@ -44,7 +44,15 @@ const User = sequelize.define('User', {
     type: DataTypes.ENUM('admin', 'customer'),
     defaultValue: 'customer'
   },
+  is_active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  },
   created_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updated_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   }
@@ -63,6 +71,8 @@ const User = sequelize.define('User', {
         const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10);
         user.password = await bcrypt.hash(user.password, salt);
       }
+      // Update the updated_at timestamp
+      user.updated_at = new Date();
     }
   }
 });

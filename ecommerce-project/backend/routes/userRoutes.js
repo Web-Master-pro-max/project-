@@ -5,16 +5,16 @@ const {
   getUsers,
   getUserById,
   getProfile,
+  updateProfile,
   updateUser,
   deleteUser,
-  changePassword,
   getUserStats
 } = require('../controllers/userController');
 
 router.use(authenticate); // All user routes require authentication
 
 router.get('/profile', getProfile);
-router.put('/change-password', changePassword);
+router.put('/profile', updateProfile);
 router.get('/', isAdmin, getUsers);
 router.get('/stats/summary', isAdmin, getUserStats);
 router.get('/:id', getUserById);

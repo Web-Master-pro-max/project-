@@ -16,7 +16,7 @@ const getUsers = async (req, res) => {
   }
 };
 
-// @desc    Get single user
+// @desc    Get user by ID (Admin or self)
 // @route   GET /api/users/:id
 const getUserById = async (req, res) => {
   try {
@@ -28,13 +28,103 @@ const getUserById = async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    // Check if user is requesting their own data or is admin
-    if (req.user.id !== user.id && req.user.role !== 'admin') {
+    if (req.user.role !== 'admin' && req.user.id !== user.id) {
       return res.status(403).json({ error: 'Access denied' });
     }
 
     res.json({ success: true, user });
   } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Get current user profile
+// @route   GET /api/users/profile
+const getProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.json({ success: true, user });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// @desc    Update current user profile
+// @route   PUT /api/users/profile
+const updateProfile = async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Define allowed updates for profile
+    const allowedUpdates = ['name', 'phone', 'date_of_birth', 'gender'];
+
+    // If user is updating their email, check if it's already taken
+    if (req.body.email && req.body.email !== user.email) {
+      const existingUser = await User.findOne({
+        where: {
+          email: req.body.email,
+          id: { [Op.ne]: user.id }
+        }
+      });
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already in use' });
+      }
+      allowedUpdates.push('email');
+    }
+
+    const updates = {};
+    allowedUpdates.forEach(field => {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
+    });
+
+    // Normalize certain fields for consistent storage
+    if (updates.hasOwnProperty('date_of_birth') && updates.date_of_birth) {
+      updates.date_of_birth = new Date(updates.date_of_birth);
+    }
+
+    // Handle password change separately
+    if (req.body.current_password && req.body.new_password) {
+      // Verify current password
+      const isValidPassword = await user.comparePassword(req.body.current_password);
+      if (!isValidPassword) {
+        return res.status(400).json({ error: 'Current password is incorrect' });
+      }
+
+      // Validate new password
+      if (req.body.new_password.length < 6) {
+        return res.status(400).json({ error: 'New password must be at least 6 characters long' });
+      }
+
+      updates.password = req.body.new_password;
+    }
+
+    await user.update(updates);
+
+    // Return updated user data (exclude password)
+    const updatedUser = await User.findByPk(user.id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    res.json({
+      success: true,
+      user: updatedUser,
+      message: 'Profile updated successfully'
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -54,10 +144,25 @@ const updateUser = async (req, res) => {
       return res.status(403).json({ error: 'Access denied' });
     }
 
-    // Update only allowed fields
-    const allowedUpdates = ['name', 'phone', 'date_of_birth', 'gender'];
+    // Define allowed updates based on user role
+    let allowedUpdates = ['name', 'phone', 'date_of_birth', 'gender'];
+
     if (req.user.role === 'admin') {
-      allowedUpdates.push('role', 'email');
+      // Admins can update more fields
+      allowedUpdates = ['name', 'email', 'phone', 'date_of_birth', 'gender', 'role', 'is_active'];
+    }
+
+    // If user is updating their own email, check if it's already taken
+    if (req.body.email && req.body.email !== user.email) {
+      const existingUser = await User.findOne({
+        where: {
+          email: req.body.email,
+          id: { [Op.ne]: user.id }
+        }
+      });
+      if (existingUser) {
+        return res.status(400).json({ error: 'Email already in use' });
+      }
     }
 
     const updates = {};
@@ -67,18 +172,45 @@ const updateUser = async (req, res) => {
       }
     });
 
+    // Normalize certain fields for consistent storage
+    if (updates.hasOwnProperty('is_active')) {
+      updates.is_active = updates.is_active === true || updates.is_active === 'true' || updates.is_active === 1 || updates.is_active === '1';
+    }
+
+    if (updates.hasOwnProperty('date_of_birth') && updates.date_of_birth) {
+      updates.date_of_birth = new Date(updates.date_of_birth);
+    }
+
+    // Handle password change separately
+    if (req.body.current_password && req.body.new_password) {
+      // Verify current password
+      const isValidPassword = await user.comparePassword(req.body.current_password);
+      if (!isValidPassword) {
+        return res.status(400).json({ error: 'Current password is incorrect' });
+      }
+
+      // Validate new password
+      if (req.body.new_password.length < 6) {
+        return res.status(400).json({ error: 'New password must be at least 6 characters long' });
+      }
+
+      updates.password = req.body.new_password;
+    }
+
     await user.update(updates);
+
+    // Return updated user data (exclude password)
+    const updatedUser = await User.findByPk(user.id, {
+      attributes: { exclude: ['password'] }
+    });
 
     res.json({
       success: true,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
+      user: updatedUser,
+      message: 'Profile updated successfully'
     });
   } catch (error) {
+    console.error('Update user error:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -101,24 +233,6 @@ const deleteUser = async (req, res) => {
     await user.destroy();
 
     res.json({ success: true, message: 'User deleted successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
-// @desc    Get current user's profile
-// @route   GET /api/users/profile
-const getProfile = async (req, res) => {
-  try {
-    const user = await User.findByPk(req.user.id, {
-      attributes: { exclude: ['password'] }
-    });
-
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    res.json({ success: true, user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -158,45 +272,12 @@ const getUserStats = async (req, res) => {
   }
 };
 
-// @desc    Change user password
-// @route   PUT /api/users/change-password
-const changePassword = async (req, res) => {
-  try {
-    const { current_password, new_password } = req.body;
-
-    if (!current_password || !new_password) {
-      return res.status(400).json({ error: 'Current password and new password are required' });
-    }
-
-    if (new_password.length < 6) {
-      return res.status(400).json({ error: 'New password must be at least 6 characters long' });
-    }
-
-    const user = await User.findByPk(req.user.id);
-
-    // Verify current password
-    const isCurrentPasswordValid = await user.comparePassword(current_password);
-    if (!isCurrentPasswordValid) {
-      return res.status(400).json({ error: 'Current password is incorrect' });
-    }
-
-    // Update password
-    const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10);
-    user.password = await bcrypt.hash(new_password, salt);
-    await user.save();
-
-    res.json({ success: true, message: 'Password changed successfully' });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
 module.exports = {
   getUsers,
   getUserById,
   getProfile,
+  updateProfile,
   updateUser,
   deleteUser,
-  changePassword,
   getUserStats
 };
