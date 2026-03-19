@@ -301,7 +301,11 @@ const authAPI = {
 const usersAPI = {
     getProfile: () => apiCall('/users/profile'),
     updateProfile: (data) => apiCall('/users/profile', 'PUT', data),
-    getAll: () => apiCall('/users')
+    changePassword: (data) => apiCall('/users/change-password', 'PUT', data),
+    getAll: () => apiCall('/users'),
+    getById: (id) => apiCall(`/users/${id}`),
+    updateUser: (id, data) => apiCall(`/users/${id}`, 'PUT', data),
+    deleteUser: (id) => apiCall(`/users/${id}`, 'DELETE')
 };
 
 // ==================== DOM UTILITIES ====================

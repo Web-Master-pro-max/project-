@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - ShopHub</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .profile-header {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--flipkart-blue), #1a4d8c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .profile-tabs {
+            display: flex;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 1rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            background: var(--flipkart-blue);
+            color: white;
+            border-bottom-color: white;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+            font-size: 1.2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--flipkart-blue);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, var(--flipkart-blue), #1a4d8c);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-save:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 116, 240, 0.3);
+        }
+
+        .btn-save:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .password-strength {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .strength-weak { color: #dc3545; }
+        .strength-medium { color: #ffc107; }
+        .strength-strong { color: #28a745; }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-container {
+                padding: 0 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <i class="fas fa-shopping-bag"></i>
+                ShopHub
+            </div>
+
+            <div class="nav-search">
+                <input type="text" id="search-input" placeholder="Search for products, brands and more...">
+                <button onclick="performSearch()">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="/"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="/products"><i class="fas fa-box"></i> Products</a></li>
+                <li>
+                    <a href="/cart" class="cart-icon-wrapper">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cart-count" class="cart-count" style="display: none;">0</span>
+                    </a>
+                </li>
+                <li><a href="/orders"><i class="fas fa-truck"></i> Orders</a></li>
+                <li><a href="/dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            </ul>
+
+            <div id="auth-buttons" class="auth-buttons">
+                <a href="/login" class="btn btn-primary btn-sm"><i class="fas fa-sign-in-alt"></i> Login</a>
+                <a href="/register" class="btn btn-outline btn-sm"><i class="fas fa-user-plus"></i> Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <h1>My Profile</h1>
+            <p>Manage your account information and preferences</p>
+        </div>
+
+        <div class="profile-tabs">
+            <button class="tab-button active" onclick="switchTab('profile')">Profile Information</button>
+            <button class="tab-button" onclick="switchTab('password')">Change Password</button>
+        </div>
+
+        <!-- Profile Information Tab -->
+        <div id="profile-tab" class="tab-content active">
+            <form id="profile-form">
+                <div class="form-section">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Full Name *</label>
+                            <input type="text" id="name" name="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="date_of_birth">Date of Birth</label>
+                            <input type="date" id="date_of_birth" name="date_of_birth" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+            </form>
+        </div>
+
+        <!-- Change Password Tab -->
+        <div id="password-tab" class="tab-content">
+            <form id="password-form">
+                <div class="form-section">
+                    <h3><i class="fas fa-lock"></i> Change Password</h3>
+                    <div class="form-group">
+                        <label for="current_password">Current Password *</label>
+                        <input type="password" id="current_password" name="current_password" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new_password">New Password *</label>
+                        <input type="password" id="new_password" name="new_password" class="form-control" required minlength="6">
+                        <div id="password-strength" class="password-strength"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password *</label>
+                        <input type="password" id="confirm_password" name="confirm_password" class="form-control" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-save">
+                    <i class="fas fa-key"></i> Change Password
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About ShopHub</h3>
+                    <ul>
+                        <li><a href="/about">About Us</a></li>
+                        <li><a href="/contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Help</h3>
+                    <ul>
+                        <li><a href="/shipping">Shipping</a></li>
+                        <li><a href="/returns">Returns</a></li>
+                        <li><a href="/faq">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Policy</h3>
+                    <ul>
+                        <li><a href="/privacy">Privacy Policy</a></li>
+                        <li><a href="/terms">Terms of Use</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ShopHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/api.js"></script>
+    <script>
+        let currentUser = null;
+
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabName + '-tab').classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Load user profile
+        async function loadProfile() {
+            try {
+                const response = await usersAPI.getProfile();
+                if (response.user) {
+                    currentUser = response.user;
+                    populateProfileForm(response.user);
+                }
+            } catch (error) {
+                console.error('Error loading profile:', error);
+                if (error.message.includes('Session expired')) {
+                    showAlert('Please login to view your profile', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    showAlert('Error loading profile: ' + error.message, 'danger');
+                }
+            }
+        }
+
+        // Populate profile form
+        function populateProfileForm(user) {
+            document.getElementById('name').value = user.name || '';
+            document.getElementById('email').value = user.email || '';
+            document.getElementById('phone').value = user.phone || '';
+            document.getElementById('date_of_birth').value = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
+            document.getElementById('gender').value = user.gender || '';
+        }
+
+        // Handle profile form submission
+        document.getElementById('profile-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = e.target.querySelector('.btn-save');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            try {
+                const formData = new FormData(e.target);
+                const data = Object.fromEntries(formData);
+
+                // Remove empty fields
+                Object.keys(data).forEach(key => {
+                    if (!data[key]) delete data[key];
+                });
+
+                await usersAPI.updateProfile(data);
+
+                showAlert('Profile updated successfully!', 'success');
+                loadProfile(); // Reload profile data
+            } catch (error) {
+                console.error('Error updating profile:', error);
+                showAlert('Error updating profile: ' + error.message, 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+
+        // Handle password form submission
+        document.getElementById('password-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const newPassword = document.getElementById('new_password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+
+            if (newPassword !== confirmPassword) {
+                showAlert('New passwords do not match', 'danger');
+                return;
+            }
+
+            const submitBtn = e.target.querySelector('.btn-save');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Changing...';
+
+            try {
+                const data = {
+                    current_password: document.getElementById('current_password').value,
+                    new_password: newPassword
+                };
+
+                await usersAPI.changePassword(data);
+
+                showAlert('Password changed successfully!', 'success');
+                e.target.reset();
+                document.getElementById('password-strength').innerHTML = '';
+            } catch (error) {
+                console.error('Error changing password:', error);
+                showAlert('Error changing password: ' + error.message, 'danger');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+
+        // Password strength checker
+        document.getElementById('new_password').addEventListener('input', (e) => {
+            const password = e.target.value;
+            const strengthEl = document.getElementById('password-strength');
+
+            if (password.length === 0) {
+                strengthEl.innerHTML = '';
+                return;
+            }
+
+            let strength = 0;
+            let feedback = [];
+
+            if (password.length >= 8) strength++;
+            else feedback.push('At least 8 characters');
+
+            if (/[a-z]/.test(password)) strength++;
+            else feedback.push('Lowercase letter');
+
+            if (/[A-Z]/.test(password)) strength++;
+            else feedback.push('Uppercase letter');
+
+            if (/[0-9]/.test(password)) strength++;
+            else feedback.push('Number');
+
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            else feedback.push('Special character');
+
+            let strengthText = '';
+            let strengthClass = '';
+
+            if (strength < 3) {
+                strengthText = 'Weak';
+                strengthClass = 'strength-weak';
+            } else if (strength < 4) {
+                strengthText = 'Medium';
+                strengthClass = 'strength-medium';
+            } else {
+                strengthText = 'Strong';
+                strengthClass = 'strength-strong';
+            }
+
+            strengthEl.innerHTML = `<span class="${strengthClass}">${strengthText}</span>`;
+            if (feedback.length > 0) {
+                strengthEl.innerHTML += ` - ${feedback.join(', ')}`;
+            }
+        });
+
+        // Utility functions
+        function performSearch() {
+            const query = document.getElementById('search-input').value.trim();
+            if (query) {
+                window.location.href = `/products?search=${encodeURIComponent(query)}`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+        });
+
+        document.getElementById('search-input')?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+    </script>
+</body>
+</html>

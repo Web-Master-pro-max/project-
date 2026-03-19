@@ -176,6 +176,10 @@ app.get('/checkout', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'public', 'checkout.html'));
 });
 
+app.get('/profile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'public', 'profile.html'));
+});
+
 app.get('/order-confirmation', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'public', 'order-confirmation.html'));
 });

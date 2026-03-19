@@ -55,9 +55,9 @@ const updateUser = async (req, res) => {
     }
 
     // Update only allowed fields
-    const allowedUpdates = ['name'];
+    const allowedUpdates = ['name', 'phone', 'date_of_birth', 'gender'];
     if (req.user.role === 'admin') {
-      allowedUpdates.push('role');
+      allowedUpdates.push('role', 'email');
     }
 
     const updates = {};
@@ -158,11 +158,45 @@ const getUserStats = async (req, res) => {
   }
 };
 
+// @desc    Change user password
+// @route   PUT /api/users/change-password
+const changePassword = async (req, res) => {
+  try {
+    const { current_password, new_password } = req.body;
+
+    if (!current_password || !new_password) {
+      return res.status(400).json({ error: 'Current password and new password are required' });
+    }
+
+    if (new_password.length < 6) {
+      return res.status(400).json({ error: 'New password must be at least 6 characters long' });
+    }
+
+    const user = await User.findByPk(req.user.id);
+
+    // Verify current password
+    const isCurrentPasswordValid = await user.comparePassword(current_password);
+    if (!isCurrentPasswordValid) {
+      return res.status(400).json({ error: 'Current password is incorrect' });
+    }
+
+    // Update password
+    const salt = await bcrypt.genSalt(parseInt(process.env.BCRYPT_SALT_ROUNDS) || 10);
+    user.password = await bcrypt.hash(new_password, salt);
+    await user.save();
+
+    res.json({ success: true, message: 'Password changed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
   getProfile,
   updateUser,
   deleteUser,
+  changePassword,
   getUserStats
 };
