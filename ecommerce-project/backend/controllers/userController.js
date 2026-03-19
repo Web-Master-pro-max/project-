@@ -272,6 +272,35 @@ const getUserStats = async (req, res) => {
   }
 };
 
+// @desc    Upload user profile photo
+// @route   POST /api/users/upload-photo
+const uploadProfilePhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    const user = await User.findByPk(req.user.id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Store the file path/URL
+    const photoUrl = `/uploads/${req.file.filename}`;
+    
+    await user.update({ avatar: photoUrl });
+
+    res.json({
+      success: true,
+      message: 'Profile photo updated successfully',
+      avatar: photoUrl
+    });
+  } catch (error) {
+    console.error('Upload profile photo error:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -279,5 +308,6 @@ module.exports = {
   updateProfile,
   updateUser,
   deleteUser,
-  getUserStats
+  getUserStats,
+  uploadProfilePhoto
 };

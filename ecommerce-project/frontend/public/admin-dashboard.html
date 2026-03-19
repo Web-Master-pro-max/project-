@@ -829,6 +829,7 @@
                 <li><a href="#users" onclick="showSection('users'); closeMobileMenu()"><i class="fas fa-users"></i> Users</a></li>
                 <li><a href="#reports" onclick="showSection('reports'); closeMobileMenu()"><i class="fas fa-chart-bar"></i> Reports</a></li>
                 <li><a href="#settings" onclick="showSection('settings'); closeMobileMenu()"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" onclick="openProfileModal(); return false;"><i class="fas fa-user-cog"></i> Account Settings</a></li>
                 <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </aside>
@@ -1099,7 +1100,68 @@
         </main>
     </div>
 
-    <!-- Add/Edit Product Modal -->
+    <!-- Admin Profile Edit Modal -->
+    <div id="profile-modal" class="modal" style="display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); align-items: center; justify-content: center;">
+        <div class="modal-content" style="background-color: white; padding: 0; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15); max-width: 500px; width: 90%; max-height: 90vh; overflow-y: auto;">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 1.5rem; border-bottom: 1px solid #e1e5e9;">
+                <h2 style="margin: 0; font-size: 1.5rem; color: #232f3e;">Edit Profile</h2>
+                <button onclick="closeProfileModal()" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: #999; padding: 0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">&times;</button>
+            </div>
+            <form id="profile-edit-form">
+                <div style="padding: 1.5rem;">
+                    <!-- Profile Photo Section -->
+                    <div style="text-align: center; margin-bottom: 1.5rem;">
+                        <label for="admin-photo-input" style="cursor: pointer;">
+                            <div id="admin-profile-photo-preview" style="width: 100px; height: 100px; margin: 0 auto 0.5rem; border-radius: 50%; background: linear-gradient(135deg, #2874f0, #1a4d8c); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; overflow: hidden;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #666;">Click to change photo</p>
+                        </label>
+                        <input type="file" id="admin-photo-input" name="photo" accept="image/*" style="display: none;" onchange="handleAdminPhotoChange(event)">
+                    </div>
+
+                    <!-- Personal Information -->
+                    <div style="margin-bottom: 1rem;">
+                        <label for="admin-edit-name" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Full Name *</label>
+                        <input type="text" id="admin-edit-name" name="name" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;" required>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label for="admin-edit-email" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Email Address *</label>
+                        <input type="email" id="admin-edit-email" name="email" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;" required>
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <label for="admin-edit-phone" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Phone Number</label>
+                        <input type="tel" id="admin-edit-phone" name="phone" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                        <div>
+                            <label for="admin-edit-dob" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Date of Birth</label>
+                            <input type="date" id="admin-edit-dob" name="date_of_birth" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                        </div>
+
+                        <div>
+                            <label for="admin-edit-gender" style="display: block; margin-bottom: 0.5rem; font-weight: 500; color: #333;">Gender</label>
+                            <select id="admin-edit-gender" name="gender" style="width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem;">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="admin-profile-alert-container"></div>
+                </div>
+                <div style="display: flex; justify-content: flex-end; gap: 0.75rem; padding: 1rem 1.5rem; border-top: 1px solid #e1e5e9; background: #f9f9f9;">
+                    <button type="button" onclick="closeProfileModal()" style="padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; background: #e1e5e9; color: #333;">Cancel</button>
+                    <button type="submit" id="admin-profile-save-btn" style="padding: 0.75rem 1.5rem; border: none; border-radius: 6px; font-size: 1rem; font-weight: 500; cursor: pointer; background: linear-gradient(135deg, #2874f0, #1a4d8c); color: white;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <div id="product-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1909,6 +1971,110 @@
         });
 
         // Initialize on load
+        // ============== ADMIN PROFILE EDIT MODAL ==============
+        let currentAdminProfilePhotoFile = null;
+
+        function openProfileModal() {
+            // Load current admin profile
+            usersAPI.getProfile().then(response => {
+                if (response.success && response.user) {
+                    const user = response.user;
+                    document.getElementById('admin-edit-name').value = user.name || '';
+                    document.getElementById('admin-edit-email').value = user.email || '';
+                    document.getElementById('admin-edit-phone').value = user.phone || '';
+                    document.getElementById('admin-edit-dob').value = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
+                    document.getElementById('admin-edit-gender').value = user.gender || '';
+
+                    // Set profile photo if exists
+                    if (user.avatar) {
+                        document.getElementById('admin-profile-photo-preview').innerHTML = `<img src="${user.avatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    }
+                }
+            }).catch(error => {
+                showAlert('Error loading profile', 'danger');
+            });
+
+            document.getElementById('profile-modal').style.display = 'flex';
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').style.display = 'none';
+            document.getElementById('profile-edit-form').reset();
+            currentAdminProfilePhotoFile = null;
+        }
+
+        function handleAdminPhotoChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                showAlert('File size must be less than 5MB', 'danger');
+                event.target.value = '';
+                return;
+            }
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('admin-profile-photo-preview').innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            };
+            reader.readAsDataURL(file);
+            currentAdminProfilePhotoFile = file;
+        }
+
+        async function saveAdminProfileChanges() {
+            const btn = document.getElementById('admin-profile-save-btn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                // Update profile data
+                const profileData = {
+                    name: document.getElementById('admin-edit-name').value,
+                    email: document.getElementById('admin-edit-email').value,
+                    phone: document.getElementById('admin-edit-phone').value,
+                    date_of_birth: document.getElementById('admin-edit-dob').value,
+                    gender: document.getElementById('admin-edit-gender').value
+                };
+
+                await usersAPI.updateProfile(profileData);
+
+                // Upload photo if selected
+                if (currentAdminProfilePhotoFile) {
+                    const formData = new FormData();
+                    formData.append('photo', currentAdminProfilePhotoFile);
+
+                    const response = await fetch('/api/users/upload-photo', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Photo upload failed');
+                    }
+                }
+
+                showAlert('Profile updated successfully!', 'success');
+                closeProfileModal();
+                loadDashboard();
+            } catch (error) {
+                showAlert('Error saving profile: ' + error.message, 'danger');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Save Changes';
+            }
+        }
+
+        document.getElementById('profile-edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveAdminProfileChanges();
+        });
+
         document.addEventListener('DOMContentLoaded', async () => {
             try {
                 const response = await authAPI.checkAuth();
@@ -1927,6 +2093,14 @@
 
                 loadDashboard();
                 initCharts();
+
+                // Check if we should open profile modal
+                const params = new URLSearchParams(window.location.search);
+                if (params.get('openProfile') === 'true') {
+                    setTimeout(() => openProfileModal(), 500);
+                    // Clean up URL
+                    window.history.replaceState({}, document.title, '/admin');
+                }
             } catch (error) {
                 console.error('Auth check failed:', error);
                 window.location.href = '/login';

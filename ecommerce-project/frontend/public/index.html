@@ -222,6 +222,28 @@
             white-space: nowrap;
         }
 
+        .user-avatar-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.12);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            padding: 0;
+        }
+
+        .user-avatar-btn:hover {
+            background: rgba(255,255,255,0.25);
+            border-color: rgba(255,255,255,0.5);
+            transform: scale(1.1);
+        }
+
         .btn {
             padding: 0.5rem 0.8rem;
             font-size: 0.8rem;
@@ -1246,6 +1268,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (status.authenticated && status.user) {
                     authButtons.innerHTML = `
                         <span class="auth-user">Hi, ${status.user.name}</span>
+                        <button class="user-avatar-btn" onclick="openProfileModal()" title="Edit Profile">
+                            <i class="fas fa-user-circle"></i>
+                        </button>
                         <button class="btn btn-outline btn-sm" onclick="logout()">Logout</button>
                     `;
                     
@@ -1273,6 +1298,10 @@ document.addEventListener('DOMContentLoaded', function() {
             authAPI.logout().finally(() => {
                 window.location.href = '/';
             });
+        }
+
+        function openProfileModal() {
+            window.location.href = '/dashboard?openProfile=true';
         }
 
         // Initialize

@@ -48,6 +48,11 @@ const User = sequelize.define('User', {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   },
+  avatar: {
+    type: DataTypes.STRING(500),
+    allowNull: true,
+    comment: 'Profile photo URL'
+  },
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW

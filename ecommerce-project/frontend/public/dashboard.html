@@ -809,7 +809,7 @@
                     <ul class="dashboard-menu">
                         <li><a href="/dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
                         <li><a href="/orders"><i class="fas fa-truck"></i> My Orders</a></li>
-                        <li><a href="/dashboard/account"><i class="fas fa-user-cog"></i> Account Settings</a></li>
+                        <li><a href="#" onclick="openProfileModal(); return false;"><i class="fas fa-user-cog"></i> Account Settings</a></li>
                         <li id="admin-link" style="display:none;"><a href="/admin" style="background-color: #ff6b35; color: white;"><i class="fas fa-crown"></i> Admin Dashboard</a></li>
                         <li><a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
@@ -916,6 +916,210 @@
             </div>
         </div>
     </footer>
+
+    <!-- Profile Edit Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <h2>Edit Profile</h2>
+                <button class="modal-close" onclick="closeProfileModal()">&times;</button>
+            </div>
+            <form id="profile-edit-form">
+                <div class="modal-body">
+                    <!-- Profile Photo Section -->
+                    <div class="form-group" style="text-align: center; margin-bottom: 1.5rem;">
+                        <label for="photo-input" style="cursor: pointer;">
+                            <div id="profile-photo-preview" style="width: 100px; height: 100px; margin: 0 auto 0.5rem; border-radius: 50%; background: linear-gradient(135deg, #2874f0, #1a4d8c); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; overflow: hidden;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #666;">Click to change photo</p>
+                        </label>
+                        <input type="file" id="photo-input" name="photo" accept="image/*" style="display: none;" onchange="handlePhotoChange(event)">
+                    </div>
+
+                    <!-- Personal Information -->
+                    <div class="form-group">
+                        <label for="edit-name">Full Name *</label>
+                        <input type="text" id="edit-name" name="name" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-email">Email Address *</label>
+                        <input type="email" id="edit-email" name="email" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-phone">Phone Number</label>
+                        <input type="tel" id="edit-phone" name="phone" class="form-control">
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div class="form-group">
+                            <label for="edit-dob">Date of Birth</label>
+                            <input type="date" id="edit-dob" name="date_of_birth" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-gender">Gender</label>
+                            <select id="edit-gender" name="gender" class="form-control">
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="profile-alert-container"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeProfileModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="profile-save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Styles -->
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e5e9;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #232f3e;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid #e1e5e9;
+            background: #f9f9f9;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #2874f0;
+            box-shadow: 0 0 0 3px rgba(40, 116, 240, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2874f0, #1a4d8c);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 116, 240, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e1e5e9;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d4d9;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
 
     <script src="/js/api.js"></script>
     <script>
@@ -1075,9 +1279,121 @@
             }
         });
 
+        // ============== PROFILE EDIT MODAL ==============
+        let currentProfilePhotoFile = null;
+
+        function openProfileModal() {
+            // Load current user profile
+            usersAPI.getProfile().then(response => {
+                if (response.success && response.user) {
+                    const user = response.user;
+                    document.getElementById('edit-name').value = user.name || '';
+                    document.getElementById('edit-email').value = user.email || '';
+                    document.getElementById('edit-phone').value = user.phone || '';
+                    document.getElementById('edit-dob').value = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
+                    document.getElementById('edit-gender').value = user.gender || '';
+
+                    // Set profile photo if exists
+                    if (user.avatar) {
+                        document.getElementById('profile-photo-preview').innerHTML = `<img src="${user.avatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    }
+                }
+            }).catch(error => {
+                showAlert('Error loading profile', 'danger');
+            });
+
+            document.getElementById('profile-modal').classList.add('active');
+        }
+
+        function closeProfileModal() {
+            document.getElementById('profile-modal').classList.remove('active');
+            document.getElementById('profile-edit-form').reset();
+            currentProfilePhotoFile = null;
+        }
+
+        function handlePhotoChange(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                showAlert('File size must be less than 5MB', 'danger');
+                event.target.value = '';
+                return;
+            }
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                document.getElementById('profile-photo-preview').innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;">`;
+            };
+            reader.readAsDataURL(file);
+            currentProfilePhotoFile = file;
+        }
+
+        async function saveProfileChanges() {
+            const btn = document.getElementById('profile-save-btn');
+            btn.disabled = true;
+            btn.textContent = 'Saving...';
+
+            try {
+                // Update profile data
+                const profileData = {
+                    name: document.getElementById('edit-name').value,
+                    email: document.getElementById('edit-email').value,
+                    phone: document.getElementById('edit-phone').value,
+                    date_of_birth: document.getElementById('edit-dob').value,
+                    gender: document.getElementById('edit-gender').value
+                };
+
+                await usersAPI.updateProfile(profileData);
+
+                // Upload photo if selected
+                if (currentProfilePhotoFile) {
+                    const formData = new FormData();
+                    formData.append('photo', currentProfilePhotoFile);
+
+                    const response = await fetch('/api/users/upload-photo', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('token')}`
+                        },
+                        body: formData
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Photo upload failed');
+                    }
+                }
+
+                showAlert('Profile updated successfully!', 'success');
+                closeProfileModal();
+                loadDashboard();
+            } catch (error) {
+                showAlert('Error saving profile: ' + error.message, 'danger');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Save Changes';
+            }
+        }
+
+        document.getElementById('profile-edit-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            saveProfileChanges();
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
             loadDashboard();
             updateCartCount();
+
+            // Check if we should open profile modal
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('openProfile') === 'true') {
+                setTimeout(() => openProfileModal(), 500);
+                // Clean up URL
+                window.history.replaceState({}, document.title, '/dashboard');
+            }
         });
     </script>
 </body>
