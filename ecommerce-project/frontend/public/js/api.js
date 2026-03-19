@@ -167,6 +167,15 @@ const ordersAPI = {
         apiCall(`/orders/${id}`, 'PUT', { status })
 };
 
+// Addresses API
+const addressesAPI = {
+    getAll: () => apiCall('/addresses'),
+    create: (data) => apiCall('/addresses', 'POST', data),
+    update: (id, data) => apiCall(`/addresses/${id}`, 'PUT', data),
+    delete: (id) => apiCall(`/addresses/${id}`, 'DELETE'),
+    setDefault: (id) => apiCall(`/addresses/${id}/default`, 'PATCH')
+};
+
 // Auth API - Enhanced with better error handling
 const authAPI = {
     register: async (data) => {

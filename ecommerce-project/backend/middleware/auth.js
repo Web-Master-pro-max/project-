@@ -63,4 +63,4 @@ const isAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticate, isAdmin };
+module.exports = { authenticate, isAdmin, protect: authenticate };

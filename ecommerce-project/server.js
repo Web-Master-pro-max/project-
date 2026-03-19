@@ -21,6 +21,7 @@ const userRoutes = require('./backend/routes/userRoutes');
 const productRoutes = require('./backend/routes/productRoutes');
 const cartRoutes = require('./backend/routes/cartRoutes');
 const orderRoutes = require('./backend/routes/orderRoutes');
+const addressRoutes = require('./backend/routes/addressRoutes');
 
 // Import models and associations
 require('./backend/models');
@@ -152,6 +153,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/addresses', addressRoutes);
 
 // Frontend Routes - Serve HTML files (for when accessing EC2 directly)
 app.get('/', (req, res) => {

@@ -1142,41 +1142,57 @@
         }
 
         function loadAddresses() {
-            // Load addresses from localStorage
-            const savedAddresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
+            try {
+                addressesAPI.getAll().then(data => {
+                    if (data.addresses && data.addresses.length > 0) {
+                        const container = $('address-list');
+                        container.innerHTML = data.addresses.map(addr => `
+                            <div class="address-card ${selectedAddress?.id === addr.id ? 'selected' : ''}" 
+                                 onclick="selectAddress(${addr.id})">
+                                <input type="radio" name="address" value="${addr.id}" 
+                                       ${selectedAddress?.id === addr.id ? 'checked' : ''}>
+                                <span class="address-type ${addr.type}">
+                                    <i class="fas fa-${addr.type === 'home' ? 'home' : addr.type === 'work' ? 'building' : 'map-marker-alt'}"></i> ${addr.type}
+                                </span>
+                                <p style="margin: 0.3rem 0; font-weight: bold;">${addr.name}</p>
+                                <p style="margin: 0.2rem 0; font-size: 0.85rem;">${addr.address_line}${addr.landmark ? ', ' + addr.landmark : ''}</p>
+                                <p style="margin: 0.2rem 0; font-size: 0.85rem;">${addr.city}, ${addr.state} - ${addr.postal_code}</p>
+                                <p style="margin: 0.3rem 0 0; font-size: 0.85rem;">
+                                    <i class="fas fa-phone"></i> ${addr.phone}
+                                </p>
+                                ${addr.is_default ? '<span class="default-badge">Default</span>' : ''}
+                            </div>
+                        `).join('');
 
-            const container = $('address-list');
-            if (savedAddresses.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-address">
-                        <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
-                        <p>No addresses saved yet</p>
-                        <p style="font-size: 0.9rem; color: #666;">Add your delivery address to continue</p>
-                    </div>
-                `;
-                selectedAddress = null;
-                return;
-            }
-
-            container.innerHTML = savedAddresses.map(addr => `
-                <div class="address-card ${selectedAddress?.id === addr.id ? 'selected' : ''}" 
-                     onclick="selectAddress(${addr.id})">
-                    <input type="radio" name="address" value="${addr.id}" 
-                           ${selectedAddress?.id === addr.id ? 'checked' : ''}>
-                    <span class="address-type ${addr.type}">
-                        <i class="fas fa-${addr.type === 'home' ? 'home' : 'building'}"></i> ${addr.type}
-                    </span>
-                    <p style="margin: 0.3rem 0; font-weight: bold;">${addr.name}</p>
-                    <p style="margin: 0.2rem 0; font-size: 0.85rem;">${addr.address}</p>
-                    <p style="margin: 0.2rem 0; font-size: 0.85rem;">${addr.city}, ${addr.state} - ${addr.pin}</p>
-                    <p style="margin: 0.3rem 0 0; font-size: 0.85rem;">
-                        <i class="fas fa-phone"></i> ${addr.phone}
-                    </p>
-                </div>
-            `).join('');
-
-            if (!selectedAddress && savedAddresses.length > 0) {
-                selectAddress(savedAddresses[0].id);
+                        if (!selectedAddress && data.addresses.length > 0) {
+                            // Select default address or first address
+                            const defaultAddr = data.addresses.find(addr => addr.is_default) || data.addresses[0];
+                            selectAddress(defaultAddr.id);
+                        }
+                    } else {
+                        const container = $('address-list');
+                        container.innerHTML = `
+                            <div class="empty-address">
+                                <i class="fas fa-map-marker-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                                <p>No addresses saved yet</p>
+                                <p style="font-size: 0.9rem; color: #666;">Add your delivery address to continue</p>
+                            </div>
+                        `;
+                        selectedAddress = null;
+                    }
+                }).catch(error => {
+                    console.error('Error loading addresses:', error);
+                    if (error.message.includes('Session expired')) {
+                        showAlert('Please login to view your addresses', 'warning');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000);
+                    } else {
+                        showAlert('Error loading addresses: ' + error.message, 'danger');
+                    }
+                });
+            } catch (error) {
+                console.error('Error in loadAddresses:', error);
             }
         }
 
@@ -1208,9 +1224,16 @@
         }
 
         function selectAddress(addressId) {
-            const savedAddresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
-            selectedAddress = savedAddresses.find(addr => addr.id === addressId) || null;
-            loadAddresses();
+            try {
+                addressesAPI.getAll().then(data => {
+                    selectedAddress = data.addresses.find(addr => addr.id === addressId) || null;
+                    loadAddresses();
+                }).catch(error => {
+                    console.error('Error selecting address:', error);
+                });
+            } catch (error) {
+                console.error('Error in selectAddress:', error);
+            }
         }
 
         function selectPayment(method) {
@@ -1306,34 +1329,34 @@
             }
 
             const addressData = {
-                id: Date.now(), // Simple ID generation
                 name: $('address-name').value.trim(),
                 phone: $('address-phone').value.trim(),
-                address: $('address-line').value.trim(),
+                address_line: $('address-line').value.trim(),
                 landmark: $('address-landmark').value.trim(),
                 city: $('address-city').value.trim(),
                 state: $('address-state').value.trim(),
-                pin: $('address-pin').value.trim(),
+                postal_code: $('address-pin').value.trim(),
                 type: $('address-type').value
             };
 
-            // Load existing addresses
-            const savedAddresses = JSON.parse(localStorage.getItem('userAddresses') || '[]');
-            
-            // Add new address
-            savedAddresses.push(addressData);
-            
-            // Save back to localStorage
-            localStorage.setItem('userAddresses', JSON.stringify(savedAddresses));
+            try {
+                addressesAPI.create(addressData).then(response => {
+                    // Clear form
+                    form.reset();
 
-            // Clear form
-            form.reset();
-
-            // Close modal and reload addresses
-            closeAddressModal();
-            loadAddresses();
-            
-            showAlert('Address saved successfully!', 'success');
+                    // Close modal and reload addresses
+                    closeAddressModal();
+                    loadAddresses();
+                    
+                    showAlert('Address saved successfully!', 'success');
+                }).catch(error => {
+                    console.error('Error saving address:', error);
+                    showAlert('Error saving address: ' + error.message, 'danger');
+                });
+            } catch (error) {
+                console.error('Error in saveAddress:', error);
+                showAlert('Error saving address', 'danger');
+            }
         }
 
         async function placeOrder() {

@@ -11,7 +11,7 @@ const {
 } = require('../controllers/orderController');
 
 // Public routes
-router.post('/', createOrder);
+router.post('/', authenticate, createOrder);
 
 // Authenticated routes
 router.get('/', authenticate, getOrders);

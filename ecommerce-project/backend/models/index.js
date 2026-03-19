@@ -3,10 +3,12 @@ const Product = require('./Product');
 const Cart = require('./Cart');
 const Order = require('./Order');
 const OrderItem = require('./OrderItem');
+const Address = require('./Address');
 
 // User Associations
 User.hasMany(Cart, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 User.hasMany(Order, { foreignKey: 'user_id', onDelete: 'CASCADE' });
+User.hasMany(Address, { foreignKey: 'user_id', onDelete: 'CASCADE' });
 
 // Product Associations
 Product.hasMany(Cart, { foreignKey: 'product_id', onDelete: 'CASCADE' });
@@ -24,10 +26,14 @@ Order.hasMany(OrderItem, { foreignKey: 'order_id', onDelete: 'CASCADE' });
 OrderItem.belongsTo(Order, { foreignKey: 'order_id' });
 OrderItem.belongsTo(Product, { foreignKey: 'product_id' });
 
+// Address Associations
+Address.belongsTo(User, { foreignKey: 'user_id' });
+
 module.exports = {
   User,
   Product,
   Cart,
   Order,
-  OrderItem
+  OrderItem,
+  Address
 };

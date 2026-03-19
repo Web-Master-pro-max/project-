@@ -1,4 +1,4 @@
-const { Order, OrderItem, Cart, Product, User } = require('../models');
+const { Order, OrderItem, Cart, Product, User, Address } = require('../models');
 const { sequelize } = require('../config/database');
 
 // @desc    Create order
@@ -8,29 +8,30 @@ const createOrder = async (req, res) => {
 
   try {
     const {
-      customer_name,
-      email,
-      phone,
-      shipping_address,
-      city,
-      state,
-      postal_code,
-      country,
+      address_id,
       payment_method,
       items
     } = req.body;
+
+    // Validate address
+    const address = await Address.findByPk(address_id, { transaction });
+    if (!address) {
+      await transaction.rollback();
+      return res.status(400).json({ error: 'Invalid address' });
+    }
+
+    // Check address ownership
+    if (address.user_id !== req.user.id) {
+      await transaction.rollback();
+      return res.status(403).json({ error: 'Access denied' });
+    }
 
     let cartItems = items;
 
     // If items not provided, get from cart
     if (!items || items.length === 0) {
-      if (!req.session || !req.session.user) {
-        await transaction.rollback();
-        return res.status(401).json({ error: 'Not authenticated' });
-      }
-
       cartItems = await Cart.findAll({
-        where: { user_id: req.session.user.id },
+        where: { user_id: req.user.id },
         include: [Product],
         transaction
       });
@@ -69,15 +70,15 @@ const createOrder = async (req, res) => {
 
     // Create order
     const order = await Order.create({
-      user_id: req.session?.user?.id || null,
-      customer_name: customer_name || (req.session?.user?.name || 'Guest'),
-      email: email || (req.session?.user?.email || ''),
-      phone: phone || '',
-      shipping_address: shipping_address || '',
-      city: city || '',
-      state: state || '',
-      postal_code: postal_code || '',
-      country: country || 'India',
+      user_id: req.user.id,
+      customer_name: address.name,
+      email: req.user.email,
+      phone: address.phone,
+      shipping_address: address.address_line + (address.landmark ? ', ' + address.landmark : ''),
+      city: address.city,
+      state: address.state,
+      postal_code: address.postal_code,
+      country: 'India',
       payment_method: payment_method || 'card',
       total_amount: total,
       status: 'pending'
@@ -93,13 +94,11 @@ const createOrder = async (req, res) => {
       }, { transaction });
     }
 
-    // Clear cart if user is authenticated
-    if (req.session?.user?.id) {
-      await Cart.destroy({
-        where: { user_id: req.session.user.id },
-        transaction
-      });
-    }
+    // Clear cart
+    await Cart.destroy({
+      where: { user_id: req.user.id },
+      transaction
+    });
 
     await transaction.commit();
 
