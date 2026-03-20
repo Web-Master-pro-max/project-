@@ -290,6 +290,16 @@ const uploadProfilePhoto = async (req, res) => {
     
     await user.update({ avatar: photoUrl });
 
+    // Update session immediately so avatar shows in navbar without refresh
+    if (req.session && req.session.user) {
+      req.session.user.avatar = photoUrl;
+      req.session.save((err) => {
+        if (err) {
+          console.error('Session update error after photo upload:', err);
+        }
+      });
+    }
+
     res.json({
       success: true,
       message: 'Profile photo updated successfully',

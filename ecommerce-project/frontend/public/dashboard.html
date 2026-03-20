@@ -1384,7 +1384,9 @@
                 showAlert('Profile updated successfully!', 'success');
                 currentProfilePhotoFile = null;
                 closeProfileModal();
-                loadDashboard();
+                
+                // Reload navbar to show updated avatar immediately
+                location.reload();
             } catch (error) {
                 showAlert('Error saving profile: ' + error.message, 'danger');
             } finally {

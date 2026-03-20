@@ -42,11 +42,12 @@ const register = async (req, res) => {
       password
     });
 
-    // Store user in session
+    // Store user in session (include avatar even if null initially)
     req.session.user = {
       id: user.id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       role: user.role
     };
 

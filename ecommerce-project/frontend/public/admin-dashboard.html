@@ -2076,7 +2076,9 @@
                 showAlert('Profile updated successfully!', 'success');
                 currentAdminProfilePhotoFile = null;
                 closeProfileModal();
-                loadDashboard();
+                
+                // Reload page to update navbar with new avatar
+                location.reload();
             } catch (error) {
                 showAlert('Error saving profile: ' + error.message, 'danger');
             } finally {
