@@ -221,8 +221,9 @@ const PORT = process.env.PORT || 3000;
 const initializeServer = async () => {
     try {
         await testConnection();
-        // Sync database models - alter:true will add missing columns
-        await sequelize.sync({ alter: true });
+        // Sync database models - force:true only on first run, then use alter
+        const isDevelopment = process.env.NODE_ENV !== 'production';
+        await sequelize.sync({ force: false, alter: isDevelopment });
         console.log('Database tables synchronized successfully.');
         
         // The session store will create its table automatically on first use
