@@ -290,11 +290,6 @@ const uploadProfilePhoto = async (req, res) => {
     
     await user.update({ avatar: photoUrl });
 
-    // Update session user with new avatar
-    if (req.session && req.session.user) {
-      req.session.user.avatar = photoUrl;
-    }
-
     res.json({
       success: true,
       message: 'Profile photo updated successfully',
