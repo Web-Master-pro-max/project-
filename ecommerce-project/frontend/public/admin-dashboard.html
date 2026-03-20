@@ -1974,11 +1974,18 @@
         // ============== ADMIN PROFILE EDIT MODAL ==============
         let currentAdminProfilePhotoFile = null;
 
+        const BACKEND_BASE_URL = 'http://13.62.153.215:3000';
         const DEFAULT_AVATAR_URL = 'https://static.vecteezy.com/system/resources/thumbnails/017/800/528/small/user-simple-flat-icon-illustration-vector.jpg';
 
         function getAvatarUrl(user) {
             if (user && user.avatar) {
-                return user.avatar;
+                if (user.avatar.startsWith('http://') || user.avatar.startsWith('https://')) {
+                    return user.avatar;
+                }
+                if (user.avatar.startsWith('/')) {
+                    return `${BACKEND_BASE_URL}${user.avatar}`;
+                }
+                return `${BACKEND_BASE_URL}/${user.avatar}`;
             }
             return DEFAULT_AVATAR_URL;
         }

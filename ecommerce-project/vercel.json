@@ -2,22 +2,30 @@
   "version": 2,
   "builds": [
     {
-      "src": "**/*.html",
+      "src": "*.html",
       "use": "@vercel/static"
     },
     {
-      "src": "**/*.css",
+      "src": "css/**/*.css",
       "use": "@vercel/static"
     },
     {
-      "src": "**/*.js",
+      "src": "js/**/*.js",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "images/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "uploads/**/*",
       "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "http://51.20.87.184:3000/api/$1",
+      "dest": "http://13.62.153.215:3000/api/$1",
       "headers": {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -26,8 +34,83 @@
       }
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "src": "/css/(.*)",
+      "dest": "/css/$1"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/js/$1"
+    },
+    {
+      "src": "/images/(.*)",
+      "dest": "/images/$1"
+    },
+    {
+      "src": "/uploads/(.*)",
+      "dest": "http://13.62.153.215:3000/uploads/$1",
+      "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Cache-Control": "public, max-age=31536000, immutable"
+      }
+    },
+    { "src": "/credits",
+       "dest": "/credits.html" 
+      },
+      {
+        "src": "/credits/(.*)",
+        "dest": "/credits.html"
+      },
+    {
+      "src": "/products",
+      "dest": "/products.html"
+    },
+    {
+      "src": "/products/(.*)",
+      "dest": "/products.html"
+    },
+    {
+      "src": "/product/(.*)",
+      "dest": "/products.html"
+    },
+    {
+      "src": "/profile",
+      "dest": "/profile.html"
+    },
+    {
+      "src": "/cart",
+      "dest": "/cart.html"
+    },
+    {
+      "src": "/checkout",
+      "dest": "/checkout.html"
+    },
+    {
+      "src": "/orders",
+      "dest": "/orders.html"
+    },
+    {
+      "src": "/order-confirmation",
+      "dest": "/order-confirmation.html"
+    },
+    {
+      "src": "/login",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/register",
+      "dest": "/register.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
+    },
+    {
+      "src": "/admin",
+      "dest": "/admin-dashboard.html"
+    },
+    {
+      "src": "/",
+      "dest": "/index.html"
     }
   ]
 }
