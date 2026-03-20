@@ -1974,6 +1974,15 @@
         // ============== ADMIN PROFILE EDIT MODAL ==============
         let currentAdminProfilePhotoFile = null;
 
+        const DEFAULT_AVATAR_URL = 'https://static.vecteezy.com/system/resources/thumbnails/017/800/528/small/user-simple-flat-icon-illustration-vector.jpg';
+
+        function getAvatarUrl(user) {
+            if (user && user.avatar) {
+                return user.avatar;
+            }
+            return DEFAULT_AVATAR_URL;
+        }
+
         function openProfileModal() {
             // Load current admin profile
             usersAPI.getProfile().then(response => {
@@ -1985,10 +1994,9 @@
                     document.getElementById('admin-edit-dob').value = user.date_of_birth ? user.date_of_birth.split('T')[0] : '';
                     document.getElementById('admin-edit-gender').value = user.gender || '';
 
-                    // Set profile photo if exists
-                    if (user.avatar) {
-                        document.getElementById('admin-profile-photo-preview').innerHTML = `<img src="${user.avatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
-                    }
+                    // Set profile photo (with default fallback)
+                    const avatarUrl = getAvatarUrl(user);
+                    document.getElementById('admin-profile-photo-preview').innerHTML = `<img src="${avatarUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
                 }
             }).catch(error => {
                 showAlert('Error loading profile', 'danger');
@@ -2057,9 +2065,16 @@
                     if (!response.ok) {
                         throw new Error('Photo upload failed');
                     }
+
+                    const result = await response.json();
+                    if (result.success && result.avatar) {
+                        // Update preview with actual server URL
+                        document.getElementById('admin-profile-photo-preview').innerHTML = `<img src="${result.avatar}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    }
                 }
 
                 showAlert('Profile updated successfully!', 'success');
+                currentAdminProfilePhotoFile = null;
                 closeProfileModal();
                 loadDashboard();
             } catch (error) {
