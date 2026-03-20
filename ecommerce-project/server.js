@@ -221,12 +221,21 @@ const PORT = process.env.PORT || 3000;
 const initializeServer = async () => {
     try {
         await testConnection();
-        // Sync database models - alter:true will add missing columns
-        await sequelize.sync({ alter: true });
+
+        // In production, avoid auto-alter migrations at each start.
+        // Use explicit migrations or one-time alter scripts instead.
+        const isProd = process.env.NODE_ENV === 'production';
+        if (isProd) {
+            console.log('Production mode: skipping Sequelize auto alter sync to prevent ER_TOO_MANY_KEYS. Ensure DB schema is managed via migrations.');
+            await sequelize.sync({ alter: false });
+        } else {
+            console.log('Development mode: applying Sequelize sync alter.');
+            await sequelize.sync({ alter: true });
+        }
         console.log('Database tables synchronized successfully.');
-        
+
         // The session store will create its table automatically on first use
-        
+
         app.listen(PORT, '0.0.0.0', () => {
             console.log(`Server running on port ${PORT}`);
             console.log(`CORS enabled for: .vercel.app domains`);

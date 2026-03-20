@@ -101,11 +101,12 @@ const login = async (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Store user in session
+    // Store user in session (include avatar for UI)
     req.session.user = {
       id: user.id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
       role: user.role
     };
 
