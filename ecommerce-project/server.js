@@ -222,16 +222,23 @@ const initializeServer = async () => {
     try {
         await testConnection();
 
-        // In production, avoid auto-alter migrations at each start.
-        // Use explicit migrations or one-time alter scripts instead.
-        const isProd = process.env.NODE_ENV === 'production';
-        if (isProd) {
-            console.log('Production mode: skipping Sequelize auto alter sync to prevent ER_TOO_MANY_KEYS. Ensure DB schema is managed via migrations.');
-            await sequelize.sync({ alter: false });
-        } else {
-            console.log('Development mode: applying Sequelize sync alter.');
+        // Database sync settings config:
+        // - avoid schema changes in production by default to prevent ER_TOO_MANY_KEYS.
+        // - use DB_SYNC_ALTER=true or DB_SYNC_FORCE=true only when explicitly needed.
+        const forceSync = process.env.DB_SYNC_FORCE === 'true';
+        const alterSync = process.env.DB_SYNC_ALTER === 'true';
+
+        if (forceSync) {
+            console.warn('DB_SYNC_FORCE=true: forcing sequelize.sync({ force: true }). This will DROP and RECREATES tables.');
+            await sequelize.sync({ force: true });
+        } else if (alterSync) {
+            console.warn('DB_SYNC_ALTER=true: applying sequelize.sync({ alter: true }). This may change indexes and columns.');
             await sequelize.sync({ alter: true });
+        } else {
+            console.log('DB_SYNC_ALTER not set: using sequelize.sync({ alter: false }) (no schema changes).');
+            await sequelize.sync({ alter: false });
         }
+
         console.log('Database tables synchronized successfully.');
 
         // The session store will create its table automatically on first use
